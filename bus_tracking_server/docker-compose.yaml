@@ -1,0 +1,54 @@
+services:
+  # Development services
+  postgres:
+    image: postgres:16.3
+    ports:
+      - '8090:5432'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: bus_tracking
+      POSTGRES_PASSWORD: "dXljwszf6TLzKP_w-S0jKli7j3Tiwdaw"
+    volumes:
+      - bus_tracking_data:/var/lib/postgresql/data
+    profiles:
+      - '' # Default profile
+      - dev
+  redis:
+    image: redis:6.2.6
+    ports:
+      - '8091:6379'
+    command: redis-server --requirepass "vnmEnwIMiBJd-5ftaUCwypvKzahCJVUO"
+    environment:
+      - REDIS_REPLICATION_MODE=master
+    profiles:
+      - '' # Default profile
+      - dev
+
+  # Test services
+  postgres_test:
+    image: postgres:16.3
+    ports:
+      - '9090:5432'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: bus_tracking_test
+      POSTGRES_PASSWORD: "UBsOjLan1o6QYGRg4Rbp42lThuQceoGt"
+    volumes:
+      - bus_tracking_test_data:/var/lib/postgresql/data
+    profiles:
+      - '' # Default profile
+      - test
+  redis_test:
+    image: redis:6.2.6
+    ports:
+      - '9091:6379'
+    command: redis-server --requirepass "vjt5i4sYyDJrLyoMsqU6LFWg9v-DhNSq"
+    environment:
+      - REDIS_REPLICATION_MODE=master
+    profiles:
+      - '' # Default profile
+      - test
+
+volumes:
+  bus_tracking_data:
+  bus_tracking_test_data:
