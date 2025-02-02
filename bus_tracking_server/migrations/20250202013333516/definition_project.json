@@ -1,0 +1,19 @@
+{
+  "moduleName": "bus_tracking",
+  "tables": [],
+  "installedModules": [
+    {
+      "module": "serverpod",
+      "version": "20240516151843329"
+    },
+    {
+      "module": "serverpod_auth",
+      "version": "20240520102713718"
+    },
+    {
+      "module": "bus_tracking",
+      "version": "20250202003626521"
+    }
+  ],
+  "migrationApiVersion": 1
+}
