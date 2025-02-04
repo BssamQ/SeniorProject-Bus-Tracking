@@ -11,8 +11,9 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import 'dart:async' as _i2;
-import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i3;
-import 'protocol.dart' as _i4;
+import 'package:bus_tracking_client/src/protocol/user_class.dart' as _i3;
+import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i4;
+import 'protocol.dart' as _i5;
 
 /// {@category Endpoint}
 class EndpointExample extends _i1.EndpointRef {
@@ -28,12 +29,52 @@ class EndpointExample extends _i1.EndpointRef {
       );
 }
 
+/// {@category Endpoint}
+class EndpointUser extends _i1.EndpointRef {
+  EndpointUser(_i1.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'user';
+
+  _i2.Future<List<_i3.User>> getUser({String? keyword}) =>
+      caller.callServerEndpoint<List<_i3.User>>(
+        'user',
+        'getUser',
+        {'keyword': keyword},
+      );
+
+  _i2.Future<_i3.User?> getUserById({int? id}) =>
+      caller.callServerEndpoint<_i3.User?>(
+        'user',
+        'getUserById',
+        {'id': id},
+      );
+
+  _i2.Future<bool> addUser(_i3.User user) => caller.callServerEndpoint<bool>(
+        'user',
+        'addUser',
+        {'user': user},
+      );
+
+  _i2.Future<bool> updateUser(_i3.User user) => caller.callServerEndpoint<bool>(
+        'user',
+        'updateUser',
+        {'user': user},
+      );
+
+  _i2.Future<bool> deleteUser(int id) => caller.callServerEndpoint<bool>(
+        'user',
+        'deleteUser',
+        {'id': id},
+      );
+}
+
 class Modules {
   Modules(Client client) {
-    auth = _i3.Caller(client);
+    auth = _i4.Caller(client);
   }
 
-  late final _i3.Caller auth;
+  late final _i4.Caller auth;
 }
 
 class Client extends _i1.ServerpodClientShared {
@@ -52,7 +93,7 @@ class Client extends _i1.ServerpodClientShared {
     bool? disconnectStreamsOnLostInternetConnection,
   }) : super(
           host,
-          _i4.Protocol(),
+          _i5.Protocol(),
           securityContext: securityContext,
           authenticationKeyManager: authenticationKeyManager,
           streamingConnectionTimeout: streamingConnectionTimeout,
@@ -63,15 +104,21 @@ class Client extends _i1.ServerpodClientShared {
               disconnectStreamsOnLostInternetConnection,
         ) {
     example = EndpointExample(this);
+    user = EndpointUser(this);
     modules = Modules(this);
   }
 
   late final EndpointExample example;
 
+  late final EndpointUser user;
+
   late final Modules modules;
 
   @override
-  Map<String, _i1.EndpointRef> get endpointRefLookup => {'example': example};
+  Map<String, _i1.EndpointRef> get endpointRefLookup => {
+        'example': example,
+        'user': user,
+      };
 
   @override
   Map<String, _i1.ModuleEndpointCaller> get moduleLookup =>

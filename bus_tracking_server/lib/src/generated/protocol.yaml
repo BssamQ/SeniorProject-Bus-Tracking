@@ -1,2 +1,8 @@
 example:
   - hello:
+user:
+  - getUser:
+  - getUserById:
+  - addUser:
+  - updateUser:
+  - deleteUser:
