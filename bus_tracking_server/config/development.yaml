@@ -34,6 +34,7 @@ database:
   name: bus_tracking
   user: postgres
 
+
 # This is the setup for Redis.
 redis:
   enabled: false
