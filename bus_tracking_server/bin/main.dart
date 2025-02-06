@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:bus_tracking_server/server.dart';
 import 'package:serverpod/serverpod.dart';
 
 import 'package:serverpod_auth_server/serverpod_auth_server.dart' as auth;
@@ -9,13 +6,9 @@ import 'package:serverpod_auth_server/serverpod_auth_server.dart' as auth;
 /// no need to modify this file.
 void main(List<String> args) {
   run(args);
-
-
 }
 
 void run(List<String> args) async {
-
-
   var pod = Serverpod(
     args,
     auth.Protocol(),
