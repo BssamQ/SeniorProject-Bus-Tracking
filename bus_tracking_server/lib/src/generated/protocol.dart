@@ -14,7 +14,6 @@ import 'package:serverpod/protocol.dart' as _i2;
 import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i3;
 import 'example.dart' as _i4;
 import 'user_class.dart' as _i5;
-import 'package:bus_tracking_server/src/generated/user_class.dart' as _i6;
 export 'example.dart';
 export 'user_class.dart';
 
@@ -40,16 +39,10 @@ class Protocol extends _i1.SerializationManagerServer {
           columnDefault: 'nextval(\'user_id_seq\'::regclass)',
         ),
         _i2.ColumnDefinition(
-          name: 'name',
-          columnType: _i2.ColumnType.text,
-          isNullable: false,
-          dartType: 'String',
-        ),
-        _i2.ColumnDefinition(
-          name: 'email',
-          columnType: _i2.ColumnType.text,
-          isNullable: false,
-          dartType: 'String',
+          name: 'userId',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: true,
+          dartType: 'int?',
         ),
         _i2.ColumnDefinition(
           name: 'role',
@@ -58,16 +51,22 @@ class Protocol extends _i1.SerializationManagerServer {
           dartType: 'String',
         ),
         _i2.ColumnDefinition(
-          name: 'passwordHash',
+          name: 'location',
           columnType: _i2.ColumnType.text,
-          isNullable: false,
-          dartType: 'String',
+          isNullable: true,
+          dartType: 'String?',
         ),
         _i2.ColumnDefinition(
-          name: 'lastLogin',
-          columnType: _i2.ColumnType.timestampWithoutTimeZone,
-          isNullable: false,
-          dartType: 'DateTime',
+          name: 'latitude',
+          columnType: _i2.ColumnType.doublePrecision,
+          isNullable: true,
+          dartType: 'double?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'longitude',
+          columnType: _i2.ColumnType.doublePrecision,
+          isNullable: true,
+          dartType: 'double?',
         ),
       ],
       foreignKeys: [],
@@ -109,10 +108,6 @@ class Protocol extends _i1.SerializationManagerServer {
     }
     if (t == _i1.getType<_i5.User?>()) {
       return (data != null ? _i5.User.fromJson(data) : null) as T;
-    }
-    if (t == List<_i6.User>) {
-      return (data as List).map((e) => deserialize<_i6.User>(e)).toList()
-          as dynamic;
     }
     try {
       return _i3.Protocol().deserialize<T>(data, t);

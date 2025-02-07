@@ -1,8 +1,8 @@
 class: User
 table: user
 fields:
-  name: String
-  email: String
+  userId: int?
   role: String
-  passwordHash: String
-  lastLogin: DateTime
+  location: String?  # His building
+  latitude: double?
+  longitude: double?

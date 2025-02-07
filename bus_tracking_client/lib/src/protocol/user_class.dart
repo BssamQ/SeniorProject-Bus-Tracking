@@ -14,31 +14,30 @@ import 'package:serverpod_client/serverpod_client.dart' as _i1;
 abstract class User implements _i1.SerializableModel {
   User._({
     this.id,
-    required this.name,
-    required this.email,
+    this.userId,
     required this.role,
-    required this.passwordHash,
-    required this.lastLogin,
+    this.location,
+    this.latitude,
+    this.longitude,
   });
 
   factory User({
     int? id,
-    required String name,
-    required String email,
+    int? userId,
     required String role,
-    required String passwordHash,
-    required DateTime lastLogin,
+    String? location,
+    double? latitude,
+    double? longitude,
   }) = _UserImpl;
 
   factory User.fromJson(Map<String, dynamic> jsonSerialization) {
     return User(
       id: jsonSerialization['id'] as int?,
-      name: jsonSerialization['name'] as String,
-      email: jsonSerialization['email'] as String,
+      userId: jsonSerialization['userId'] as int?,
       role: jsonSerialization['role'] as String,
-      passwordHash: jsonSerialization['passwordHash'] as String,
-      lastLogin:
-          _i1.DateTimeJsonExtension.fromJson(jsonSerialization['lastLogin']),
+      location: jsonSerialization['location'] as String?,
+      latitude: (jsonSerialization['latitude'] as num?)?.toDouble(),
+      longitude: (jsonSerialization['longitude'] as num?)?.toDouble(),
     );
   }
 
@@ -47,33 +46,33 @@ abstract class User implements _i1.SerializableModel {
   /// the id will be null.
   int? id;
 
-  String name;
-
-  String email;
+  int? userId;
 
   String role;
 
-  String passwordHash;
+  String? location;
 
-  DateTime lastLogin;
+  double? latitude;
+
+  double? longitude;
 
   User copyWith({
     int? id,
-    String? name,
-    String? email,
+    int? userId,
     String? role,
-    String? passwordHash,
-    DateTime? lastLogin,
+    String? location,
+    double? latitude,
+    double? longitude,
   });
   @override
   Map<String, dynamic> toJson() {
     return {
       if (id != null) 'id': id,
-      'name': name,
-      'email': email,
+      if (userId != null) 'userId': userId,
       'role': role,
-      'passwordHash': passwordHash,
-      'lastLogin': lastLogin.toJson(),
+      if (location != null) 'location': location,
+      if (latitude != null) 'latitude': latitude,
+      if (longitude != null) 'longitude': longitude,
     };
   }
 
@@ -88,36 +87,36 @@ class _Undefined {}
 class _UserImpl extends User {
   _UserImpl({
     int? id,
-    required String name,
-    required String email,
+    int? userId,
     required String role,
-    required String passwordHash,
-    required DateTime lastLogin,
+    String? location,
+    double? latitude,
+    double? longitude,
   }) : super._(
           id: id,
-          name: name,
-          email: email,
+          userId: userId,
           role: role,
-          passwordHash: passwordHash,
-          lastLogin: lastLogin,
+          location: location,
+          latitude: latitude,
+          longitude: longitude,
         );
 
   @override
   User copyWith({
     Object? id = _Undefined,
-    String? name,
-    String? email,
+    Object? userId = _Undefined,
     String? role,
-    String? passwordHash,
-    DateTime? lastLogin,
+    Object? location = _Undefined,
+    Object? latitude = _Undefined,
+    Object? longitude = _Undefined,
   }) {
     return User(
       id: id is int? ? id : this.id,
-      name: name ?? this.name,
-      email: email ?? this.email,
+      userId: userId is int? ? userId : this.userId,
       role: role ?? this.role,
-      passwordHash: passwordHash ?? this.passwordHash,
-      lastLogin: lastLogin ?? this.lastLogin,
+      location: location is String? ? location : this.location,
+      latitude: latitude is double? ? latitude : this.latitude,
+      longitude: longitude is double? ? longitude : this.longitude,
     );
   }
 }

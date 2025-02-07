@@ -60,24 +60,6 @@ class Endpoints extends _i1.EndpointDispatch {
       name: 'user',
       endpoint: endpoints['user']!,
       methodConnectors: {
-        'getUser': _i1.MethodConnector(
-          name: 'getUser',
-          params: {
-            'keyword': _i1.ParameterDescription(
-              name: 'keyword',
-              type: _i1.getType<String?>(),
-              nullable: true,
-            )
-          },
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-          ) async =>
-              (endpoints['user'] as _i3.UserEndpoint).getUser(
-            session,
-            keyword: params['keyword'],
-          ),
-        ),
         'getUserById': _i1.MethodConnector(
           name: 'getUserById',
           params: {

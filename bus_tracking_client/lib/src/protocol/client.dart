@@ -36,13 +36,6 @@ class EndpointUser extends _i1.EndpointRef {
   @override
   String get name => 'user';
 
-  _i2.Future<List<_i3.User>> getUser({String? keyword}) =>
-      caller.callServerEndpoint<List<_i3.User>>(
-        'user',
-        'getUser',
-        {'keyword': keyword},
-      );
-
   _i2.Future<_i3.User?> getUserById({int? id}) =>
       caller.callServerEndpoint<_i3.User?>(
         'user',

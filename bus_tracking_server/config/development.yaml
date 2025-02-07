@@ -40,3 +40,13 @@ redis:
   enabled: false
   host: localhost
   port: 8091
+
+
+log:
+  enable:
+      session: true
+      query: true
+      debug: true
+      info: true
+      warning: true
+      error: true

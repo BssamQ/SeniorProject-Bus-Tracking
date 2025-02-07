@@ -1,0 +1,139 @@
+{
+  "actions": [
+    {
+      "type": "alterTable",
+      "alterTable": {
+        "name": "user",
+        "schema": "public",
+        "addColumns": [
+          {
+            "name": "userId",
+            "columnType": 6,
+            "isNullable": true,
+            "dartType": "int?"
+          },
+          {
+            "name": "location",
+            "columnType": 0,
+            "isNullable": true,
+            "dartType": "String?"
+          },
+          {
+            "name": "latitude",
+            "columnType": 3,
+            "isNullable": true,
+            "dartType": "double?"
+          },
+          {
+            "name": "longitude",
+            "columnType": 3,
+            "isNullable": true,
+            "dartType": "double?"
+          }
+        ],
+        "deleteColumns": [
+          "name",
+          "email",
+          "passwordHash",
+          "lastLogin"
+        ],
+        "modifyColumns": [],
+        "addIndexes": [],
+        "deleteIndexes": [],
+        "addForeignKeys": [
+          {
+            "constraintName": "user_fk_0",
+            "columns": [
+              "userId"
+            ],
+            "referenceTable": "serverpod_user_info",
+            "referenceTableSchema": "public",
+            "referenceColumns": [
+              "id"
+            ],
+            "onUpdate": 3,
+            "onDelete": 3
+          }
+        ],
+        "deleteForeignKeys": [],
+        "warnings": [
+          {
+            "type": "columnDropped",
+            "message": "Column \"name\" of table \"user\" will be dropped.",
+            "table": "user",
+            "columns": [
+              "name"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"email\" of table \"user\" will be dropped.",
+            "table": "user",
+            "columns": [
+              "email"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"passwordHash\" of table \"user\" will be dropped.",
+            "table": "user",
+            "columns": [
+              "passwordHash"
+            ],
+            "destrucive": true
+          },
+          {
+            "type": "columnDropped",
+            "message": "Column \"lastLogin\" of table \"user\" will be dropped.",
+            "table": "user",
+            "columns": [
+              "lastLogin"
+            ],
+            "destrucive": true
+          }
+        ]
+      }
+    }
+  ],
+  "warnings": [
+    {
+      "type": "columnDropped",
+      "message": "Column \"name\" of table \"user\" will be dropped.",
+      "table": "user",
+      "columns": [
+        "name"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column \"email\" of table \"user\" will be dropped.",
+      "table": "user",
+      "columns": [
+        "email"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column \"passwordHash\" of table \"user\" will be dropped.",
+      "table": "user",
+      "columns": [
+        "passwordHash"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column \"lastLogin\" of table \"user\" will be dropped.",
+      "table": "user",
+      "columns": [
+        "lastLogin"
+      ],
+      "destrucive": true
+    }
+  ],
+  "migrationApiVersion": 1
+}
