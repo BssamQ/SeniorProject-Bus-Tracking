@@ -108,7 +108,7 @@ class _SelectBusScreenState extends State<SelectBusScreen> {
         icon: Icon(Icons.info_outline, color: Colors.blue),
         onPressed: () => _showBusInfo(busName),
       ),
-      tileColor: selectedBus == busName ? Colors.orangeAccent.withOpacity(0.5) : null,
+      tileColor: selectedBus == busName ? Colors.orangeAccent : null,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       onTap: () {
         setState(() {

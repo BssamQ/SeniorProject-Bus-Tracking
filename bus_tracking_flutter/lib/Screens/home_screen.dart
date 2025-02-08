@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
-import 'preferences_screen.dart';
-import 'select_bus_screen.dart';
-import '../Screens/login_screen.dart';
-import 'list_station_screen.dart';
+
 
 class HomeScreen extends StatelessWidget {
   final LatLng _initialPosition = LatLng(26.3041, 50.1412); // KFUPM Location

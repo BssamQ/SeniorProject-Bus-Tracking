@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
 import 'Screens/login_screen.dart';
 import 'Screens/home_screen.dart';
 import 'Screens/preferences_screen.dart';

@@ -1,5 +1,4 @@
 import 'package:bus_tracking_client/bus_tracking_client.dart';
-import 'package:bus_tracking_flutter/main.dart';
 import 'package:flutter/material.dart';
 import 'package:serverpod_auth_email_flutter/serverpod_auth_email_flutter.dart';
 import 'package:serverpod_auth_shared_flutter/serverpod_auth_shared_flutter.dart';
