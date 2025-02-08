@@ -4,7 +4,7 @@ import 'package:bus_tracking_server/src/web/routes/root.dart';
 
 import 'src/generated/protocol.dart';
 import 'src/generated/endpoints.dart';
-
+import 'package:serverpod_auth_server/module.dart' as auth;
 // This is the starting point of your Serverpod server. In most cases, you will
 // only need to make additions to this file if you add future calls,  are
 // configuring Relic (Serverpod's web-server), or need custom setup work.
