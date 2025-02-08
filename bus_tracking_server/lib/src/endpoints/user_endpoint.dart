@@ -10,11 +10,10 @@ class UserEndpoint extends Endpoint {
     return await User.db.findById(session, id ?? 1);
   }
 
+  @override
+  bool get requireLogin => false;
   // Add a new user
   Future<bool> addUser(Session session, User user) async {
-    if (user.latitude == null || user.longitude == null) {
-      return false; // Ensure the location is provided (optional, depends on your requirement)
-    }
     await User.db.insert(session, [user]);
     return true;
   }
@@ -42,4 +41,21 @@ class UserEndpoint extends Endpoint {
     }
     return false;
   }
+
+  Future<bool> login(Session session, String email, String password) async {
+    var users = await User.db.find(session, where: (t) => t.email.equals(email));
+
+    if (users.isNotEmpty) {
+      var user = users.first;
+      if (user.password == password) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+
 }
+
+
+

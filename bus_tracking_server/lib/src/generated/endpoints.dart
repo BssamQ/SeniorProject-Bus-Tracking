@@ -132,6 +132,30 @@ class Endpoints extends _i1.EndpointDispatch {
             params['id'],
           ),
         ),
+        'login': _i1.MethodConnector(
+          name: 'login',
+          params: {
+            'email': _i1.ParameterDescription(
+              name: 'email',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+            'password': _i1.ParameterDescription(
+              name: 'password',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['user'] as _i3.UserEndpoint).login(
+            session,
+            params['email'],
+            params['password'],
+          ),
+        ),
       },
     );
     modules['serverpod_auth'] = _i5.Endpoints()..initializeEndpoints(server);

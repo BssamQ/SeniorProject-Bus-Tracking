@@ -14,6 +14,7 @@ apiServer:
   publicPort: 0
   publicScheme: http
 
+
 # Configuration for the Insights test server.
 insightsServer:
   port: 0

@@ -5,3 +5,4 @@ user:
   - addUser:
   - updateUser:
   - deleteUser:
+  - login:

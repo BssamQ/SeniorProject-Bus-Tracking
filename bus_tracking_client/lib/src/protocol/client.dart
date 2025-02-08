@@ -60,6 +60,19 @@ class EndpointUser extends _i1.EndpointRef {
         'deleteUser',
         {'id': id},
       );
+
+  _i2.Future<bool> login(
+    String email,
+    String password,
+  ) =>
+      caller.callServerEndpoint<bool>(
+        'user',
+        'login',
+        {
+          'email': email,
+          'password': password,
+        },
+      );
 }
 
 class Modules {

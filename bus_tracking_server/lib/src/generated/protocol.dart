@@ -39,10 +39,22 @@ class Protocol extends _i1.SerializationManagerServer {
           columnDefault: 'nextval(\'user_id_seq\'::regclass)',
         ),
         _i2.ColumnDefinition(
-          name: 'userId',
-          columnType: _i2.ColumnType.bigint,
-          isNullable: true,
-          dartType: 'int?',
+          name: 'name',
+          columnType: _i2.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _i2.ColumnDefinition(
+          name: 'email',
+          columnType: _i2.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _i2.ColumnDefinition(
+          name: 'password',
+          columnType: _i2.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
         ),
         _i2.ColumnDefinition(
           name: 'role',

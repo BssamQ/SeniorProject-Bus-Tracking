@@ -1,7 +1,9 @@
 class: User
 table: user
 fields:
-  userId: int?
+  name: String
+  email: String
+  password: String
   role: String
   location: String?  # His building
   latitude: double?

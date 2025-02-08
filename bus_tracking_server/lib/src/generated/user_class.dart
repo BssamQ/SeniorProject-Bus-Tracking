@@ -14,7 +14,9 @@ import 'package:serverpod/serverpod.dart' as _i1;
 abstract class User implements _i1.TableRow, _i1.ProtocolSerialization {
   User._({
     this.id,
-    this.userId,
+    required this.name,
+    required this.email,
+    required this.password,
     required this.role,
     this.location,
     this.latitude,
@@ -23,7 +25,9 @@ abstract class User implements _i1.TableRow, _i1.ProtocolSerialization {
 
   factory User({
     int? id,
-    int? userId,
+    required String name,
+    required String email,
+    required String password,
     required String role,
     String? location,
     double? latitude,
@@ -33,7 +37,9 @@ abstract class User implements _i1.TableRow, _i1.ProtocolSerialization {
   factory User.fromJson(Map<String, dynamic> jsonSerialization) {
     return User(
       id: jsonSerialization['id'] as int?,
-      userId: jsonSerialization['userId'] as int?,
+      name: jsonSerialization['name'] as String,
+      email: jsonSerialization['email'] as String,
+      password: jsonSerialization['password'] as String,
       role: jsonSerialization['role'] as String,
       location: jsonSerialization['location'] as String?,
       latitude: (jsonSerialization['latitude'] as num?)?.toDouble(),
@@ -48,7 +54,11 @@ abstract class User implements _i1.TableRow, _i1.ProtocolSerialization {
   @override
   int? id;
 
-  int? userId;
+  String name;
+
+  String email;
+
+  String password;
 
   String role;
 
@@ -63,7 +73,9 @@ abstract class User implements _i1.TableRow, _i1.ProtocolSerialization {
 
   User copyWith({
     int? id,
-    int? userId,
+    String? name,
+    String? email,
+    String? password,
     String? role,
     String? location,
     double? latitude,
@@ -73,7 +85,9 @@ abstract class User implements _i1.TableRow, _i1.ProtocolSerialization {
   Map<String, dynamic> toJson() {
     return {
       if (id != null) 'id': id,
-      if (userId != null) 'userId': userId,
+      'name': name,
+      'email': email,
+      'password': password,
       'role': role,
       if (location != null) 'location': location,
       if (latitude != null) 'latitude': latitude,
@@ -85,7 +99,9 @@ abstract class User implements _i1.TableRow, _i1.ProtocolSerialization {
   Map<String, dynamic> toJsonForProtocol() {
     return {
       if (id != null) 'id': id,
-      if (userId != null) 'userId': userId,
+      'name': name,
+      'email': email,
+      'password': password,
       'role': role,
       if (location != null) 'location': location,
       if (latitude != null) 'latitude': latitude,
@@ -128,14 +144,18 @@ class _Undefined {}
 class _UserImpl extends User {
   _UserImpl({
     int? id,
-    int? userId,
+    required String name,
+    required String email,
+    required String password,
     required String role,
     String? location,
     double? latitude,
     double? longitude,
   }) : super._(
           id: id,
-          userId: userId,
+          name: name,
+          email: email,
+          password: password,
           role: role,
           location: location,
           latitude: latitude,
@@ -145,7 +165,9 @@ class _UserImpl extends User {
   @override
   User copyWith({
     Object? id = _Undefined,
-    Object? userId = _Undefined,
+    String? name,
+    String? email,
+    String? password,
     String? role,
     Object? location = _Undefined,
     Object? latitude = _Undefined,
@@ -153,7 +175,9 @@ class _UserImpl extends User {
   }) {
     return User(
       id: id is int? ? id : this.id,
-      userId: userId is int? ? userId : this.userId,
+      name: name ?? this.name,
+      email: email ?? this.email,
+      password: password ?? this.password,
       role: role ?? this.role,
       location: location is String? ? location : this.location,
       latitude: latitude is double? ? latitude : this.latitude,
@@ -164,8 +188,16 @@ class _UserImpl extends User {
 
 class UserTable extends _i1.Table {
   UserTable({super.tableRelation}) : super(tableName: 'user') {
-    userId = _i1.ColumnInt(
-      'userId',
+    name = _i1.ColumnString(
+      'name',
+      this,
+    );
+    email = _i1.ColumnString(
+      'email',
+      this,
+    );
+    password = _i1.ColumnString(
+      'password',
       this,
     );
     role = _i1.ColumnString(
@@ -186,7 +218,11 @@ class UserTable extends _i1.Table {
     );
   }
 
-  late final _i1.ColumnInt userId;
+  late final _i1.ColumnString name;
+
+  late final _i1.ColumnString email;
+
+  late final _i1.ColumnString password;
 
   late final _i1.ColumnString role;
 
@@ -199,7 +235,9 @@ class UserTable extends _i1.Table {
   @override
   List<_i1.Column> get columns => [
         id,
-        userId,
+        name,
+        email,
+        password,
         role,
         location,
         latitude,
