@@ -6,7 +6,7 @@ services:
       - '8090:5432'
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_DB: bus_tracking
+      POSTGRES_DB: bus_system_db
       POSTGRES_PASSWORD: "dXljwszf6TLzKP_w-S0jKli7j3Tiwdaw"
     volumes:
       - bus_tracking_data:/var/lib/postgresql/data
