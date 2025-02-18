@@ -33,6 +33,7 @@ database:
   port: 5432
   name: bus_system_db
   user: postgres
+  password: '1234'
 
 
 # This is the setup for Redis.
