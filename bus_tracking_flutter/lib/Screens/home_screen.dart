@@ -1,80 +1,74 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:serverpod_auth_shared_flutter/serverpod_auth_shared_flutter.dart';
+import '../main.dart';
 
 class HomeScreen extends StatefulWidget {
+  final bool isDarkMode;
+  final Function(bool) onThemeChanged;
+
+  HomeScreen({required this.isDarkMode, required this.onThemeChanged});
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
   final LatLng _initialPosition = LatLng(26.3123370, 50.1422222);
-  LatLng? _currentPostion = LatLng(26.3123370, 50.1422222);
+  String username = "Guest";
+  late bool _isDarkMode;
   LatLng? pickupPosition;
   LatLng? destinationPosition;
+  bool showRoute = false;
   String? pickupLocation;
   String? destinationLocation;
-  bool showRoute = false;
 
-  void _updateRoute(Map<String, dynamic> selectedRoute) {
+  @override
+  void initState() {
+    super.initState();
+    _loadPreferences();
+    _fetchUsername();
+    _loadSavedRoute();
+  }
+
+  Future<void> _loadPreferences() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool savedDarkMode = prefs.getBool('darkMode') ?? false;
     setState(() {
-      pickupLocation = selectedRoute['pickup'];
-      destinationLocation = selectedRoute['destination'];
-      pickupPosition = selectedRoute['pickupPosition'];
-      destinationPosition = selectedRoute['destinationPosition'];
-      showRoute = true;
+      _isDarkMode = savedDarkMode;
     });
   }
 
-  List<Marker> _getRouteMarkers() {
-    List<Marker> markers = [];
-    if (showRoute && pickupPosition != null && destinationPosition != null) {
-      markers.addAll([
-        Marker(
-          point: pickupPosition!,
-          width: 40,
-          height: 40,
-          child: Icon(Icons.location_on,
-              color: const Color.fromARGB(255, 63, 244, 54), size: 40),
-        ),
-        Marker(
-          point: destinationPosition!,
-          width: 40,
-          height: 40,
-          child: Icon(Icons.location_on, color: Colors.red, size: 40),
-        ),
-      ]);
-    }
-    return markers;
+  void _fetchUsername() {
+    var userInfo = sessionManager.signedInUser;
+    setState(() {
+      username = userInfo?.userName ?? "Guest";
+    });
   }
 
-  List<Polyline> _getRoutePolylines() {
-    if (showRoute && pickupPosition != null && destinationPosition != null) {
-      return [
-        Polyline(
-          points: [pickupPosition!, destinationPosition!],
-          color: const Color.fromARGB(255, 54, 244, 168),
-          strokeWidth: 4.0,
-        ),
-      ];
+  Future<void> _loadSavedRoute() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? savedPickup = prefs.getString('pickup');
+    String? savedDestination = prefs.getString('destination');
+    if (savedPickup != null && savedDestination != null) {
+      setState(() {
+        pickupLocation = savedPickup;
+        destinationLocation = savedDestination;
+        showRoute = true;
+      });
     }
-    return [];
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: _isDarkMode ? Colors.black : Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: _isDarkMode ? Colors.black : Colors.white,
         elevation: 0,
-        leading: Builder(
-          builder: (context) => IconButton(
-            icon: Icon(Icons.menu, color: Colors.black),
-            onPressed: () => Scaffold.of(context).openDrawer(),
-          ),
-        ),
         title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.network(
               'https://upload.wikimedia.org/wikipedia/ar/archive/3/37/20221103091849%21King_Fahd_University_of_Petroleum_%26_Minerals_Logo.png',
@@ -88,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: CircularProgressIndicator(
                       value: loadingProgress.expectedTotalBytes != null
                           ? loadingProgress.cumulativeBytesLoaded /
-                              loadingProgress.expectedTotalBytes!
+                          loadingProgress.expectedTotalBytes!
                           : null,
                     ),
                   ),
@@ -99,101 +93,79 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
             SizedBox(width: 9),
-            Text('BUS SYSTEM',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                )),
-          ],
-        ),
-      ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            DrawerHeader(
-              decoration: BoxDecoration(color: Colors.green),
-              child: Text('Menu',
-                  style: TextStyle(color: Colors.white, fontSize: 24)),
-            ),
-            ListTile(
-              leading: Icon(Icons.account_circle),
-              title: Text('Account'),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: Icon(Icons.settings),
-              title: Text('Preferences'),
-              onTap: () {
-                Navigator.pushNamed(context, '/preferences');
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.logout),
-              title: Text('Log Out'),
-              onTap: () {
-                Navigator.pushReplacementNamed(context, '/');
-              },
+            Text(
+              'BUS SYSTEM',
+              style: TextStyle(
+                color: _isDarkMode ? Colors.white : Colors.black,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ],
         ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.person, color: _isDarkMode ? Colors.white : Colors.black),
+            onPressed: () async {
+              await Navigator.pushNamed(context, '/preferences');
+              // Reload preferences after returning
+              _loadPreferences();
+            },
+          ),
+        ],
       ),
-      body: Stack(
+      body: FlutterMap(
+        options: MapOptions(
+          initialCenter: pickupPosition ?? _initialPosition,
+          initialZoom: 16.0,
+        ),
         children: [
-          FlutterMap(
-            options: MapOptions(
-              initialCenter: _initialPosition,
-              initialZoom: 16.0,
+          TileLayer(
+            urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            subdomains: ['a', 'b', 'c'],
+          ),
+          if (showRoute && pickupPosition != null && destinationPosition != null)
+            PolylineLayer(
+              polylines: [
+                Polyline(
+                  points: [pickupPosition!, destinationPosition!],
+                  color: Colors.blue,
+                  strokeWidth: 4,
+                ),
+              ],
             ),
-            children: [
-              TileLayer(
-                urlTemplate:
-                    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                subdomains: ['a', 'b', 'c'],
-              ),
-              PolylineLayer(
-                polylines: _getRoutePolylines(),
-              ),
-              MarkerLayer(markers: _getRouteMarkers()),
+          MarkerLayer(
+            markers: [
+              if (pickupPosition != null)
+                Marker(
+                  point: pickupPosition!,
+                  width: 40,
+                  height: 40,
+                  child: Icon(Icons.location_pin, color: Colors.orange, size: 40),
+                ),
+              if (destinationPosition != null)
+                Marker(
+                  point: destinationPosition!,
+                  width: 40,
+                  height: 40,
+                  child: Icon(Icons.location_pin, color: Colors.blue, size: 40),
+                ),
             ],
           ),
-          if (showRoute)
-            Positioned(
-              bottom: 70,
-              left: 16,
-              right: 16,
-              child: Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text('From: ${pickupLocation ?? ""}'),
-                      Text('To: ${destinationLocation ?? ""}'),
-                    ],
-                  ),
-                ),
-              ),
-            ),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: _isDarkMode ? Colors.black : Colors.white,
+        selectedItemColor: _isDarkMode ? Colors.green : Colors.blue,
         currentIndex: 0,
         onTap: (index) {
           if (index == 1) {
-            Navigator.pushNamed(context, '/select_route').then((result) {
-              if (result != null) {
-                _updateRoute(result as Map<String, dynamic>);
-              }
-            });
+            Navigator.pushNamed(context, '/select_route');
           }
         },
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.explore), label: 'Explore'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.directions), label: 'Select Route'),
+          BottomNavigationBarItem(icon: Icon(Icons.directions), label: 'Select Route'),
         ],
       ),
     );

@@ -1,172 +1,50 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:serverpod_auth_shared_flutter/serverpod_auth_shared_flutter.dart';
+import '../main.dart'; // Ensure main.dart has sessionManager
 
 class PreferencesScreen extends StatefulWidget {
+  final bool isDarkMode;
+  final Function(bool) onThemeChanged;
+
+  const PreferencesScreen({
+    Key? key,
+    required this.isDarkMode,
+    required this.onThemeChanged,
+  }) : super(key: key);
+
   @override
   _PreferencesScreenState createState() => _PreferencesScreenState();
 }
 
 class _PreferencesScreenState extends State<PreferencesScreen> {
-  TextEditingController _nameController = TextEditingController(text: "Ahmed Mohammed");
-  bool _isEditing = false; // Track if the user is editing
-
-  bool _isDarkMode = false;
+  late bool _isDarkMode;
+  late TextEditingController _nameController;
+  bool _isEditing = false;
   String _selectedStation = "Station 828";
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: Text('Preferences', style: TextStyle(color: Colors.black)),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: ListView(
-          children: [
-            // Profile Section
-            Text("Profile", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-            SizedBox(height: 10),
-
-            Container(
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Icon(Icons.account_circle, size: 50, color: Colors.black54),
-                      SizedBox(width: 10),
-                      Expanded(
-                        child: _isEditing
-                            ? TextField(
-                          controller: _nameController,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                          ),
-                        )
-                            : Text(
-                          _nameController.text,
-                          style: TextStyle(fontSize: 18),
-                        ),
-                      ),
-                      IconButton(
-                        icon: Icon(_isEditing ? Icons.check : Icons.edit, color: Colors.black),
-                        onPressed: () {
-                          setState(() {
-                            _isEditing = !_isEditing; // Toggle editing state
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                  Text("Student", style: TextStyle(color: Colors.grey[600])),
-                ],
-              ),
-            ),
-
-            SizedBox(height: 20),
-
-            // User Preferences Section
-            Text("User Preferences", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-            SizedBox(height: 10),
-
-            // Theme Toggle
-            ListTile(
-              leading: Icon(Icons.brightness_6),
-              title: Text("Theme"),
-              trailing: Switch(
-                value: _isDarkMode,
-                onChanged: (value) {
-                  setState(() {
-                    _isDarkMode = value;
-                  });
-                },
-              ),
-            ),
-
-            // Default Destination Selection
-            ListTile(
-              leading: Icon(Icons.location_on),
-              title: Text("Default Destination"),
-              subtitle: Text(_selectedStation),
-              trailing: Icon(Icons.arrow_drop_down),
-              onTap: () {
-                _selectStation();
-              },
-            ),
-
-            SizedBox(height: 20),
-
-            // Data & Privacy Section
-            Text("Data and Privacy", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-            SizedBox(height: 10),
-
-            ListTile(
-              leading: Icon(Icons.delete),
-              title: Text("Clear Cache"),
-              trailing: ElevatedButton(
-                onPressed: () {},
-                child: Text("Clear"),
-              ),
-            ),
-
-            ListTile(
-              leading: Icon(Icons.privacy_tip),
-              title: Text("Privacy Policy"),
-              trailing: ElevatedButton(
-                onPressed: () {},
-                child: Text("Link"),
-              ),
-            ),
-
-            SizedBox(height: 20),
-
-            // Support Section
-            Text("Support and Feedback", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-            SizedBox(height: 10),
-
-            ListTile(
-              leading: Icon(Icons.help),
-              title: Text("Help Center"),
-              trailing: ElevatedButton(
-                onPressed: () {},
-                child: Text("Contact Us"),
-              ),
-            ),
-
-            SizedBox(height: 20),
-
-            // App Version
-            Container(
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.grey[300],
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("App Version"),
-                  Text("1.0", style: TextStyle(fontWeight: FontWeight.bold)),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+  void initState() {
+    super.initState();
+    _nameController = TextEditingController();
+    _isDarkMode = widget.isDarkMode;
+    _fetchUsername();
   }
 
-  // Function to select default station
+  Future<void> _fetchUsername() async {
+    var userInfo = sessionManager.signedInUser;
+    setState(() {
+      _nameController.text = userInfo?.userName ?? "Guest";
+    });
+  }
+
+  void _toggleTheme(bool value) {
+    setState(() {
+      _isDarkMode = value;
+    });
+    widget.onThemeChanged(value); // Notify main app
+  }
+
   void _selectStation() {
     showModalBottomSheet(
       context: context,
@@ -208,6 +86,77 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
           ),
         );
       },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text("Preferences")),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: _isDarkMode ? Colors.grey[800] : Colors.grey[200],
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Icon(Icons.account_circle, size: 50, color: _isDarkMode ? Colors.white70 : Colors.black54),
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: _isEditing
+                            ? TextField(
+                          controller: _nameController,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                          ),
+                        )
+                            : Text(
+                          _nameController.text,
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: _isDarkMode ? Colors.white : Colors.black,
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        icon: Icon(_isEditing ? Icons.check : Icons.edit, color: _isDarkMode ? Colors.white : Colors.black),
+                        onPressed: () {
+                          setState(() {
+                            _isEditing = !_isEditing; // Toggle editing state
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                  Text("Student", style: TextStyle(color: _isDarkMode ? Colors.white70 : Colors.grey[600])),
+                ],
+              ),
+            ),
+            const SizedBox(height: 20),
+
+            ListTile(
+              leading: Icon(Icons.location_on),
+              title: Text("Default Destination"),
+              subtitle: Text(_selectedStation),
+              trailing: Icon(Icons.arrow_drop_down),
+              onTap: _selectStation,
+            ),
+            const Text("Theme Mode"),
+            Switch(
+              value: _isDarkMode,
+              onChanged: _toggleTheme,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
