@@ -13,8 +13,11 @@ import 'package:serverpod/serverpod.dart' as _i1;
 import 'package:serverpod/protocol.dart' as _i2;
 import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i3;
 import 'example.dart' as _i4;
-import 'user_class.dart' as _i5;
+import 'stations.dart' as _i5;
+import 'user_class.dart' as _i6;
+import 'package:bus_tracking_server/src/generated/stations.dart' as _i7;
 export 'example.dart';
+export 'stations.dart';
 export 'user_class.dart';
 
 class Protocol extends _i1.SerializationManagerServer {
@@ -25,6 +28,56 @@ class Protocol extends _i1.SerializationManagerServer {
   static final Protocol _instance = Protocol._();
 
   static final List<_i2.TableDefinition> targetTableDefinitions = [
+    _i2.TableDefinition(
+      name: 'station',
+      dartName: 'Station',
+      schema: 'public',
+      module: 'bus_tracking',
+      columns: [
+        _i2.ColumnDefinition(
+          name: 'id',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'nextval(\'station_id_seq\'::regclass)',
+        ),
+        _i2.ColumnDefinition(
+          name: 'name',
+          columnType: _i2.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _i2.ColumnDefinition(
+          name: 'latitude',
+          columnType: _i2.ColumnType.doublePrecision,
+          isNullable: false,
+          dartType: 'double',
+        ),
+        _i2.ColumnDefinition(
+          name: 'longitude',
+          columnType: _i2.ColumnType.doublePrecision,
+          isNullable: false,
+          dartType: 'double',
+        ),
+      ],
+      foreignKeys: [],
+      indexes: [
+        _i2.IndexDefinition(
+          indexName: 'station_pkey',
+          tableSpace: null,
+          elements: [
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'id',
+            )
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: true,
+        )
+      ],
+      managed: true,
+    ),
     _i2.TableDefinition(
       name: 'user',
       dartName: 'User',
@@ -112,14 +165,24 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i4.Example) {
       return _i4.Example.fromJson(data) as T;
     }
-    if (t == _i5.User) {
-      return _i5.User.fromJson(data) as T;
+    if (t == _i5.Station) {
+      return _i5.Station.fromJson(data) as T;
+    }
+    if (t == _i6.User) {
+      return _i6.User.fromJson(data) as T;
     }
     if (t == _i1.getType<_i4.Example?>()) {
       return (data != null ? _i4.Example.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i5.User?>()) {
-      return (data != null ? _i5.User.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i5.Station?>()) {
+      return (data != null ? _i5.Station.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i6.User?>()) {
+      return (data != null ? _i6.User.fromJson(data) : null) as T;
+    }
+    if (t == List<_i7.Station>) {
+      return (data as List).map((e) => deserialize<_i7.Station>(e)).toList()
+          as dynamic;
     }
     try {
       return _i3.Protocol().deserialize<T>(data, t);
@@ -133,22 +196,21 @@ class Protocol extends _i1.SerializationManagerServer {
   @override
   String? getClassNameForObject(Object? data) {
     String? className = super.getClassNameForObject(data);
-    if (className != null) return className;
+    return className;
     if (data is _i4.Example) {
       return 'Example';
     }
-    if (data is _i5.User) {
+    if (data is _i5.Station) {
+      return 'Station';
+    }
+    if (data is _i6.User) {
       return 'User';
     }
     className = _i2.Protocol().getClassNameForObject(data);
-    if (className != null) {
-      return 'serverpod.$className';
-    }
-    className = _i3.Protocol().getClassNameForObject(data);
-    if (className != null) {
-      return 'serverpod_auth.$className';
-    }
-    return null;
+    return 'serverpod.$className';
+      className = _i3.Protocol().getClassNameForObject(data);
+    return 'serverpod_auth.$className';
+      return null;
   }
 
   @override
@@ -160,8 +222,11 @@ class Protocol extends _i1.SerializationManagerServer {
     if (dataClassName == 'Example') {
       return deserialize<_i4.Example>(data['data']);
     }
+    if (dataClassName == 'Station') {
+      return deserialize<_i5.Station>(data['data']);
+    }
     if (dataClassName == 'User') {
-      return deserialize<_i5.User>(data['data']);
+      return deserialize<_i6.User>(data['data']);
     }
     if (dataClassName.startsWith('serverpod.')) {
       data['className'] = dataClassName.substring(10);
@@ -189,8 +254,10 @@ class Protocol extends _i1.SerializationManagerServer {
       }
     }
     switch (t) {
-      case _i5.User:
-        return _i5.User.t;
+      case _i5.Station:
+        return _i5.Station.t;
+      case _i6.User:
+        return _i6.User.t;
     }
     return null;
   }

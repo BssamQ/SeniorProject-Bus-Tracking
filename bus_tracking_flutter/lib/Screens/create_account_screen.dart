@@ -4,6 +4,8 @@ import 'package:serverpod_flutter/serverpod_flutter.dart';
 
 
 class CreateAccountScreen extends StatefulWidget {
+  const CreateAccountScreen({super.key});
+
   @override
   _CreateAccountScreenState createState() => _CreateAccountScreenState();
 }

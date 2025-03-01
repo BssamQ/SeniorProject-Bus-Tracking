@@ -2,8 +2,6 @@ import 'package:bus_tracking_client/bus_tracking_client.dart';
 import 'package:flutter/material.dart';
 import 'package:serverpod_flutter/serverpod_flutter.dart';
 import 'Screens/create_account_screen.dart';
-import 'Screens/create_account_screen.dart';
-import 'package:serverpod_auth_email_flutter/serverpod_auth_email_flutter.dart';
 
 
 class LoginScreen extends StatefulWidget {

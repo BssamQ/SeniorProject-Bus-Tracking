@@ -9,7 +9,7 @@ class HomeScreen extends StatefulWidget {
   final bool isDarkMode;
   final Function(bool) onThemeChanged;
 
-  HomeScreen({required this.isDarkMode, required this.onThemeChanged});
+  const HomeScreen({super.key, required this.isDarkMode, required this.onThemeChanged});
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
