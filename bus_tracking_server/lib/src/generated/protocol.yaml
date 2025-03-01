@@ -1,5 +1,12 @@
 example:
   - hello:
+station:
+  - getStationById:
+  - addStation:
+  - deleteStationById:
+  - searchStationsByName:
+  - updateStation:
+  - getAllStations:
 user:
   - getUserById:
   - addUser:

@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:open_route_service/open_route_service.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
+import '../main.dart';
 
 class SelectRouteScreen extends StatefulWidget {
   final bool isDarkMode;
@@ -20,16 +19,26 @@ class SelectRouteScreen extends StatefulWidget {
 }
 
 class _SelectRouteScreenState extends State<SelectRouteScreen> {
-  final Map<String, LatLng> locationCoordinates = {
-    'Station 1': LatLng(26.3148672, 50.1466890),
-    'Station 2': LatLng(26.3145661, 50.1452127),
-    'Station 3': LatLng(26.3140771, 50.1433836),
-    'Station 4': LatLng(26.3128896, 50.1402611),
-    'Station 5': LatLng(26.3123370, 50.1422222),
-    'Station 6': LatLng(26.3098307, 50.1439817),
-    'Station 7': LatLng(26.3083034, 50.1456665),
-    'Station 8': LatLng(26.3061739, 50.1477596),
-  };
+
+  Future<void> _fetchStations() async {
+    try {
+      var stations = await client.station.getAllStations();
+      setState(() {
+        // Map stations to a Map<String, LatLng>
+        locationCoordinates = {
+          for (var station in stations)
+            station.name: LatLng( station.latitude, station.longitude
+            ),
+        };
+      });
+    } catch (e) {
+      // Handle error (e.g., show a snackbar)
+      print('Error fetching stations: $e');
+    }
+  }
+
+  Map<String, LatLng> locationCoordinates = {};
+
 
   LatLng? startPoint;
   LatLng? endPoint;
@@ -118,6 +127,7 @@ class _SelectRouteScreenState extends State<SelectRouteScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _fetchStations();
     bool canDrawRoute = startPoint != null && endPoint != null;
 
     return Scaffold(

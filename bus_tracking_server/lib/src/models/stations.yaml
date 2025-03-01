@@ -1,0 +1,6 @@
+class: Station
+table: station
+fields:
+  name: String
+  latitude: double
+  longitude: double

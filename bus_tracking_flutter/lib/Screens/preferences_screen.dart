@@ -1,7 +1,7 @@
+import 'package:bus_tracking_client/bus_tracking_client.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:serverpod_auth_shared_flutter/serverpod_auth_shared_flutter.dart';
-import '../main.dart'; // Ensure main.dart has sessionManager
+import '../main.dart';
 
 class PreferencesScreen extends StatefulWidget {
   final bool isDarkMode;
@@ -22,6 +22,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
   late TextEditingController _nameController;
   bool _isEditing = false;
   String _selectedStation = "Station 828";
+  List<Station> _stations = [];
 
   @override
   void initState() {
@@ -29,6 +30,8 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
     _nameController = TextEditingController();
     _isDarkMode = widget.isDarkMode;
     _fetchUsername();
+    _fetchStations();
+    _loadSelectedStation();
   }
 
   Future<void> _fetchUsername() async {
@@ -36,6 +39,30 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
     setState(() {
       _nameController.text = userInfo?.userName ?? "Guest";
     });
+  }
+
+  Future<void> _fetchStations() async {
+    try {
+      var stations = await client.station.getAllStations();
+      setState(() {
+        _stations = stations;
+      });
+    } catch (e) {
+      // Handle error (e.g., show a snackbar)
+      print('Error fetching stations: $e');
+    }
+  }
+
+  Future<void> _loadSelectedStation() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _selectedStation = prefs.getString('selectedStation') ?? "Station 828";
+    });
+  }
+
+  Future<void> _saveSelectedStation(String stationName) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('selectedStation', stationName);
   }
 
   void _toggleTheme(bool value) {
@@ -51,38 +78,25 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
       builder: (context) {
         return Container(
           padding: EdgeInsets.all(16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text("Select Default Destination", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              ListTile(
-                title: Text("Station 828"),
-                onTap: () {
-                  setState(() {
-                    _selectedStation = "Station 828";
-                  });
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                title: Text("Station 19"),
-                onTap: () {
-                  setState(() {
-                    _selectedStation = "Station 19";
-                  });
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                title: Text("Station 25"),
-                onTap: () {
-                  setState(() {
-                    _selectedStation = "Station 25";
-                  });
-                  Navigator.pop(context);
-                },
-              ),
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text("Select Default Destination", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                ..._stations.map((station) {
+                  return ListTile(
+                    title: Text(station.name),
+                    onTap: () {
+                      setState(() {
+                        _selectedStation = station.name;
+                      });
+                      _saveSelectedStation(station.name); // Save the selected station
+                      Navigator.pop(context);
+                    },
+                  );
+                }).toList(),
+              ],
+            ),
           ),
         );
       },
@@ -141,7 +155,6 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
               ),
             ),
             const SizedBox(height: 20),
-
             ListTile(
               leading: Icon(Icons.location_on),
               title: Text("Default Destination"),
