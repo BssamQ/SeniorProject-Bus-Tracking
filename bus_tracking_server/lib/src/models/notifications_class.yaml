@@ -1,0 +1,8 @@
+class: Notification
+table: notification
+fields:
+  userID: int, relation(name=user_notifications, parent=user)  # Add named relation
+  message: String
+  type: String  # "Alert", "Reminder", "Info"
+  timestamp: DateTime
+  readStatus: String  # "Unread" or "Read"

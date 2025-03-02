@@ -10,6 +10,7 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
+import 'notifications_class.dart' as _i2;
 
 abstract class User implements _i1.TableRow, _i1.ProtocolSerialization {
   User._({
@@ -21,6 +22,7 @@ abstract class User implements _i1.TableRow, _i1.ProtocolSerialization {
     this.location,
     this.latitude,
     this.longitude,
+    this.notifications,
   });
 
   factory User({
@@ -32,6 +34,7 @@ abstract class User implements _i1.TableRow, _i1.ProtocolSerialization {
     String? location,
     double? latitude,
     double? longitude,
+    List<_i2.Notification>? notifications,
   }) = _UserImpl;
 
   factory User.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -44,6 +47,9 @@ abstract class User implements _i1.TableRow, _i1.ProtocolSerialization {
       location: jsonSerialization['location'] as String?,
       latitude: (jsonSerialization['latitude'] as num?)?.toDouble(),
       longitude: (jsonSerialization['longitude'] as num?)?.toDouble(),
+      notifications: (jsonSerialization['notifications'] as List?)
+          ?.map((e) => _i2.Notification.fromJson((e as Map<String, dynamic>)))
+          .toList(),
     );
   }
 
@@ -68,6 +74,8 @@ abstract class User implements _i1.TableRow, _i1.ProtocolSerialization {
 
   double? longitude;
 
+  List<_i2.Notification>? notifications;
+
   @override
   _i1.Table get table => t;
 
@@ -80,6 +88,7 @@ abstract class User implements _i1.TableRow, _i1.ProtocolSerialization {
     String? location,
     double? latitude,
     double? longitude,
+    List<_i2.Notification>? notifications,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -92,6 +101,8 @@ abstract class User implements _i1.TableRow, _i1.ProtocolSerialization {
       if (location != null) 'location': location,
       if (latitude != null) 'latitude': latitude,
       if (longitude != null) 'longitude': longitude,
+      if (notifications != null)
+        'notifications': notifications?.toJson(valueToJson: (v) => v.toJson()),
     };
   }
 
@@ -106,11 +117,14 @@ abstract class User implements _i1.TableRow, _i1.ProtocolSerialization {
       if (location != null) 'location': location,
       if (latitude != null) 'latitude': latitude,
       if (longitude != null) 'longitude': longitude,
+      if (notifications != null)
+        'notifications':
+            notifications?.toJson(valueToJson: (v) => v.toJsonForProtocol()),
     };
   }
 
-  static UserInclude include() {
-    return UserInclude._();
+  static UserInclude include({_i2.NotificationIncludeList? notifications}) {
+    return UserInclude._(notifications: notifications);
   }
 
   static UserIncludeList includeList({
@@ -151,6 +165,7 @@ class _UserImpl extends User {
     String? location,
     double? latitude,
     double? longitude,
+    List<_i2.Notification>? notifications,
   }) : super._(
           id: id,
           name: name,
@@ -160,6 +175,7 @@ class _UserImpl extends User {
           location: location,
           latitude: latitude,
           longitude: longitude,
+          notifications: notifications,
         );
 
   @override
@@ -172,6 +188,7 @@ class _UserImpl extends User {
     Object? location = _Undefined,
     Object? latitude = _Undefined,
     Object? longitude = _Undefined,
+    Object? notifications = _Undefined,
   }) {
     return User(
       id: id is int? ? id : this.id,
@@ -182,6 +199,9 @@ class _UserImpl extends User {
       location: location is String? ? location : this.location,
       latitude: latitude is double? ? latitude : this.latitude,
       longitude: longitude is double? ? longitude : this.longitude,
+      notifications: notifications is List<_i2.Notification>?
+          ? notifications
+          : this.notifications?.map((e0) => e0.copyWith()).toList(),
     );
   }
 }
@@ -232,6 +252,41 @@ class UserTable extends _i1.Table {
 
   late final _i1.ColumnDouble longitude;
 
+  _i2.NotificationTable? ___notifications;
+
+  _i1.ManyRelation<_i2.NotificationTable>? _notifications;
+
+  _i2.NotificationTable get __notifications {
+    if (___notifications != null) return ___notifications!;
+    ___notifications = _i1.createRelationTable(
+      relationFieldName: '__notifications',
+      field: User.t.id,
+      foreignField: _i2.Notification.t.userID,
+      tableRelation: tableRelation,
+      createTable: (foreignTableRelation) =>
+          _i2.NotificationTable(tableRelation: foreignTableRelation),
+    );
+    return ___notifications!;
+  }
+
+  _i1.ManyRelation<_i2.NotificationTable> get notifications {
+    if (_notifications != null) return _notifications!;
+    var relationTable = _i1.createRelationTable(
+      relationFieldName: 'notifications',
+      field: User.t.id,
+      foreignField: _i2.Notification.t.userID,
+      tableRelation: tableRelation,
+      createTable: (foreignTableRelation) =>
+          _i2.NotificationTable(tableRelation: foreignTableRelation),
+    );
+    _notifications = _i1.ManyRelation<_i2.NotificationTable>(
+      tableWithRelations: relationTable,
+      table: _i2.NotificationTable(
+          tableRelation: relationTable.tableRelation!.lastRelation),
+    );
+    return _notifications!;
+  }
+
   @override
   List<_i1.Column> get columns => [
         id,
@@ -243,13 +298,25 @@ class UserTable extends _i1.Table {
         latitude,
         longitude,
       ];
+
+  @override
+  _i1.Table? getRelationTable(String relationField) {
+    if (relationField == 'notifications') {
+      return __notifications;
+    }
+    return null;
+  }
 }
 
 class UserInclude extends _i1.IncludeObject {
-  UserInclude._();
+  UserInclude._({_i2.NotificationIncludeList? notifications}) {
+    _notifications = notifications;
+  }
+
+  _i2.NotificationIncludeList? _notifications;
 
   @override
-  Map<String, _i1.Include?> get includes => {};
+  Map<String, _i1.Include?> get includes => {'notifications': _notifications};
 
   @override
   _i1.Table get table => User.t;
@@ -278,6 +345,10 @@ class UserIncludeList extends _i1.IncludeList {
 class UserRepository {
   const UserRepository._();
 
+  final attach = const UserAttachRepository._();
+
+  final attachRow = const UserAttachRowRepository._();
+
   Future<List<User>> find(
     _i1.Session session, {
     _i1.WhereExpressionBuilder<UserTable>? where,
@@ -287,6 +358,7 @@ class UserRepository {
     bool orderDescending = false,
     _i1.OrderByListBuilder<UserTable>? orderByList,
     _i1.Transaction? transaction,
+    UserInclude? include,
   }) async {
     return session.db.find<User>(
       where: where?.call(User.t),
@@ -296,6 +368,7 @@ class UserRepository {
       limit: limit,
       offset: offset,
       transaction: transaction,
+      include: include,
     );
   }
 
@@ -307,6 +380,7 @@ class UserRepository {
     bool orderDescending = false,
     _i1.OrderByListBuilder<UserTable>? orderByList,
     _i1.Transaction? transaction,
+    UserInclude? include,
   }) async {
     return session.db.findFirstRow<User>(
       where: where?.call(User.t),
@@ -315,6 +389,7 @@ class UserRepository {
       orderDescending: orderDescending,
       offset: offset,
       transaction: transaction,
+      include: include,
     );
   }
 
@@ -322,10 +397,12 @@ class UserRepository {
     _i1.Session session,
     int id, {
     _i1.Transaction? transaction,
+    UserInclude? include,
   }) async {
     return session.db.findById<User>(
       id,
       transaction: transaction,
+      include: include,
     );
   }
 
@@ -419,6 +496,57 @@ class UserRepository {
     return session.db.count<User>(
       where: where?.call(User.t),
       limit: limit,
+      transaction: transaction,
+    );
+  }
+}
+
+class UserAttachRepository {
+  const UserAttachRepository._();
+
+  Future<void> notifications(
+    _i1.Session session,
+    User user,
+    List<_i2.Notification> notification, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (notification.any((e) => e.id == null)) {
+      throw ArgumentError.notNull('notification.id');
+    }
+    if (user.id == null) {
+      throw ArgumentError.notNull('user.id');
+    }
+
+    var $notification =
+        notification.map((e) => e.copyWith(userID: user.id)).toList();
+    await session.db.update<_i2.Notification>(
+      $notification,
+      columns: [_i2.Notification.t.userID],
+      transaction: transaction,
+    );
+  }
+}
+
+class UserAttachRowRepository {
+  const UserAttachRowRepository._();
+
+  Future<void> notifications(
+    _i1.Session session,
+    User user,
+    _i2.Notification notification, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (notification.id == null) {
+      throw ArgumentError.notNull('notification.id');
+    }
+    if (user.id == null) {
+      throw ArgumentError.notNull('user.id');
+    }
+
+    var $notification = notification.copyWith(userID: user.id);
+    await session.db.updateRow<_i2.Notification>(
+      $notification,
+      columns: [_i2.Notification.t.userID],
       transaction: transaction,
     );
   }

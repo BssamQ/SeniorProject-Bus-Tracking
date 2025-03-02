@@ -1,5 +1,26 @@
+bus:
+  - getBusById:
+  - getAllBuses:
+  - addBus:
+  - updateBus:
+  - deleteBus:
 example:
   - hello:
+gPSData:
+  - getGPSDataByBusId:
+  - addGPSData:
+  - deleteGPSData:
+notification:
+  - getNotificationsByUserId:
+  - addNotification:
+  - markNotificationAsRead:
+  - deleteNotification:
+route:
+  - getRouteById:
+  - getAllRoutes:
+  - addRoute:
+  - updateRoute:
+  - deleteRoute:
 station:
   - getStationById:
   - addStation:
@@ -7,6 +28,12 @@ station:
   - searchStationsByName:
   - updateStation:
   - getAllStations:
+stop:
+  - getStopById:
+  - getAllStops:
+  - addStop:
+  - updateStop:
+  - deleteStop:
 user:
   - getUserById:
   - addUser:

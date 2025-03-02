@@ -10,6 +10,7 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
+import 'notifications_class.dart' as _i2;
 
 abstract class User implements _i1.SerializableModel {
   User._({
@@ -21,6 +22,7 @@ abstract class User implements _i1.SerializableModel {
     this.location,
     this.latitude,
     this.longitude,
+    this.notifications,
   });
 
   factory User({
@@ -32,6 +34,7 @@ abstract class User implements _i1.SerializableModel {
     String? location,
     double? latitude,
     double? longitude,
+    List<_i2.Notification>? notifications,
   }) = _UserImpl;
 
   factory User.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -44,6 +47,9 @@ abstract class User implements _i1.SerializableModel {
       location: jsonSerialization['location'] as String?,
       latitude: (jsonSerialization['latitude'] as num?)?.toDouble(),
       longitude: (jsonSerialization['longitude'] as num?)?.toDouble(),
+      notifications: (jsonSerialization['notifications'] as List?)
+          ?.map((e) => _i2.Notification.fromJson((e as Map<String, dynamic>)))
+          .toList(),
     );
   }
 
@@ -66,6 +72,8 @@ abstract class User implements _i1.SerializableModel {
 
   double? longitude;
 
+  List<_i2.Notification>? notifications;
+
   User copyWith({
     int? id,
     String? name,
@@ -75,6 +83,7 @@ abstract class User implements _i1.SerializableModel {
     String? location,
     double? latitude,
     double? longitude,
+    List<_i2.Notification>? notifications,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -87,6 +96,8 @@ abstract class User implements _i1.SerializableModel {
       if (location != null) 'location': location,
       if (latitude != null) 'latitude': latitude,
       if (longitude != null) 'longitude': longitude,
+      if (notifications != null)
+        'notifications': notifications?.toJson(valueToJson: (v) => v.toJson()),
     };
   }
 
@@ -108,6 +119,7 @@ class _UserImpl extends User {
     String? location,
     double? latitude,
     double? longitude,
+    List<_i2.Notification>? notifications,
   }) : super._(
           id: id,
           name: name,
@@ -117,6 +129,7 @@ class _UserImpl extends User {
           location: location,
           latitude: latitude,
           longitude: longitude,
+          notifications: notifications,
         );
 
   @override
@@ -129,6 +142,7 @@ class _UserImpl extends User {
     Object? location = _Undefined,
     Object? latitude = _Undefined,
     Object? longitude = _Undefined,
+    Object? notifications = _Undefined,
   }) {
     return User(
       id: id is int? ? id : this.id,
@@ -139,6 +153,9 @@ class _UserImpl extends User {
       location: location is String? ? location : this.location,
       latitude: latitude is double? ? latitude : this.latitude,
       longitude: longitude is double? ? longitude : this.longitude,
+      notifications: notifications is List<_i2.Notification>?
+          ? notifications
+          : this.notifications?.map((e0) => e0.copyWith()).toList(),
     );
   }
 }
