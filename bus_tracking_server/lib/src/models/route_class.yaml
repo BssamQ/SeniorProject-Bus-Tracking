@@ -1,0 +1,11 @@
+class: Route
+table: route
+fields:
+  routeName: String
+  stops: List<Stop>?, relation(name=route_stops)  # One-to-Many with Stops
+  routeStartTime: String
+  startPoint: String  # Start Location
+  routeEndTime: String
+  endPoint: String  # End Location
+  createdAt: DateTime?, scope=serverOnly  # Auto timestamp
+  buses: List<Bus>?, relation(name=route_buses)  # One-to-Many with Buses

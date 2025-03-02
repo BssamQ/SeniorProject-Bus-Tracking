@@ -1,0 +1,10 @@
+class: Bus
+table: bus
+fields:
+  busNumber: String
+  routeID: int, relation(name=route_buses, parent=route)  # Add named relation
+  driverName: String
+  latitude: double  # Current location latitude
+  longitude: double  # Current location longitude
+  status: String  # "Active" or "In Maintenance"
+  gpsData: List<GPSData>?, relation(name=bus_gps_data)  # One-to-Many with GPS Data

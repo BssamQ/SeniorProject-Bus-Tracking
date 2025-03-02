@@ -1,0 +1,7 @@
+class: GPSData
+table: gps_data
+fields:
+  busID: int, relation(name=bus_gps_data, parent=bus)  # Add named relation
+  timestamp: DateTime
+  latitude: double
+  longitude: double

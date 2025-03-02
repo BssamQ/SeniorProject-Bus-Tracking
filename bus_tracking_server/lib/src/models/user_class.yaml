@@ -8,3 +8,4 @@ fields:
   location: String?  # His building
   latitude: double?
   longitude: double?
+  notifications: List<Notification>?, relation(name=user_notifications)  # One-to-Many
