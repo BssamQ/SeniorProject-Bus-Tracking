@@ -60,6 +60,48 @@ class EndpointBus extends _i1.EndpointRef {
         'deleteBus',
         {'id': id},
       );
+
+  _i2.Future<List<_i3.Bus>> getBusesByAgeGroup1() =>
+      caller.callServerEndpoint<List<_i3.Bus>>(
+        'bus',
+        'getBusesByAgeGroup1',
+        {},
+      );
+
+  _i2.Future<List<_i3.Bus>> getBusesByAgeGroup2() =>
+      caller.callServerEndpoint<List<_i3.Bus>>(
+        'bus',
+        'getBusesByAgeGroup2',
+        {},
+      );
+
+  _i2.Future<List<_i3.Bus>> getBusesByAgeGroup3() =>
+      caller.callServerEndpoint<List<_i3.Bus>>(
+        'bus',
+        'getBusesByAgeGroup3',
+        {},
+      );
+
+  _i2.Future<List<_i3.Bus>> getBusesByStatusOperating() =>
+      caller.callServerEndpoint<List<_i3.Bus>>(
+        'bus',
+        'getBusesByStatusOperating',
+        {},
+      );
+
+  _i2.Future<List<_i3.Bus>> getBusesByStatusInMaintenance() =>
+      caller.callServerEndpoint<List<_i3.Bus>>(
+        'bus',
+        'getBusesByStatusInMaintenance',
+        {},
+      );
+
+  _i2.Future<List<_i3.Bus>> getBusesByStatusOutOfService() =>
+      caller.callServerEndpoint<List<_i3.Bus>>(
+        'bus',
+        'getBusesByStatusOutOfService',
+        {},
+      );
 }
 
 /// {@category Endpoint}

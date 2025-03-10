@@ -400,6 +400,10 @@ class RouteRepository {
 
   final attachRow = const RouteAttachRowRepository._();
 
+  final detach = const RouteDetachRepository._();
+
+  final detachRow = const RouteDetachRowRepository._();
+
   Future<List<Route>> find(
     _i1.Session session, {
     _i1.WhereExpressionBuilder<RouteTable>? where,
@@ -636,6 +640,48 @@ class RouteAttachRowRepository {
     }
 
     var $bus = bus.copyWith(routeID: route.id);
+    await session.db.updateRow<_i3.Bus>(
+      $bus,
+      columns: [_i3.Bus.t.routeID],
+      transaction: transaction,
+    );
+  }
+}
+
+class RouteDetachRepository {
+  const RouteDetachRepository._();
+
+  Future<void> buses(
+    _i1.Session session,
+    List<_i3.Bus> bus, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (bus.any((e) => e.id == null)) {
+      throw ArgumentError.notNull('bus.id');
+    }
+
+    var $bus = bus.map((e) => e.copyWith(routeID: null)).toList();
+    await session.db.update<_i3.Bus>(
+      $bus,
+      columns: [_i3.Bus.t.routeID],
+      transaction: transaction,
+    );
+  }
+}
+
+class RouteDetachRowRepository {
+  const RouteDetachRowRepository._();
+
+  Future<void> buses(
+    _i1.Session session,
+    _i3.Bus bus, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (bus.id == null) {
+      throw ArgumentError.notNull('bus.id');
+    }
+
+    var $bus = bus.copyWith(routeID: null);
     await session.db.updateRow<_i3.Bus>(
       $bus,
       columns: [_i3.Bus.t.routeID],

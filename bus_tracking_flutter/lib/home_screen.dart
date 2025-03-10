@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'Screens/AdminDash.dart';
+
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
@@ -20,7 +22,17 @@ class HomeScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.pushReplacementNamed(context, '/home');
               },
-              child: Text('Get Started'),
+              child: Text('Student Page'),
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AdminMain()),
+                );
+              },
+              child: const Text('Admin Page'),
             ),
           ],
         ),

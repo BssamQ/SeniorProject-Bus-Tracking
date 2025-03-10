@@ -16,37 +16,43 @@ abstract class Bus implements _i1.TableRow, _i1.ProtocolSerialization {
   Bus._({
     this.id,
     required this.busNumber,
-    required this.routeID,
+    this.routeID,
     required this.driverName,
-    required this.latitude,
-    required this.longitude,
+    this.latitude,
+    this.longitude,
     required this.status,
     this.gpsData,
+    required this.age,
+    required this.breakdownCounter,
   });
 
   factory Bus({
     int? id,
     required String busNumber,
-    required int routeID,
+    int? routeID,
     required String driverName,
-    required double latitude,
-    required double longitude,
+    double? latitude,
+    double? longitude,
     required String status,
     List<_i2.GPSData>? gpsData,
+    required int age,
+    required int breakdownCounter,
   }) = _BusImpl;
 
   factory Bus.fromJson(Map<String, dynamic> jsonSerialization) {
     return Bus(
       id: jsonSerialization['id'] as int?,
       busNumber: jsonSerialization['busNumber'] as String,
-      routeID: jsonSerialization['routeID'] as int,
+      routeID: jsonSerialization['routeID'] as int?,
       driverName: jsonSerialization['driverName'] as String,
-      latitude: (jsonSerialization['latitude'] as num).toDouble(),
-      longitude: (jsonSerialization['longitude'] as num).toDouble(),
+      latitude: (jsonSerialization['latitude'] as num?)?.toDouble(),
+      longitude: (jsonSerialization['longitude'] as num?)?.toDouble(),
       status: jsonSerialization['status'] as String,
       gpsData: (jsonSerialization['gpsData'] as List?)
           ?.map((e) => _i2.GPSData.fromJson((e as Map<String, dynamic>)))
           .toList(),
+      age: jsonSerialization['age'] as int,
+      breakdownCounter: jsonSerialization['breakdownCounter'] as int,
     );
   }
 
@@ -59,17 +65,21 @@ abstract class Bus implements _i1.TableRow, _i1.ProtocolSerialization {
 
   String busNumber;
 
-  int routeID;
+  int? routeID;
 
   String driverName;
 
-  double latitude;
+  double? latitude;
 
-  double longitude;
+  double? longitude;
 
   String status;
 
   List<_i2.GPSData>? gpsData;
+
+  int age;
+
+  int breakdownCounter;
 
   @override
   _i1.Table get table => t;
@@ -83,19 +93,23 @@ abstract class Bus implements _i1.TableRow, _i1.ProtocolSerialization {
     double? longitude,
     String? status,
     List<_i2.GPSData>? gpsData,
+    int? age,
+    int? breakdownCounter,
   });
   @override
   Map<String, dynamic> toJson() {
     return {
       if (id != null) 'id': id,
       'busNumber': busNumber,
-      'routeID': routeID,
+      if (routeID != null) 'routeID': routeID,
       'driverName': driverName,
-      'latitude': latitude,
-      'longitude': longitude,
+      if (latitude != null) 'latitude': latitude,
+      if (longitude != null) 'longitude': longitude,
       'status': status,
       if (gpsData != null)
         'gpsData': gpsData?.toJson(valueToJson: (v) => v.toJson()),
+      'age': age,
+      'breakdownCounter': breakdownCounter,
     };
   }
 
@@ -104,13 +118,15 @@ abstract class Bus implements _i1.TableRow, _i1.ProtocolSerialization {
     return {
       if (id != null) 'id': id,
       'busNumber': busNumber,
-      'routeID': routeID,
+      if (routeID != null) 'routeID': routeID,
       'driverName': driverName,
-      'latitude': latitude,
-      'longitude': longitude,
+      if (latitude != null) 'latitude': latitude,
+      if (longitude != null) 'longitude': longitude,
       'status': status,
       if (gpsData != null)
         'gpsData': gpsData?.toJson(valueToJson: (v) => v.toJsonForProtocol()),
+      'age': age,
+      'breakdownCounter': breakdownCounter,
     };
   }
 
@@ -150,12 +166,14 @@ class _BusImpl extends Bus {
   _BusImpl({
     int? id,
     required String busNumber,
-    required int routeID,
+    int? routeID,
     required String driverName,
-    required double latitude,
-    required double longitude,
+    double? latitude,
+    double? longitude,
     required String status,
     List<_i2.GPSData>? gpsData,
+    required int age,
+    required int breakdownCounter,
   }) : super._(
           id: id,
           busNumber: busNumber,
@@ -165,30 +183,36 @@ class _BusImpl extends Bus {
           longitude: longitude,
           status: status,
           gpsData: gpsData,
+          age: age,
+          breakdownCounter: breakdownCounter,
         );
 
   @override
   Bus copyWith({
     Object? id = _Undefined,
     String? busNumber,
-    int? routeID,
+    Object? routeID = _Undefined,
     String? driverName,
-    double? latitude,
-    double? longitude,
+    Object? latitude = _Undefined,
+    Object? longitude = _Undefined,
     String? status,
     Object? gpsData = _Undefined,
+    int? age,
+    int? breakdownCounter,
   }) {
     return Bus(
       id: id is int? ? id : this.id,
       busNumber: busNumber ?? this.busNumber,
-      routeID: routeID ?? this.routeID,
+      routeID: routeID is int? ? routeID : this.routeID,
       driverName: driverName ?? this.driverName,
-      latitude: latitude ?? this.latitude,
-      longitude: longitude ?? this.longitude,
+      latitude: latitude is double? ? latitude : this.latitude,
+      longitude: longitude is double? ? longitude : this.longitude,
       status: status ?? this.status,
       gpsData: gpsData is List<_i2.GPSData>?
           ? gpsData
           : this.gpsData?.map((e0) => e0.copyWith()).toList(),
+      age: age ?? this.age,
+      breakdownCounter: breakdownCounter ?? this.breakdownCounter,
     );
   }
 }
@@ -219,6 +243,14 @@ class BusTable extends _i1.Table {
       'status',
       this,
     );
+    age = _i1.ColumnInt(
+      'age',
+      this,
+    );
+    breakdownCounter = _i1.ColumnInt(
+      'breakdownCounter',
+      this,
+    );
   }
 
   late final _i1.ColumnString busNumber;
@@ -236,6 +268,10 @@ class BusTable extends _i1.Table {
   _i2.GPSDataTable? ___gpsData;
 
   _i1.ManyRelation<_i2.GPSDataTable>? _gpsData;
+
+  late final _i1.ColumnInt age;
+
+  late final _i1.ColumnInt breakdownCounter;
 
   _i2.GPSDataTable get __gpsData {
     if (___gpsData != null) return ___gpsData!;
@@ -277,6 +313,8 @@ class BusTable extends _i1.Table {
         latitude,
         longitude,
         status,
+        age,
+        breakdownCounter,
       ];
 
   @override

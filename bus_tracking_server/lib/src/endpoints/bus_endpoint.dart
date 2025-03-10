@@ -39,4 +39,70 @@ class BusEndpoint extends Endpoint {
     }
     return false;
   }
+
+  // Get buses with age between 0 and 3 years
+  Future<List<Bus>> getBusesByAgeGroup1(Session session) async {
+    // Get all buses from the database
+    List<Bus> allBuses = await Bus.db.find(session);
+
+    // Filter buses based on age range
+    List<Bus> filteredBuses = allBuses.where((bus) => bus.age >= 0 && bus.age <= 3).toList();
+
+    return filteredBuses;
+  }
+
+  // Get buses with age between 4 and 6 years
+  Future<List<Bus>> getBusesByAgeGroup2(Session session) async {
+    // Get all buses from the database
+    List<Bus> allBuses = await Bus.db.find(session);
+
+    // Filter buses based on age range
+    List<Bus> filteredBuses = allBuses.where((bus) => bus.age >= 4 && bus.age <= 6).toList();
+
+    return filteredBuses;
+  }
+
+  // Get buses with age 7 years and above
+  Future<List<Bus>> getBusesByAgeGroup3(Session session) async {
+    // Get all buses from the database
+    List<Bus> allBuses = await Bus.db.find(session);
+
+    // Filter buses based on age range
+    List<Bus> filteredBuses = allBuses.where((bus) => bus.age >= 7).toList();
+
+    return filteredBuses;
+  }
+
+  // Get buses with status "Operating"
+  Future<List<Bus>> getBusesByStatusOperating(Session session) async {
+    // Get all buses from the database
+    List<Bus> allBuses = await Bus.db.find(session);
+
+    // Filter buses based on status
+    List<Bus> filteredBuses = allBuses.where((bus) => bus.status == "Operating").toList();
+
+    return filteredBuses;
+  }
+
+  // Get buses with status "In Maintenance"
+  Future<List<Bus>> getBusesByStatusInMaintenance(Session session) async {
+    // Get all buses from the database
+    List<Bus> allBuses = await Bus.db.find(session);
+
+    // Filter buses based on status
+    List<Bus> filteredBuses = allBuses.where((bus) => bus.status == "In Maintenance").toList();
+
+    return filteredBuses;
+  }
+
+  // Get buses with status "Out of Service"
+  Future<List<Bus>> getBusesByStatusOutOfService(Session session) async {
+    // Get all buses from the database
+    List<Bus> allBuses = await Bus.db.find(session);
+
+    // Filter buses based on status
+    List<Bus> filteredBuses = allBuses.where((bus) => bus.status == "Out of Service").toList();
+
+    return filteredBuses;
+  }
 }

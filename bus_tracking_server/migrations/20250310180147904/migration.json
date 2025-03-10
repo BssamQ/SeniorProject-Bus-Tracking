@@ -1,0 +1,116 @@
+{
+  "actions": [
+    {
+      "type": "deleteTable",
+      "deleteTable": "bus"
+    },
+    {
+      "type": "createTable",
+      "createTable": {
+        "name": "bus",
+        "dartName": "Bus",
+        "module": "bus_tracking",
+        "schema": "public",
+        "columns": [
+          {
+            "name": "id",
+            "columnType": 6,
+            "isNullable": false,
+            "columnDefault": "nextval('bus_id_seq'::regclass)",
+            "dartType": "int?"
+          },
+          {
+            "name": "busNumber",
+            "columnType": 0,
+            "isNullable": false,
+            "dartType": "String"
+          },
+          {
+            "name": "routeID",
+            "columnType": 6,
+            "isNullable": false,
+            "dartType": "int"
+          },
+          {
+            "name": "driverName",
+            "columnType": 0,
+            "isNullable": false,
+            "dartType": "String"
+          },
+          {
+            "name": "latitude",
+            "columnType": 3,
+            "isNullable": false,
+            "dartType": "double"
+          },
+          {
+            "name": "longitude",
+            "columnType": 3,
+            "isNullable": false,
+            "dartType": "double"
+          },
+          {
+            "name": "status",
+            "columnType": 0,
+            "isNullable": false,
+            "dartType": "String"
+          },
+          {
+            "name": "age",
+            "columnType": 6,
+            "isNullable": false,
+            "dartType": "int"
+          },
+          {
+            "name": "breakdownCounter",
+            "columnType": 6,
+            "isNullable": false,
+            "dartType": "int"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "constraintName": "bus_fk_0",
+            "columns": [
+              "routeID"
+            ],
+            "referenceTable": "route",
+            "referenceTableSchema": "public",
+            "referenceColumns": [
+              "id"
+            ],
+            "onUpdate": 3,
+            "onDelete": 3
+          }
+        ],
+        "indexes": [
+          {
+            "indexName": "bus_pkey",
+            "elements": [
+              {
+                "type": 0,
+                "definition": "id"
+              }
+            ],
+            "type": "btree",
+            "isUnique": true,
+            "isPrimary": true
+          }
+        ],
+        "managed": true
+      }
+    }
+  ],
+  "warnings": [
+    {
+      "type": "tableDropped",
+      "message": "One or more columns are added to table \"bus\" which cannot be added in a table migration. The complete table will be deleted and recreated.",
+      "table": "bus",
+      "columns": [
+        "age"
+      ],
+      "destrucive": true
+    }
+  ],
+  "migrationApiVersion": 1
+}

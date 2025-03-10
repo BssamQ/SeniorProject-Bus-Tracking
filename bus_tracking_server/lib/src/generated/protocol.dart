@@ -66,8 +66,8 @@ class Protocol extends _i1.SerializationManagerServer {
         _i2.ColumnDefinition(
           name: 'routeID',
           columnType: _i2.ColumnType.bigint,
-          isNullable: false,
-          dartType: 'int',
+          isNullable: true,
+          dartType: 'int?',
         ),
         _i2.ColumnDefinition(
           name: 'driverName',
@@ -78,20 +78,32 @@ class Protocol extends _i1.SerializationManagerServer {
         _i2.ColumnDefinition(
           name: 'latitude',
           columnType: _i2.ColumnType.doublePrecision,
-          isNullable: false,
-          dartType: 'double',
+          isNullable: true,
+          dartType: 'double?',
         ),
         _i2.ColumnDefinition(
           name: 'longitude',
           columnType: _i2.ColumnType.doublePrecision,
-          isNullable: false,
-          dartType: 'double',
+          isNullable: true,
+          dartType: 'double?',
         ),
         _i2.ColumnDefinition(
           name: 'status',
           columnType: _i2.ColumnType.text,
           isNullable: false,
           dartType: 'String',
+        ),
+        _i2.ColumnDefinition(
+          name: 'age',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _i2.ColumnDefinition(
+          name: 'breakdownCounter',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
         ),
       ],
       foreignKeys: [

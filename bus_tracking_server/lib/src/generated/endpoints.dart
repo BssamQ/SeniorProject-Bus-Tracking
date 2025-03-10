@@ -166,6 +166,66 @@ class Endpoints extends _i1.EndpointDispatch {
             params['id'],
           ),
         ),
+        'getBusesByAgeGroup1': _i1.MethodConnector(
+          name: 'getBusesByAgeGroup1',
+          params: {},
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['bus'] as _i2.BusEndpoint)
+                  .getBusesByAgeGroup1(session),
+        ),
+        'getBusesByAgeGroup2': _i1.MethodConnector(
+          name: 'getBusesByAgeGroup2',
+          params: {},
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['bus'] as _i2.BusEndpoint)
+                  .getBusesByAgeGroup2(session),
+        ),
+        'getBusesByAgeGroup3': _i1.MethodConnector(
+          name: 'getBusesByAgeGroup3',
+          params: {},
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['bus'] as _i2.BusEndpoint)
+                  .getBusesByAgeGroup3(session),
+        ),
+        'getBusesByStatusOperating': _i1.MethodConnector(
+          name: 'getBusesByStatusOperating',
+          params: {},
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['bus'] as _i2.BusEndpoint)
+                  .getBusesByStatusOperating(session),
+        ),
+        'getBusesByStatusInMaintenance': _i1.MethodConnector(
+          name: 'getBusesByStatusInMaintenance',
+          params: {},
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['bus'] as _i2.BusEndpoint)
+                  .getBusesByStatusInMaintenance(session),
+        ),
+        'getBusesByStatusOutOfService': _i1.MethodConnector(
+          name: 'getBusesByStatusOutOfService',
+          params: {},
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['bus'] as _i2.BusEndpoint)
+                  .getBusesByStatusOutOfService(session),
+        ),
       },
     );
     connectors['example'] = _i1.EndpointConnector(

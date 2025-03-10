@@ -4,6 +4,12 @@ bus:
   - addBus:
   - updateBus:
   - deleteBus:
+  - getBusesByAgeGroup1:
+  - getBusesByAgeGroup2:
+  - getBusesByAgeGroup3:
+  - getBusesByStatusOperating:
+  - getBusesByStatusInMaintenance:
+  - getBusesByStatusOutOfService:
 example:
   - hello:
 gPSData:
