@@ -13,40 +13,46 @@ import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import 'stop_class.dart' as _i2;
 import 'bus_class.dart' as _i3;
 
-abstract class Route implements _i1.SerializableModel {
-  Route._({
+abstract class Routes implements _i1.SerializableModel {
+  Routes._({
     this.id,
     required this.routeName,
     this.stops,
-    required this.routeStartTime,
-    required this.startPoint,
+    this.routeStartTime,
+    required this.startlatitude,
+    required this.startlongitude,
     required this.routeEndTime,
-    required this.endPoint,
+    required this.endlatitude,
+    required this.endlongitude,
     this.buses,
   });
 
-  factory Route({
+  factory Routes({
     int? id,
     required String routeName,
     List<_i2.Stop>? stops,
-    required String routeStartTime,
-    required String startPoint,
+    String? routeStartTime,
+    required double startlatitude,
+    required double startlongitude,
     required String routeEndTime,
-    required String endPoint,
+    required double endlatitude,
+    required double endlongitude,
     List<_i3.Bus>? buses,
-  }) = _RouteImpl;
+  }) = _RoutesImpl;
 
-  factory Route.fromJson(Map<String, dynamic> jsonSerialization) {
-    return Route(
+  factory Routes.fromJson(Map<String, dynamic> jsonSerialization) {
+    return Routes(
       id: jsonSerialization['id'] as int?,
       routeName: jsonSerialization['routeName'] as String,
       stops: (jsonSerialization['stops'] as List?)
           ?.map((e) => _i2.Stop.fromJson((e as Map<String, dynamic>)))
           .toList(),
-      routeStartTime: jsonSerialization['routeStartTime'] as String,
-      startPoint: jsonSerialization['startPoint'] as String,
+      routeStartTime: jsonSerialization['routeStartTime'] as String?,
+      startlatitude: (jsonSerialization['startlatitude'] as num).toDouble(),
+      startlongitude: (jsonSerialization['startlongitude'] as num).toDouble(),
       routeEndTime: jsonSerialization['routeEndTime'] as String,
-      endPoint: jsonSerialization['endPoint'] as String,
+      endlatitude: (jsonSerialization['endlatitude'] as num).toDouble(),
+      endlongitude: (jsonSerialization['endlongitude'] as num).toDouble(),
       buses: (jsonSerialization['buses'] as List?)
           ?.map((e) => _i3.Bus.fromJson((e as Map<String, dynamic>)))
           .toList(),
@@ -62,24 +68,30 @@ abstract class Route implements _i1.SerializableModel {
 
   List<_i2.Stop>? stops;
 
-  String routeStartTime;
+  String? routeStartTime;
 
-  String startPoint;
+  double startlatitude;
+
+  double startlongitude;
 
   String routeEndTime;
 
-  String endPoint;
+  double endlatitude;
+
+  double endlongitude;
 
   List<_i3.Bus>? buses;
 
-  Route copyWith({
+  Routes copyWith({
     int? id,
     String? routeName,
     List<_i2.Stop>? stops,
     String? routeStartTime,
-    String? startPoint,
+    double? startlatitude,
+    double? startlongitude,
     String? routeEndTime,
-    String? endPoint,
+    double? endlatitude,
+    double? endlongitude,
     List<_i3.Bus>? buses,
   });
   @override
@@ -88,10 +100,12 @@ abstract class Route implements _i1.SerializableModel {
       if (id != null) 'id': id,
       'routeName': routeName,
       if (stops != null) 'stops': stops?.toJson(valueToJson: (v) => v.toJson()),
-      'routeStartTime': routeStartTime,
-      'startPoint': startPoint,
+      if (routeStartTime != null) 'routeStartTime': routeStartTime,
+      'startlatitude': startlatitude,
+      'startlongitude': startlongitude,
       'routeEndTime': routeEndTime,
-      'endPoint': endPoint,
+      'endlatitude': endlatitude,
+      'endlongitude': endlongitude,
       if (buses != null) 'buses': buses?.toJson(valueToJson: (v) => v.toJson()),
     };
   }
@@ -104,48 +118,57 @@ abstract class Route implements _i1.SerializableModel {
 
 class _Undefined {}
 
-class _RouteImpl extends Route {
-  _RouteImpl({
+class _RoutesImpl extends Routes {
+  _RoutesImpl({
     int? id,
     required String routeName,
     List<_i2.Stop>? stops,
-    required String routeStartTime,
-    required String startPoint,
+    String? routeStartTime,
+    required double startlatitude,
+    required double startlongitude,
     required String routeEndTime,
-    required String endPoint,
+    required double endlatitude,
+    required double endlongitude,
     List<_i3.Bus>? buses,
   }) : super._(
           id: id,
           routeName: routeName,
           stops: stops,
           routeStartTime: routeStartTime,
-          startPoint: startPoint,
+          startlatitude: startlatitude,
+          startlongitude: startlongitude,
           routeEndTime: routeEndTime,
-          endPoint: endPoint,
+          endlatitude: endlatitude,
+          endlongitude: endlongitude,
           buses: buses,
         );
 
   @override
-  Route copyWith({
+  Routes copyWith({
     Object? id = _Undefined,
     String? routeName,
     Object? stops = _Undefined,
-    String? routeStartTime,
-    String? startPoint,
+    Object? routeStartTime = _Undefined,
+    double? startlatitude,
+    double? startlongitude,
     String? routeEndTime,
-    String? endPoint,
+    double? endlatitude,
+    double? endlongitude,
     Object? buses = _Undefined,
   }) {
-    return Route(
+    return Routes(
       id: id is int? ? id : this.id,
       routeName: routeName ?? this.routeName,
       stops: stops is List<_i2.Stop>?
           ? stops
           : this.stops?.map((e0) => e0.copyWith()).toList(),
-      routeStartTime: routeStartTime ?? this.routeStartTime,
-      startPoint: startPoint ?? this.startPoint,
+      routeStartTime:
+          routeStartTime is String? ? routeStartTime : this.routeStartTime,
+      startlatitude: startlatitude ?? this.startlatitude,
+      startlongitude: startlongitude ?? this.startlongitude,
       routeEndTime: routeEndTime ?? this.routeEndTime,
-      endPoint: endPoint ?? this.endPoint,
+      endlatitude: endlatitude ?? this.endlatitude,
+      endlongitude: endlongitude ?? this.endlongitude,
       buses: buses is List<_i3.Bus>?
           ? buses
           : this.buses?.map((e0) => e0.copyWith()).toList(),

@@ -61,8 +61,8 @@ class Protocol extends _i1.SerializationManager {
     if (t == _i5.Notification) {
       return _i5.Notification.fromJson(data) as T;
     }
-    if (t == _i6.Route) {
-      return _i6.Route.fromJson(data) as T;
+    if (t == _i6.Routes) {
+      return _i6.Routes.fromJson(data) as T;
     }
     if (t == _i7.Station) {
       return _i7.Station.fromJson(data) as T;
@@ -85,8 +85,8 @@ class Protocol extends _i1.SerializationManager {
     if (t == _i1.getType<_i5.Notification?>()) {
       return (data != null ? _i5.Notification.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i6.Route?>()) {
-      return (data != null ? _i6.Route.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i6.Routes?>()) {
+      return (data != null ? _i6.Routes.fromJson(data) : null) as T;
     }
     if (t == _i1.getType<_i7.Station?>()) {
       return (data != null ? _i7.Station.fromJson(data) : null) as T;
@@ -130,8 +130,12 @@ class Protocol extends _i1.SerializationManager {
           .map((e) => deserialize<_i12.Notification>(e))
           .toList() as dynamic;
     }
-    if (t == List<_i13.Route>) {
-      return (data as List).map((e) => deserialize<_i13.Route>(e)).toList()
+    if (t == List<_i13.Routes>) {
+      return (data as List).map((e) => deserialize<_i13.Routes>(e)).toList()
+          as dynamic;
+    }
+    if (t == List<String>) {
+      return (data as List).map((e) => deserialize<String>(e)).toList()
           as dynamic;
     }
     if (t == List<_i14.Station>) {
@@ -164,8 +168,8 @@ class Protocol extends _i1.SerializationManager {
     if (data is _i5.Notification) {
       return 'Notification';
     }
-    if (data is _i6.Route) {
-      return 'Route';
+    if (data is _i6.Routes) {
+      return 'Routes';
     }
     if (data is _i7.Station) {
       return 'Station';
@@ -201,8 +205,8 @@ class Protocol extends _i1.SerializationManager {
     if (dataClassName == 'Notification') {
       return deserialize<_i5.Notification>(data['data']);
     }
-    if (dataClassName == 'Route') {
-      return deserialize<_i6.Route>(data['data']);
+    if (dataClassName == 'Routes') {
+      return deserialize<_i6.Routes>(data['data']);
     }
     if (dataClassName == 'Station') {
       return deserialize<_i7.Station>(data['data']);

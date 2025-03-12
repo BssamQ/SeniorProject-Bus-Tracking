@@ -189,27 +189,28 @@ class EndpointRoute extends _i1.EndpointRef {
   @override
   String get name => 'route';
 
-  _i2.Future<_i6.Route?> getRouteById(int id) =>
-      caller.callServerEndpoint<_i6.Route?>(
+  _i2.Future<_i6.Routes?> getRouteById(int id) =>
+      caller.callServerEndpoint<_i6.Routes?>(
         'route',
         'getRouteById',
         {'id': id},
       );
 
-  _i2.Future<List<_i6.Route>> getAllRoutes() =>
-      caller.callServerEndpoint<List<_i6.Route>>(
+  _i2.Future<List<_i6.Routes>> getAllRoutes() =>
+      caller.callServerEndpoint<List<_i6.Routes>>(
         'route',
         'getAllRoutes',
         {},
       );
 
-  _i2.Future<bool> addRoute(_i6.Route route) => caller.callServerEndpoint<bool>(
+  _i2.Future<bool> addRoute(_i6.Routes route) =>
+      caller.callServerEndpoint<bool>(
         'route',
         'addRoute',
         {'route': route},
       );
 
-  _i2.Future<bool> updateRoute(_i6.Route route) =>
+  _i2.Future<bool> updateRoute(_i6.Routes route) =>
       caller.callServerEndpoint<bool>(
         'route',
         'updateRoute',
@@ -220,6 +221,50 @@ class EndpointRoute extends _i1.EndpointRef {
         'route',
         'deleteRoute',
         {'id': id},
+      );
+
+  _i2.Future<String?> getRouteNameById(int id) =>
+      caller.callServerEndpoint<String?>(
+        'route',
+        'getRouteNameById',
+        {'id': id},
+      );
+
+  _i2.Future<List<String>> getAllRouteNames() =>
+      caller.callServerEndpoint<List<String>>(
+        'route',
+        'getAllRouteNames',
+        {},
+      );
+
+  _i2.Future<List<_i6.Routes>> getRoutesByLocation(
+    double startLatitude,
+    double startLongitude,
+    double endLatitude,
+    double endLongitude,
+  ) =>
+      caller.callServerEndpoint<List<_i6.Routes>>(
+        'route',
+        'getRoutesByLocation',
+        {
+          'startLatitude': startLatitude,
+          'startLongitude': startLongitude,
+          'endLatitude': endLatitude,
+          'endLongitude': endLongitude,
+        },
+      );
+
+  _i2.Future<bool> updateRouteStartTime(
+    int routeId,
+    String? newStartTime,
+  ) =>
+      caller.callServerEndpoint<bool>(
+        'route',
+        'updateRouteStartTime',
+        {
+          'routeId': routeId,
+          'newStartTime': newStartTime,
+        },
       );
 }
 

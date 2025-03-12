@@ -6,4 +6,4 @@ fields:
   longitude: double
   stopOrder: int  # Defines the sequence of stops in the route
   createdAt: DateTime?, scope=serverOnly  # Timestamp, only stored on the server
-  routeID: int, relation(name=route_stops, parent=route)  # Add named relation
+  routeID: int, relation(name=routes_stops, parent=routes)  # Add named relation

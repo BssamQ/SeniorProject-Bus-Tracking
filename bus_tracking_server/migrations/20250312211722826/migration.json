@@ -1,0 +1,120 @@
+{
+  "actions": [
+    {
+      "type": "deleteTable",
+      "deleteTable": "route"
+    },
+    {
+      "type": "createTable",
+      "createTable": {
+        "name": "route",
+        "dartName": "Route",
+        "module": "bus_tracking",
+        "schema": "public",
+        "columns": [
+          {
+            "name": "id",
+            "columnType": 6,
+            "isNullable": false,
+            "columnDefault": "nextval('route_id_seq'::regclass)",
+            "dartType": "int?"
+          },
+          {
+            "name": "routeName",
+            "columnType": 0,
+            "isNullable": false,
+            "dartType": "String"
+          },
+          {
+            "name": "routeStartTime",
+            "columnType": 0,
+            "isNullable": true,
+            "dartType": "String?"
+          },
+          {
+            "name": "startlatitude",
+            "columnType": 3,
+            "isNullable": false,
+            "dartType": "double"
+          },
+          {
+            "name": "startlongitude",
+            "columnType": 3,
+            "isNullable": false,
+            "dartType": "double"
+          },
+          {
+            "name": "routeEndTime",
+            "columnType": 0,
+            "isNullable": false,
+            "dartType": "String"
+          },
+          {
+            "name": "endlatitude",
+            "columnType": 3,
+            "isNullable": false,
+            "dartType": "double"
+          },
+          {
+            "name": "endlongitude",
+            "columnType": 3,
+            "isNullable": false,
+            "dartType": "double"
+          },
+          {
+            "name": "createdAt",
+            "columnType": 4,
+            "isNullable": true,
+            "dartType": "DateTime?"
+          }
+        ],
+        "foreignKeys": [],
+        "indexes": [
+          {
+            "indexName": "route_pkey",
+            "elements": [
+              {
+                "type": 0,
+                "definition": "id"
+              }
+            ],
+            "type": "btree",
+            "isUnique": true,
+            "isPrimary": true
+          }
+        ],
+        "managed": true
+      }
+    }
+  ],
+  "warnings": [
+    {
+      "type": "columnDropped",
+      "message": "Column \"startPoint\" of table \"route\" will be dropped.",
+      "table": "route",
+      "columns": [
+        "startPoint"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "columnDropped",
+      "message": "Column \"endPoint\" of table \"route\" will be dropped.",
+      "table": "route",
+      "columns": [
+        "endPoint"
+      ],
+      "destrucive": true
+    },
+    {
+      "type": "tableDropped",
+      "message": "One or more columns are added to table \"route\" which cannot be added in a table migration. The complete table will be deleted and recreated.",
+      "table": "route",
+      "columns": [
+        "startlatitude"
+      ],
+      "destrucive": true
+    }
+  ],
+  "migrationApiVersion": 1
+}

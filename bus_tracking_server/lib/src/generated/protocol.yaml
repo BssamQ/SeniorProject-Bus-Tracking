@@ -27,6 +27,10 @@ route:
   - addRoute:
   - updateRoute:
   - deleteRoute:
+  - getRouteNameById:
+  - getAllRouteNames:
+  - getRoutesByLocation:
+  - updateRouteStartTime:
 station:
   - getStationById:
   - addStation:

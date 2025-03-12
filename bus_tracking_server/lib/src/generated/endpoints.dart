@@ -430,7 +430,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'route': _i1.ParameterDescription(
               name: 'route',
-              type: _i1.getType<_i13.Route>(),
+              type: _i1.getType<_i13.Routes>(),
               nullable: false,
             )
           },
@@ -448,7 +448,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'route': _i1.ParameterDescription(
               name: 'route',
-              type: _i1.getType<_i13.Route>(),
+              type: _i1.getType<_i13.Routes>(),
               nullable: false,
             )
           },
@@ -477,6 +477,94 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['route'] as _i6.RouteEndpoint).deleteRoute(
             session,
             params['id'],
+          ),
+        ),
+        'getRouteNameById': _i1.MethodConnector(
+          name: 'getRouteNameById',
+          params: {
+            'id': _i1.ParameterDescription(
+              name: 'id',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['route'] as _i6.RouteEndpoint).getRouteNameById(
+            session,
+            params['id'],
+          ),
+        ),
+        'getAllRouteNames': _i1.MethodConnector(
+          name: 'getAllRouteNames',
+          params: {},
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['route'] as _i6.RouteEndpoint)
+                  .getAllRouteNames(session),
+        ),
+        'getRoutesByLocation': _i1.MethodConnector(
+          name: 'getRoutesByLocation',
+          params: {
+            'startLatitude': _i1.ParameterDescription(
+              name: 'startLatitude',
+              type: _i1.getType<double>(),
+              nullable: false,
+            ),
+            'startLongitude': _i1.ParameterDescription(
+              name: 'startLongitude',
+              type: _i1.getType<double>(),
+              nullable: false,
+            ),
+            'endLatitude': _i1.ParameterDescription(
+              name: 'endLatitude',
+              type: _i1.getType<double>(),
+              nullable: false,
+            ),
+            'endLongitude': _i1.ParameterDescription(
+              name: 'endLongitude',
+              type: _i1.getType<double>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['route'] as _i6.RouteEndpoint).getRoutesByLocation(
+            session,
+            params['startLatitude'],
+            params['startLongitude'],
+            params['endLatitude'],
+            params['endLongitude'],
+          ),
+        ),
+        'updateRouteStartTime': _i1.MethodConnector(
+          name: 'updateRouteStartTime',
+          params: {
+            'routeId': _i1.ParameterDescription(
+              name: 'routeId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+            'newStartTime': _i1.ParameterDescription(
+              name: 'newStartTime',
+              type: _i1.getType<String?>(),
+              nullable: true,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['route'] as _i6.RouteEndpoint).updateRouteStartTime(
+            session,
+            params['routeId'],
+            params['newStartTime'],
           ),
         ),
       },

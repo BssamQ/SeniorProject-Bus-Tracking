@@ -752,7 +752,7 @@ class _RouteEndpoint {
 
   final _i2.SerializationManager _serializationManager;
 
-  _i3.Future<_i7.Route?> getRouteById(
+  _i3.Future<_i7.Routes?> getRouteById(
     _i1.TestSessionBuilder sessionBuilder,
     int id,
   ) async {
@@ -773,7 +773,7 @@ class _RouteEndpoint {
         var _localReturnValue = await (_localCallContext.method.call(
           _localUniqueSession,
           _localCallContext.arguments,
-        ) as _i3.Future<_i7.Route?>);
+        ) as _i3.Future<_i7.Routes?>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();
@@ -781,7 +781,7 @@ class _RouteEndpoint {
     });
   }
 
-  _i3.Future<List<_i7.Route>> getAllRoutes(
+  _i3.Future<List<_i7.Routes>> getAllRoutes(
       _i1.TestSessionBuilder sessionBuilder) async {
     return _i1.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -800,7 +800,7 @@ class _RouteEndpoint {
         var _localReturnValue = await (_localCallContext.method.call(
           _localUniqueSession,
           _localCallContext.arguments,
-        ) as _i3.Future<List<_i7.Route>>);
+        ) as _i3.Future<List<_i7.Routes>>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();
@@ -810,7 +810,7 @@ class _RouteEndpoint {
 
   _i3.Future<bool> addRoute(
     _i1.TestSessionBuilder sessionBuilder,
-    _i7.Route route,
+    _i7.Routes route,
   ) async {
     return _i1.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -839,7 +839,7 @@ class _RouteEndpoint {
 
   _i3.Future<bool> updateRoute(
     _i1.TestSessionBuilder sessionBuilder,
-    _i7.Route route,
+    _i7.Routes route,
   ) async {
     return _i1.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -882,6 +882,132 @@ class _RouteEndpoint {
           endpointPath: 'route',
           methodName: 'deleteRoute',
           parameters: _i1.testObjectToJson({'id': id}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue = await (_localCallContext.method.call(
+          _localUniqueSession,
+          _localCallContext.arguments,
+        ) as _i3.Future<bool>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _i3.Future<String?> getRouteNameById(
+    _i1.TestSessionBuilder sessionBuilder,
+    int id,
+  ) async {
+    return _i1.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _i1.InternalTestSessionBuilder).internalBuild(
+        endpoint: 'route',
+        method: 'getRouteNameById',
+      );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'route',
+          methodName: 'getRouteNameById',
+          parameters: _i1.testObjectToJson({'id': id}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue = await (_localCallContext.method.call(
+          _localUniqueSession,
+          _localCallContext.arguments,
+        ) as _i3.Future<String?>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _i3.Future<List<String>> getAllRouteNames(
+      _i1.TestSessionBuilder sessionBuilder) async {
+    return _i1.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _i1.InternalTestSessionBuilder).internalBuild(
+        endpoint: 'route',
+        method: 'getAllRouteNames',
+      );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'route',
+          methodName: 'getAllRouteNames',
+          parameters: _i1.testObjectToJson({}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue = await (_localCallContext.method.call(
+          _localUniqueSession,
+          _localCallContext.arguments,
+        ) as _i3.Future<List<String>>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _i3.Future<List<_i7.Routes>> getRoutesByLocation(
+    _i1.TestSessionBuilder sessionBuilder,
+    double startLatitude,
+    double startLongitude,
+    double endLatitude,
+    double endLongitude,
+  ) async {
+    return _i1.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _i1.InternalTestSessionBuilder).internalBuild(
+        endpoint: 'route',
+        method: 'getRoutesByLocation',
+      );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'route',
+          methodName: 'getRoutesByLocation',
+          parameters: _i1.testObjectToJson({
+            'startLatitude': startLatitude,
+            'startLongitude': startLongitude,
+            'endLatitude': endLatitude,
+            'endLongitude': endLongitude,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue = await (_localCallContext.method.call(
+          _localUniqueSession,
+          _localCallContext.arguments,
+        ) as _i3.Future<List<_i7.Routes>>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _i3.Future<bool> updateRouteStartTime(
+    _i1.TestSessionBuilder sessionBuilder,
+    int routeId,
+    String? newStartTime,
+  ) async {
+    return _i1.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _i1.InternalTestSessionBuilder).internalBuild(
+        endpoint: 'route',
+        method: 'updateRouteStartTime',
+      );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'route',
+          methodName: 'updateRouteStartTime',
+          parameters: _i1.testObjectToJson({
+            'routeId': routeId,
+            'newStartTime': newStartTime,
+          }),
           serializationManager: _serializationManager,
         );
         var _localReturnValue = await (_localCallContext.method.call(

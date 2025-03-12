@@ -110,7 +110,7 @@ class Protocol extends _i1.SerializationManagerServer {
         _i2.ForeignKeyDefinition(
           constraintName: 'bus_fk_0',
           columns: ['routeID'],
-          referenceTable: 'route',
+          referenceTable: 'routes',
           referenceTableSchema: 'public',
           referenceColumns: ['id'],
           onUpdate: _i2.ForeignKeyAction.noAction,
@@ -276,8 +276,8 @@ class Protocol extends _i1.SerializationManagerServer {
       managed: true,
     ),
     _i2.TableDefinition(
-      name: 'route',
-      dartName: 'Route',
+      name: 'routes',
+      dartName: 'Routes',
       schema: 'public',
       module: 'bus_tracking',
       columns: [
@@ -286,7 +286,7 @@ class Protocol extends _i1.SerializationManagerServer {
           columnType: _i2.ColumnType.bigint,
           isNullable: false,
           dartType: 'int?',
-          columnDefault: 'nextval(\'route_id_seq\'::regclass)',
+          columnDefault: 'nextval(\'routes_id_seq\'::regclass)',
         ),
         _i2.ColumnDefinition(
           name: 'routeName',
@@ -297,14 +297,20 @@ class Protocol extends _i1.SerializationManagerServer {
         _i2.ColumnDefinition(
           name: 'routeStartTime',
           columnType: _i2.ColumnType.text,
-          isNullable: false,
-          dartType: 'String',
+          isNullable: true,
+          dartType: 'String?',
         ),
         _i2.ColumnDefinition(
-          name: 'startPoint',
-          columnType: _i2.ColumnType.text,
+          name: 'startlatitude',
+          columnType: _i2.ColumnType.doublePrecision,
           isNullable: false,
-          dartType: 'String',
+          dartType: 'double',
+        ),
+        _i2.ColumnDefinition(
+          name: 'startlongitude',
+          columnType: _i2.ColumnType.doublePrecision,
+          isNullable: false,
+          dartType: 'double',
         ),
         _i2.ColumnDefinition(
           name: 'routeEndTime',
@@ -313,10 +319,16 @@ class Protocol extends _i1.SerializationManagerServer {
           dartType: 'String',
         ),
         _i2.ColumnDefinition(
-          name: 'endPoint',
-          columnType: _i2.ColumnType.text,
+          name: 'endlatitude',
+          columnType: _i2.ColumnType.doublePrecision,
           isNullable: false,
-          dartType: 'String',
+          dartType: 'double',
+        ),
+        _i2.ColumnDefinition(
+          name: 'endlongitude',
+          columnType: _i2.ColumnType.doublePrecision,
+          isNullable: false,
+          dartType: 'double',
         ),
         _i2.ColumnDefinition(
           name: 'createdAt',
@@ -328,7 +340,7 @@ class Protocol extends _i1.SerializationManagerServer {
       foreignKeys: [],
       indexes: [
         _i2.IndexDefinition(
-          indexName: 'route_pkey',
+          indexName: 'routes_pkey',
           tableSpace: null,
           elements: [
             _i2.IndexElementDefinition(
@@ -447,7 +459,7 @@ class Protocol extends _i1.SerializationManagerServer {
         _i2.ForeignKeyDefinition(
           constraintName: 'stop_fk_0',
           columns: ['routeID'],
-          referenceTable: 'route',
+          referenceTable: 'routes',
           referenceTableSchema: 'public',
           referenceColumns: ['id'],
           onUpdate: _i2.ForeignKeyAction.noAction,
@@ -568,8 +580,8 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i7.Notification) {
       return _i7.Notification.fromJson(data) as T;
     }
-    if (t == _i8.Route) {
-      return _i8.Route.fromJson(data) as T;
+    if (t == _i8.Routes) {
+      return _i8.Routes.fromJson(data) as T;
     }
     if (t == _i9.Station) {
       return _i9.Station.fromJson(data) as T;
@@ -592,8 +604,8 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i1.getType<_i7.Notification?>()) {
       return (data != null ? _i7.Notification.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i8.Route?>()) {
-      return (data != null ? _i8.Route.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i8.Routes?>()) {
+      return (data != null ? _i8.Routes.fromJson(data) : null) as T;
     }
     if (t == _i1.getType<_i9.Station?>()) {
       return (data != null ? _i9.Station.fromJson(data) : null) as T;
@@ -637,8 +649,12 @@ class Protocol extends _i1.SerializationManagerServer {
           .map((e) => deserialize<_i14.Notification>(e))
           .toList() as dynamic;
     }
-    if (t == List<_i15.Route>) {
-      return (data as List).map((e) => deserialize<_i15.Route>(e)).toList()
+    if (t == List<_i15.Routes>) {
+      return (data as List).map((e) => deserialize<_i15.Routes>(e)).toList()
+          as dynamic;
+    }
+    if (t == List<String>) {
+      return (data as List).map((e) => deserialize<String>(e)).toList()
           as dynamic;
     }
     if (t == List<_i16.Station>) {
@@ -674,8 +690,8 @@ class Protocol extends _i1.SerializationManagerServer {
     if (data is _i7.Notification) {
       return 'Notification';
     }
-    if (data is _i8.Route) {
-      return 'Route';
+    if (data is _i8.Routes) {
+      return 'Routes';
     }
     if (data is _i9.Station) {
       return 'Station';
@@ -715,8 +731,8 @@ class Protocol extends _i1.SerializationManagerServer {
     if (dataClassName == 'Notification') {
       return deserialize<_i7.Notification>(data['data']);
     }
-    if (dataClassName == 'Route') {
-      return deserialize<_i8.Route>(data['data']);
+    if (dataClassName == 'Routes') {
+      return deserialize<_i8.Routes>(data['data']);
     }
     if (dataClassName == 'Station') {
       return deserialize<_i9.Station>(data['data']);
@@ -759,8 +775,8 @@ class Protocol extends _i1.SerializationManagerServer {
         return _i6.GPSData.t;
       case _i7.Notification:
         return _i7.Notification.t;
-      case _i8.Route:
-        return _i8.Route.t;
+      case _i8.Routes:
+        return _i8.Routes.t;
       case _i9.Station:
         return _i9.Station.t;
       case _i10.Stop:
