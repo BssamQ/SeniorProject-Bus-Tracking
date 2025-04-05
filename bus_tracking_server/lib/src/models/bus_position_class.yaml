@@ -1,0 +1,5 @@
+class: BusPosition
+fields:
+  latitude: double
+  longitude: double
+  timestamp: DateTime

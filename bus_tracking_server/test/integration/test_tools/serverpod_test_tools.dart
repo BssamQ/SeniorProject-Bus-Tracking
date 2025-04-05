@@ -14,7 +14,10 @@
 import 'package:serverpod_test/serverpod_test.dart' as _i1;
 import 'package:serverpod/serverpod.dart' as _i2;
 import 'dart:async' as _i3;
-import 'package:bus_tracking_server/src/generated/user_class.dart' as _i4;
+import 'package:bus_tracking_server/src/generated/simulation_class.dart' as _i4;
+import 'package:bus_tracking_server/src/generated/bus_position_class.dart'
+    as _i5;
+import 'package:bus_tracking_server/src/generated/user_class.dart' as _i6;
 import 'package:bus_tracking_server/src/generated/protocol.dart';
 import 'package:bus_tracking_server/src/generated/endpoints.dart';
 export 'package:serverpod_test/serverpod_test_public_exports.dart';
@@ -97,6 +100,8 @@ void withServerpod(
 class TestEndpoints {
   late final _ExampleEndpoint example;
 
+  late final _SimulationEndpoint simulation;
+
   late final _UserEndpoint user;
 }
 
@@ -108,6 +113,10 @@ class _InternalTestEndpoints extends TestEndpoints
     _i2.EndpointDispatch endpoints,
   ) {
     example = _ExampleEndpoint(
+      endpoints,
+      serializationManager,
+    );
+    simulation = _SimulationEndpoint(
       endpoints,
       serializationManager,
     );
@@ -158,6 +167,151 @@ class _ExampleEndpoint {
   }
 }
 
+class _SimulationEndpoint {
+  _SimulationEndpoint(
+    this._endpointDispatch,
+    this._serializationManager,
+  );
+
+  final _i2.EndpointDispatch _endpointDispatch;
+
+  final _i2.SerializationManager _serializationManager;
+
+  _i3.Future<void> startSimulation(
+    _i1.TestSessionBuilder sessionBuilder, {
+    required String routeId,
+    required double latitude,
+    required double longitude,
+  }) async {
+    return _i1.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _i1.InternalTestSessionBuilder).internalBuild(
+        endpoint: 'simulation',
+        method: 'startSimulation',
+      );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'simulation',
+          methodName: 'startSimulation',
+          parameters: _i1.testObjectToJson({
+            'routeId': routeId,
+            'latitude': latitude,
+            'longitude': longitude,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue = await (_localCallContext.method.call(
+          _localUniqueSession,
+          _localCallContext.arguments,
+        ) as _i3.Future<void>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _i3.Future<void> updatePosition(
+    _i1.TestSessionBuilder sessionBuilder, {
+    required String routeId,
+    required double latitude,
+    required double longitude,
+  }) async {
+    return _i1.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _i1.InternalTestSessionBuilder).internalBuild(
+        endpoint: 'simulation',
+        method: 'updatePosition',
+      );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'simulation',
+          methodName: 'updatePosition',
+          parameters: _i1.testObjectToJson({
+            'routeId': routeId,
+            'latitude': latitude,
+            'longitude': longitude,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue = await (_localCallContext.method.call(
+          _localUniqueSession,
+          _localCallContext.arguments,
+        ) as _i3.Future<void>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _i3.Future<_i4.SimulationData> endSimulation(
+    _i1.TestSessionBuilder sessionBuilder, {
+    required String routeId,
+    required double latitude,
+    required double longitude,
+  }) async {
+    return _i1.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _i1.InternalTestSessionBuilder).internalBuild(
+        endpoint: 'simulation',
+        method: 'endSimulation',
+      );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'simulation',
+          methodName: 'endSimulation',
+          parameters: _i1.testObjectToJson({
+            'routeId': routeId,
+            'latitude': latitude,
+            'longitude': longitude,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue = await (_localCallContext.method.call(
+          _localUniqueSession,
+          _localCallContext.arguments,
+        ) as _i3.Future<_i4.SimulationData>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _i3.Future<_i5.BusPosition?> getCurrentPosition(
+    _i1.TestSessionBuilder sessionBuilder, {
+    required String routeId,
+  }) async {
+    return _i1.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _i1.InternalTestSessionBuilder).internalBuild(
+        endpoint: 'simulation',
+        method: 'getCurrentPosition',
+      );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'simulation',
+          methodName: 'getCurrentPosition',
+          parameters: _i1.testObjectToJson({'routeId': routeId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue = await (_localCallContext.method.call(
+          _localUniqueSession,
+          _localCallContext.arguments,
+        ) as _i3.Future<_i5.BusPosition?>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+}
+
 class _UserEndpoint {
   _UserEndpoint(
     this._endpointDispatch,
@@ -168,7 +322,7 @@ class _UserEndpoint {
 
   final _i2.SerializationManager _serializationManager;
 
-  _i3.Future<_i4.User?> getUserById(
+  _i3.Future<_i6.User?> getUserById(
     _i1.TestSessionBuilder sessionBuilder, {
     int? id,
   }) async {
@@ -189,7 +343,7 @@ class _UserEndpoint {
         var _localReturnValue = await (_localCallContext.method.call(
           _localUniqueSession,
           _localCallContext.arguments,
-        ) as _i3.Future<_i4.User?>);
+        ) as _i3.Future<_i6.User?>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();
@@ -199,7 +353,7 @@ class _UserEndpoint {
 
   _i3.Future<bool> addUser(
     _i1.TestSessionBuilder sessionBuilder,
-    _i4.User user,
+    _i6.User user,
   ) async {
     return _i1.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -228,7 +382,7 @@ class _UserEndpoint {
 
   _i3.Future<bool> updateUser(
     _i1.TestSessionBuilder sessionBuilder,
-    _i4.User user,
+    _i6.User user,
   ) async {
     return _i1.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =

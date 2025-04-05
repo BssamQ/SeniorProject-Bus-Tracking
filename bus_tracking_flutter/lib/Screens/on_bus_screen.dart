@@ -6,6 +6,8 @@ class OnBusScreen extends StatelessWidget {
   final LatLng currentBusLocation = LatLng(26.3055, 50.1425);
   final LatLng nextStationLocation = LatLng(26.3070, 50.1450);
 
+  OnBusScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

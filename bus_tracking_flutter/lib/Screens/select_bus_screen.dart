@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class SelectBusScreen extends StatefulWidget {
+  const SelectBusScreen({super.key});
+
   @override
   _SelectBusScreenState createState() => _SelectBusScreenState();
 }

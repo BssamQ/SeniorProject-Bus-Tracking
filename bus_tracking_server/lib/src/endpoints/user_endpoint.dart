@@ -42,6 +42,7 @@ class UserEndpoint extends Endpoint {
     return false;
   }
 
+  // Login auth
   Future<bool> login(Session session, String email, String password) async {
     var users = await User.db.find(session, where: (t) => t.email.equals(email));
 

@@ -12,9 +12,13 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 import 'package:serverpod/protocol.dart' as _i2;
 import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i3;
-import 'example.dart' as _i4;
-import 'user_class.dart' as _i5;
+import 'bus_position_class.dart' as _i4;
+import 'example.dart' as _i5;
+import 'simulation_class.dart' as _i6;
+import 'user_class.dart' as _i7;
+export 'bus_position_class.dart';
 export 'example.dart';
+export 'simulation_class.dart';
 export 'user_class.dart';
 
 class Protocol extends _i1.SerializationManagerServer {
@@ -109,17 +113,33 @@ class Protocol extends _i1.SerializationManagerServer {
     Type? t,
   ]) {
     t ??= T;
-    if (t == _i4.Example) {
-      return _i4.Example.fromJson(data) as T;
+    if (t == _i4.BusPosition) {
+      return _i4.BusPosition.fromJson(data) as T;
     }
-    if (t == _i5.User) {
-      return _i5.User.fromJson(data) as T;
+    if (t == _i5.Example) {
+      return _i5.Example.fromJson(data) as T;
     }
-    if (t == _i1.getType<_i4.Example?>()) {
-      return (data != null ? _i4.Example.fromJson(data) : null) as T;
+    if (t == _i6.SimulationData) {
+      return _i6.SimulationData.fromJson(data) as T;
     }
-    if (t == _i1.getType<_i5.User?>()) {
-      return (data != null ? _i5.User.fromJson(data) : null) as T;
+    if (t == _i7.User) {
+      return _i7.User.fromJson(data) as T;
+    }
+    if (t == _i1.getType<_i4.BusPosition?>()) {
+      return (data != null ? _i4.BusPosition.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i5.Example?>()) {
+      return (data != null ? _i5.Example.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i6.SimulationData?>()) {
+      return (data != null ? _i6.SimulationData.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i7.User?>()) {
+      return (data != null ? _i7.User.fromJson(data) : null) as T;
+    }
+    if (t == List<_i4.BusPosition>) {
+      return (data as List).map((e) => deserialize<_i4.BusPosition>(e)).toList()
+          as dynamic;
     }
     try {
       return _i3.Protocol().deserialize<T>(data, t);
@@ -134,10 +154,16 @@ class Protocol extends _i1.SerializationManagerServer {
   String? getClassNameForObject(Object? data) {
     String? className = super.getClassNameForObject(data);
     if (className != null) return className;
-    if (data is _i4.Example) {
+    if (data is _i4.BusPosition) {
+      return 'BusPosition';
+    }
+    if (data is _i5.Example) {
       return 'Example';
     }
-    if (data is _i5.User) {
+    if (data is _i6.SimulationData) {
+      return 'SimulationData';
+    }
+    if (data is _i7.User) {
       return 'User';
     }
     className = _i2.Protocol().getClassNameForObject(data);
@@ -157,11 +183,17 @@ class Protocol extends _i1.SerializationManagerServer {
     if (dataClassName is! String) {
       return super.deserializeByClassName(data);
     }
+    if (dataClassName == 'BusPosition') {
+      return deserialize<_i4.BusPosition>(data['data']);
+    }
     if (dataClassName == 'Example') {
-      return deserialize<_i4.Example>(data['data']);
+      return deserialize<_i5.Example>(data['data']);
+    }
+    if (dataClassName == 'SimulationData') {
+      return deserialize<_i6.SimulationData>(data['data']);
     }
     if (dataClassName == 'User') {
-      return deserialize<_i5.User>(data['data']);
+      return deserialize<_i7.User>(data['data']);
     }
     if (dataClassName.startsWith('serverpod.')) {
       data['className'] = dataClassName.substring(10);
@@ -189,8 +221,8 @@ class Protocol extends _i1.SerializationManagerServer {
       }
     }
     switch (t) {
-      case _i5.User:
-        return _i5.User.t;
+      case _i7.User:
+        return _i7.User.t;
     }
     return null;
   }

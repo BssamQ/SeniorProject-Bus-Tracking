@@ -1,0 +1,7 @@
+class: SimulationData
+fields:
+  routeId: String
+  positions: List<BusPosition>
+  startTime: DateTime
+  endTime: DateTime?
+  isActive: bool

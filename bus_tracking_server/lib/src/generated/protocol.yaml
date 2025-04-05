@@ -1,5 +1,10 @@
 example:
   - hello:
+simulation:
+  - startSimulation:
+  - updatePosition:
+  - endSimulation:
+  - getCurrentPosition:
 user:
   - getUserById:
   - addUser:

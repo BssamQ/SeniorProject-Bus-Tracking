@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
 class PreferencesScreen extends StatefulWidget {
+  const PreferencesScreen({super.key});
+
   @override
   _PreferencesScreenState createState() => _PreferencesScreenState();
 }
 
 class _PreferencesScreenState extends State<PreferencesScreen> {
-  TextEditingController _nameController = TextEditingController(text: "Ahmed Mohammed");
+  final TextEditingController _nameController = TextEditingController(text: "Ahmed Mohammed");
   bool _isEditing = false; // Track if the user is editing
 
   bool _isDarkMode = false;

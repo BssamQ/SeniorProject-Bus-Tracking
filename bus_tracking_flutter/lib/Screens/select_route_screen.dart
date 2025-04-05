@@ -4,6 +4,8 @@ import 'package:latlong2/latlong.dart';
 import 'package:shared_preferences/shared_preferences.dart'; // To save selected route
 
 class SelectRouteScreen extends StatefulWidget {
+  const SelectRouteScreen({super.key});
+
   @override
   _SelectRouteScreenState createState() => _SelectRouteScreenState();
 }

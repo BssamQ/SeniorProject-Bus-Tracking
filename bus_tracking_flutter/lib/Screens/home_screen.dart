@@ -3,13 +3,15 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 
 class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
   final LatLng _initialPosition = LatLng(26.3123370, 50.1422222);
-  LatLng? _currentPostion = LatLng(26.3123370, 50.1422222);
+  final LatLng? _currentPostion = LatLng(26.3123370, 50.1422222);
   LatLng? pickupPosition;
   LatLng? destinationPosition;
   String? pickupLocation;
