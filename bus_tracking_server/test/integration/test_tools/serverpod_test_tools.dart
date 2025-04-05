@@ -15,13 +15,14 @@ import 'package:serverpod_test/serverpod_test.dart' as _i1;
 import 'package:serverpod/serverpod.dart' as _i2;
 import 'dart:async' as _i3;
 import 'package:bus_tracking_server/src/generated/bus_class.dart' as _i4;
-import 'package:bus_tracking_server/src/generated/gps_data_class.dart' as _i5;
+import 'package:bus_tracking_server/src/generated/driver_class.dart' as _i5;
+import 'package:bus_tracking_server/src/generated/gps_data_class.dart' as _i6;
 import 'package:bus_tracking_server/src/generated/notifications_class.dart'
-    as _i6;
-import 'package:bus_tracking_server/src/generated/route_class.dart' as _i7;
-import 'package:bus_tracking_server/src/generated/stations.dart' as _i8;
-import 'package:bus_tracking_server/src/generated/stop_class.dart' as _i9;
-import 'package:bus_tracking_server/src/generated/user_class.dart' as _i10;
+    as _i7;
+import 'package:bus_tracking_server/src/generated/route_class.dart' as _i8;
+import 'package:bus_tracking_server/src/generated/stations.dart' as _i9;
+import 'package:bus_tracking_server/src/generated/stop_class.dart' as _i10;
+import 'package:bus_tracking_server/src/generated/user_class.dart' as _i11;
 import 'package:bus_tracking_server/src/generated/protocol.dart';
 import 'package:bus_tracking_server/src/generated/endpoints.dart';
 export 'package:serverpod_test/serverpod_test_public_exports.dart';
@@ -104,6 +105,8 @@ void withServerpod(
 class TestEndpoints {
   late final _BusEndpoint bus;
 
+  late final _DriverInfoEndpoint driverInfo;
+
   late final _ExampleEndpoint example;
 
   late final _GPSDataEndpoint gPSData;
@@ -127,6 +130,10 @@ class _InternalTestEndpoints extends TestEndpoints
     _i2.EndpointDispatch endpoints,
   ) {
     bus = _BusEndpoint(
+      endpoints,
+      serializationManager,
+    );
+    driverInfo = _DriverInfoEndpoint(
       endpoints,
       serializationManager,
     );
@@ -477,6 +484,338 @@ class _BusEndpoint {
   }
 }
 
+class _DriverInfoEndpoint {
+  _DriverInfoEndpoint(
+    this._endpointDispatch,
+    this._serializationManager,
+  );
+
+  final _i2.EndpointDispatch _endpointDispatch;
+
+  final _i2.SerializationManager _serializationManager;
+
+  _i3.Future<_i5.DriverInfo> createDriver(
+    _i1.TestSessionBuilder sessionBuilder,
+    _i5.DriverInfo driverInfo,
+  ) async {
+    return _i1.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _i1.InternalTestSessionBuilder).internalBuild(
+        endpoint: 'driverInfo',
+        method: 'createDriver',
+      );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'driverInfo',
+          methodName: 'createDriver',
+          parameters: _i1.testObjectToJson({'driverInfo': driverInfo}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue = await (_localCallContext.method.call(
+          _localUniqueSession,
+          _localCallContext.arguments,
+        ) as _i3.Future<_i5.DriverInfo>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _i3.Future<_i5.DriverInfo?> getDriverById(
+    _i1.TestSessionBuilder sessionBuilder,
+    int id,
+  ) async {
+    return _i1.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _i1.InternalTestSessionBuilder).internalBuild(
+        endpoint: 'driverInfo',
+        method: 'getDriverById',
+      );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'driverInfo',
+          methodName: 'getDriverById',
+          parameters: _i1.testObjectToJson({'id': id}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue = await (_localCallContext.method.call(
+          _localUniqueSession,
+          _localCallContext.arguments,
+        ) as _i3.Future<_i5.DriverInfo?>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _i3.Future<_i5.DriverInfo?> getDriverByUserInfoId(
+    _i1.TestSessionBuilder sessionBuilder,
+    int userInfoId,
+  ) async {
+    return _i1.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _i1.InternalTestSessionBuilder).internalBuild(
+        endpoint: 'driverInfo',
+        method: 'getDriverByUserInfoId',
+      );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'driverInfo',
+          methodName: 'getDriverByUserInfoId',
+          parameters: _i1.testObjectToJson({'userInfoId': userInfoId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue = await (_localCallContext.method.call(
+          _localUniqueSession,
+          _localCallContext.arguments,
+        ) as _i3.Future<_i5.DriverInfo?>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _i3.Future<List<_i5.DriverInfo>> getAllDrivers(
+      _i1.TestSessionBuilder sessionBuilder) async {
+    return _i1.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _i1.InternalTestSessionBuilder).internalBuild(
+        endpoint: 'driverInfo',
+        method: 'getAllDrivers',
+      );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'driverInfo',
+          methodName: 'getAllDrivers',
+          parameters: _i1.testObjectToJson({}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue = await (_localCallContext.method.call(
+          _localUniqueSession,
+          _localCallContext.arguments,
+        ) as _i3.Future<List<_i5.DriverInfo>>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _i3.Future<_i5.DriverInfo?> getDriverForBus(
+    _i1.TestSessionBuilder sessionBuilder,
+    int busId,
+  ) async {
+    return _i1.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _i1.InternalTestSessionBuilder).internalBuild(
+        endpoint: 'driverInfo',
+        method: 'getDriverForBus',
+      );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'driverInfo',
+          methodName: 'getDriverForBus',
+          parameters: _i1.testObjectToJson({'busId': busId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue = await (_localCallContext.method.call(
+          _localUniqueSession,
+          _localCallContext.arguments,
+        ) as _i3.Future<_i5.DriverInfo?>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _i3.Future<_i5.DriverInfo> updateDriver(
+    _i1.TestSessionBuilder sessionBuilder,
+    _i5.DriverInfo driverInfo,
+  ) async {
+    return _i1.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _i1.InternalTestSessionBuilder).internalBuild(
+        endpoint: 'driverInfo',
+        method: 'updateDriver',
+      );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'driverInfo',
+          methodName: 'updateDriver',
+          parameters: _i1.testObjectToJson({'driverInfo': driverInfo}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue = await (_localCallContext.method.call(
+          _localUniqueSession,
+          _localCallContext.arguments,
+        ) as _i3.Future<_i5.DriverInfo>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _i3.Future<bool> deleteDriver(
+    _i1.TestSessionBuilder sessionBuilder,
+    int id,
+  ) async {
+    return _i1.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _i1.InternalTestSessionBuilder).internalBuild(
+        endpoint: 'driverInfo',
+        method: 'deleteDriver',
+      );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'driverInfo',
+          methodName: 'deleteDriver',
+          parameters: _i1.testObjectToJson({'id': id}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue = await (_localCallContext.method.call(
+          _localUniqueSession,
+          _localCallContext.arguments,
+        ) as _i3.Future<bool>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _i3.Future<bool> assignBusToDiver(
+    _i1.TestSessionBuilder sessionBuilder,
+    int driverId,
+    int busId,
+  ) async {
+    return _i1.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _i1.InternalTestSessionBuilder).internalBuild(
+        endpoint: 'driverInfo',
+        method: 'assignBusToDiver',
+      );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'driverInfo',
+          methodName: 'assignBusToDiver',
+          parameters: _i1.testObjectToJson({
+            'driverId': driverId,
+            'busId': busId,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue = await (_localCallContext.method.call(
+          _localUniqueSession,
+          _localCallContext.arguments,
+        ) as _i3.Future<bool>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _i3.Future<_i4.Bus?> getDriverBus(
+    _i1.TestSessionBuilder sessionBuilder,
+    int driverInfoId,
+  ) async {
+    return _i1.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _i1.InternalTestSessionBuilder).internalBuild(
+        endpoint: 'driverInfo',
+        method: 'getDriverBus',
+      );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'driverInfo',
+          methodName: 'getDriverBus',
+          parameters: _i1.testObjectToJson({'driverInfoId': driverInfoId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue = await (_localCallContext.method.call(
+          _localUniqueSession,
+          _localCallContext.arguments,
+        ) as _i3.Future<_i4.Bus?>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _i3.Future<String?> getDriverName(
+    _i1.TestSessionBuilder sessionBuilder,
+    int userInfoId,
+  ) async {
+    return _i1.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _i1.InternalTestSessionBuilder).internalBuild(
+        endpoint: 'driverInfo',
+        method: 'getDriverName',
+      );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'driverInfo',
+          methodName: 'getDriverName',
+          parameters: _i1.testObjectToJson({'userInfoId': userInfoId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue = await (_localCallContext.method.call(
+          _localUniqueSession,
+          _localCallContext.arguments,
+        ) as _i3.Future<String?>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _i3.Future<String?> getDriverEmail(
+    _i1.TestSessionBuilder sessionBuilder,
+    int driverInfoId,
+  ) async {
+    return _i1.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _i1.InternalTestSessionBuilder).internalBuild(
+        endpoint: 'driverInfo',
+        method: 'getDriverEmail',
+      );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'driverInfo',
+          methodName: 'getDriverEmail',
+          parameters: _i1.testObjectToJson({'driverInfoId': driverInfoId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue = await (_localCallContext.method.call(
+          _localUniqueSession,
+          _localCallContext.arguments,
+        ) as _i3.Future<String?>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+}
+
 class _ExampleEndpoint {
   _ExampleEndpoint(
     this._endpointDispatch,
@@ -527,7 +866,7 @@ class _GPSDataEndpoint {
 
   final _i2.SerializationManager _serializationManager;
 
-  _i3.Future<List<_i5.GPSData>> getGPSDataByBusId(
+  _i3.Future<List<_i6.GPSData>> getGPSDataByBusId(
     _i1.TestSessionBuilder sessionBuilder,
     int busId,
   ) async {
@@ -548,7 +887,7 @@ class _GPSDataEndpoint {
         var _localReturnValue = await (_localCallContext.method.call(
           _localUniqueSession,
           _localCallContext.arguments,
-        ) as _i3.Future<List<_i5.GPSData>>);
+        ) as _i3.Future<List<_i6.GPSData>>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();
@@ -558,7 +897,7 @@ class _GPSDataEndpoint {
 
   _i3.Future<bool> addGPSData(
     _i1.TestSessionBuilder sessionBuilder,
-    _i5.GPSData gpsData,
+    _i6.GPSData gpsData,
   ) async {
     return _i1.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -625,7 +964,7 @@ class _NotificationEndpoint {
 
   final _i2.SerializationManager _serializationManager;
 
-  _i3.Future<List<_i6.Notification>> getNotificationsByUserId(
+  _i3.Future<List<_i7.Notification>> getNotificationsByUserId(
     _i1.TestSessionBuilder sessionBuilder,
     int userId,
   ) async {
@@ -646,7 +985,7 @@ class _NotificationEndpoint {
         var _localReturnValue = await (_localCallContext.method.call(
           _localUniqueSession,
           _localCallContext.arguments,
-        ) as _i3.Future<List<_i6.Notification>>);
+        ) as _i3.Future<List<_i7.Notification>>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();
@@ -656,7 +995,7 @@ class _NotificationEndpoint {
 
   _i3.Future<bool> addNotification(
     _i1.TestSessionBuilder sessionBuilder,
-    _i6.Notification notification,
+    _i7.Notification notification,
   ) async {
     return _i1.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -752,7 +1091,7 @@ class _RouteEndpoint {
 
   final _i2.SerializationManager _serializationManager;
 
-  _i3.Future<_i7.Routes?> getRouteById(
+  _i3.Future<_i8.Routes?> getRouteById(
     _i1.TestSessionBuilder sessionBuilder,
     int id,
   ) async {
@@ -773,7 +1112,7 @@ class _RouteEndpoint {
         var _localReturnValue = await (_localCallContext.method.call(
           _localUniqueSession,
           _localCallContext.arguments,
-        ) as _i3.Future<_i7.Routes?>);
+        ) as _i3.Future<_i8.Routes?>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();
@@ -781,7 +1120,7 @@ class _RouteEndpoint {
     });
   }
 
-  _i3.Future<List<_i7.Routes>> getAllRoutes(
+  _i3.Future<List<_i8.Routes>> getAllRoutes(
       _i1.TestSessionBuilder sessionBuilder) async {
     return _i1.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -800,7 +1139,7 @@ class _RouteEndpoint {
         var _localReturnValue = await (_localCallContext.method.call(
           _localUniqueSession,
           _localCallContext.arguments,
-        ) as _i3.Future<List<_i7.Routes>>);
+        ) as _i3.Future<List<_i8.Routes>>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();
@@ -810,7 +1149,7 @@ class _RouteEndpoint {
 
   _i3.Future<bool> addRoute(
     _i1.TestSessionBuilder sessionBuilder,
-    _i7.Routes route,
+    _i8.Routes route,
   ) async {
     return _i1.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -839,7 +1178,7 @@ class _RouteEndpoint {
 
   _i3.Future<bool> updateRoute(
     _i1.TestSessionBuilder sessionBuilder,
-    _i7.Routes route,
+    _i8.Routes route,
   ) async {
     return _i1.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -951,7 +1290,7 @@ class _RouteEndpoint {
     });
   }
 
-  _i3.Future<List<_i7.Routes>> getRoutesByLocation(
+  _i3.Future<List<_i8.Routes>> getRoutesByLocation(
     _i1.TestSessionBuilder sessionBuilder,
     double startLatitude,
     double startLongitude,
@@ -980,7 +1319,7 @@ class _RouteEndpoint {
         var _localReturnValue = await (_localCallContext.method.call(
           _localUniqueSession,
           _localCallContext.arguments,
-        ) as _i3.Future<List<_i7.Routes>>);
+        ) as _i3.Future<List<_i8.Routes>>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();
@@ -1032,7 +1371,7 @@ class _StationEndpoint {
 
   final _i2.SerializationManager _serializationManager;
 
-  _i3.Future<_i8.Station?> getStationById(
+  _i3.Future<_i9.Station?> getStationById(
     _i1.TestSessionBuilder sessionBuilder, {
     required int id,
   }) async {
@@ -1053,7 +1392,7 @@ class _StationEndpoint {
         var _localReturnValue = await (_localCallContext.method.call(
           _localUniqueSession,
           _localCallContext.arguments,
-        ) as _i3.Future<_i8.Station?>);
+        ) as _i3.Future<_i9.Station?>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();
@@ -1061,9 +1400,9 @@ class _StationEndpoint {
     });
   }
 
-  _i3.Future<_i8.Station> addStation(
+  _i3.Future<_i9.Station> addStation(
     _i1.TestSessionBuilder sessionBuilder,
-    _i8.Station station,
+    _i9.Station station,
   ) async {
     return _i1.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -1082,7 +1421,7 @@ class _StationEndpoint {
         var _localReturnValue = await (_localCallContext.method.call(
           _localUniqueSession,
           _localCallContext.arguments,
-        ) as _i3.Future<_i8.Station>);
+        ) as _i3.Future<_i9.Station>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();
@@ -1119,7 +1458,7 @@ class _StationEndpoint {
     });
   }
 
-  _i3.Future<List<_i8.Station>> searchStationsByName(
+  _i3.Future<List<_i9.Station>> searchStationsByName(
     _i1.TestSessionBuilder sessionBuilder, {
     required String name,
   }) async {
@@ -1140,7 +1479,7 @@ class _StationEndpoint {
         var _localReturnValue = await (_localCallContext.method.call(
           _localUniqueSession,
           _localCallContext.arguments,
-        ) as _i3.Future<List<_i8.Station>>);
+        ) as _i3.Future<List<_i9.Station>>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();
@@ -1148,9 +1487,9 @@ class _StationEndpoint {
     });
   }
 
-  _i3.Future<_i8.Station?> updateStation(
+  _i3.Future<_i9.Station?> updateStation(
     _i1.TestSessionBuilder sessionBuilder,
-    _i8.Station station,
+    _i9.Station station,
   ) async {
     return _i1.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -1169,7 +1508,7 @@ class _StationEndpoint {
         var _localReturnValue = await (_localCallContext.method.call(
           _localUniqueSession,
           _localCallContext.arguments,
-        ) as _i3.Future<_i8.Station?>);
+        ) as _i3.Future<_i9.Station?>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();
@@ -1177,7 +1516,7 @@ class _StationEndpoint {
     });
   }
 
-  _i3.Future<List<_i8.Station>> getAllStations(
+  _i3.Future<List<_i9.Station>> getAllStations(
       _i1.TestSessionBuilder sessionBuilder) async {
     return _i1.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -1196,7 +1535,7 @@ class _StationEndpoint {
         var _localReturnValue = await (_localCallContext.method.call(
           _localUniqueSession,
           _localCallContext.arguments,
-        ) as _i3.Future<List<_i8.Station>>);
+        ) as _i3.Future<List<_i9.Station>>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();
@@ -1215,7 +1554,7 @@ class _StopEndpoint {
 
   final _i2.SerializationManager _serializationManager;
 
-  _i3.Future<_i9.Stop?> getStopById(
+  _i3.Future<_i10.Stop?> getStopById(
     _i1.TestSessionBuilder sessionBuilder,
     int id,
   ) async {
@@ -1236,7 +1575,7 @@ class _StopEndpoint {
         var _localReturnValue = await (_localCallContext.method.call(
           _localUniqueSession,
           _localCallContext.arguments,
-        ) as _i3.Future<_i9.Stop?>);
+        ) as _i3.Future<_i10.Stop?>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();
@@ -1244,7 +1583,7 @@ class _StopEndpoint {
     });
   }
 
-  _i3.Future<List<_i9.Stop>> getAllStops(
+  _i3.Future<List<_i10.Stop>> getAllStops(
       _i1.TestSessionBuilder sessionBuilder) async {
     return _i1.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -1263,7 +1602,7 @@ class _StopEndpoint {
         var _localReturnValue = await (_localCallContext.method.call(
           _localUniqueSession,
           _localCallContext.arguments,
-        ) as _i3.Future<List<_i9.Stop>>);
+        ) as _i3.Future<List<_i10.Stop>>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();
@@ -1273,7 +1612,7 @@ class _StopEndpoint {
 
   _i3.Future<bool> addStop(
     _i1.TestSessionBuilder sessionBuilder,
-    _i9.Stop stop,
+    _i10.Stop stop,
   ) async {
     return _i1.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -1302,7 +1641,7 @@ class _StopEndpoint {
 
   _i3.Future<bool> updateStop(
     _i1.TestSessionBuilder sessionBuilder,
-    _i9.Stop stop,
+    _i10.Stop stop,
   ) async {
     return _i1.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -1369,7 +1708,7 @@ class _UserEndpoint {
 
   final _i2.SerializationManager _serializationManager;
 
-  _i3.Future<_i10.User?> getUserById(
+  _i3.Future<_i11.User?> getUserById(
     _i1.TestSessionBuilder sessionBuilder, {
     int? id,
   }) async {
@@ -1390,7 +1729,7 @@ class _UserEndpoint {
         var _localReturnValue = await (_localCallContext.method.call(
           _localUniqueSession,
           _localCallContext.arguments,
-        ) as _i3.Future<_i10.User?>);
+        ) as _i3.Future<_i11.User?>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();
@@ -1400,7 +1739,7 @@ class _UserEndpoint {
 
   _i3.Future<bool> addUser(
     _i1.TestSessionBuilder sessionBuilder,
-    _i10.User user,
+    _i11.User user,
   ) async {
     return _i1.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -1429,7 +1768,7 @@ class _UserEndpoint {
 
   _i3.Future<bool> updateUser(
     _i1.TestSessionBuilder sessionBuilder,
-    _i10.User user,
+    _i11.User user,
   ) async {
     return _i1.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -1485,32 +1824,25 @@ class _UserEndpoint {
     });
   }
 
-  _i3.Future<bool> login(
-    _i1.TestSessionBuilder sessionBuilder,
-    String email,
-    String password,
-  ) async {
+  _i3.Future<String?> getUserRole(_i1.TestSessionBuilder sessionBuilder) async {
     return _i1.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
           (sessionBuilder as _i1.InternalTestSessionBuilder).internalBuild(
         endpoint: 'user',
-        method: 'login',
+        method: 'getUserRole',
       );
       try {
         var _localCallContext = await _endpointDispatch.getMethodCallContext(
           createSessionCallback: (_) => _localUniqueSession,
           endpointPath: 'user',
-          methodName: 'login',
-          parameters: _i1.testObjectToJson({
-            'email': email,
-            'password': password,
-          }),
+          methodName: 'getUserRole',
+          parameters: _i1.testObjectToJson({}),
           serializationManager: _serializationManager,
         );
         var _localReturnValue = await (_localCallContext.method.call(
           _localUniqueSession,
           _localCallContext.arguments,
-        ) as _i3.Future<bool>);
+        ) as _i3.Future<String?>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();

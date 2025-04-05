@@ -1,0 +1,5 @@
+class: DriverInfo
+table: driver_info
+fields:
+  userInfoId: int, relation(parent=serverpod_user_info)
+  busId: int, relation(parent=bus)

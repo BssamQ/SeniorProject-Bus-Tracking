@@ -13,21 +13,24 @@ import 'package:serverpod/serverpod.dart' as _i1;
 import 'package:serverpod/protocol.dart' as _i2;
 import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i3;
 import 'bus_class.dart' as _i4;
-import 'example.dart' as _i5;
-import 'gps_data_class.dart' as _i6;
-import 'notifications_class.dart' as _i7;
-import 'route_class.dart' as _i8;
-import 'stations.dart' as _i9;
-import 'stop_class.dart' as _i10;
-import 'user_class.dart' as _i11;
-import 'package:bus_tracking_server/src/generated/bus_class.dart' as _i12;
-import 'package:bus_tracking_server/src/generated/gps_data_class.dart' as _i13;
+import 'driver_class.dart' as _i5;
+import 'example.dart' as _i6;
+import 'gps_data_class.dart' as _i7;
+import 'notifications_class.dart' as _i8;
+import 'route_class.dart' as _i9;
+import 'stations.dart' as _i10;
+import 'stop_class.dart' as _i11;
+import 'user_class.dart' as _i12;
+import 'package:bus_tracking_server/src/generated/bus_class.dart' as _i13;
+import 'package:bus_tracking_server/src/generated/driver_class.dart' as _i14;
+import 'package:bus_tracking_server/src/generated/gps_data_class.dart' as _i15;
 import 'package:bus_tracking_server/src/generated/notifications_class.dart'
-    as _i14;
-import 'package:bus_tracking_server/src/generated/route_class.dart' as _i15;
-import 'package:bus_tracking_server/src/generated/stations.dart' as _i16;
-import 'package:bus_tracking_server/src/generated/stop_class.dart' as _i17;
+    as _i16;
+import 'package:bus_tracking_server/src/generated/route_class.dart' as _i17;
+import 'package:bus_tracking_server/src/generated/stations.dart' as _i18;
+import 'package:bus_tracking_server/src/generated/stop_class.dart' as _i19;
 export 'bus_class.dart';
+export 'driver_class.dart';
 export 'example.dart';
 export 'gps_data_class.dart';
 export 'notifications_class.dart';
@@ -121,6 +124,71 @@ class Protocol extends _i1.SerializationManagerServer {
       indexes: [
         _i2.IndexDefinition(
           indexName: 'bus_pkey',
+          tableSpace: null,
+          elements: [
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'id',
+            )
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: true,
+        )
+      ],
+      managed: true,
+    ),
+    _i2.TableDefinition(
+      name: 'driver_info',
+      dartName: 'DriverInfo',
+      schema: 'public',
+      module: 'bus_tracking',
+      columns: [
+        _i2.ColumnDefinition(
+          name: 'id',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'nextval(\'driver_info_id_seq\'::regclass)',
+        ),
+        _i2.ColumnDefinition(
+          name: 'userInfoId',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _i2.ColumnDefinition(
+          name: 'busId',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+      ],
+      foreignKeys: [
+        _i2.ForeignKeyDefinition(
+          constraintName: 'driver_info_fk_0',
+          columns: ['userInfoId'],
+          referenceTable: 'serverpod_user_info',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.noAction,
+          matchType: null,
+        ),
+        _i2.ForeignKeyDefinition(
+          constraintName: 'driver_info_fk_1',
+          columns: ['busId'],
+          referenceTable: 'bus',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.noAction,
+          matchType: null,
+        ),
+      ],
+      indexes: [
+        _i2.IndexDefinition(
+          indexName: 'driver_info_pkey',
           tableSpace: null,
           elements: [
             _i2.IndexElementDefinition(
@@ -498,22 +566,10 @@ class Protocol extends _i1.SerializationManagerServer {
           columnDefault: 'nextval(\'user_id_seq\'::regclass)',
         ),
         _i2.ColumnDefinition(
-          name: 'name',
-          columnType: _i2.ColumnType.text,
+          name: 'userInfoId',
+          columnType: _i2.ColumnType.bigint,
           isNullable: false,
-          dartType: 'String',
-        ),
-        _i2.ColumnDefinition(
-          name: 'email',
-          columnType: _i2.ColumnType.text,
-          isNullable: false,
-          dartType: 'String',
-        ),
-        _i2.ColumnDefinition(
-          name: 'password',
-          columnType: _i2.ColumnType.text,
-          isNullable: false,
-          dartType: 'String',
+          dartType: 'int',
         ),
         _i2.ColumnDefinition(
           name: 'role',
@@ -521,26 +577,19 @@ class Protocol extends _i1.SerializationManagerServer {
           isNullable: false,
           dartType: 'String',
         ),
-        _i2.ColumnDefinition(
-          name: 'location',
-          columnType: _i2.ColumnType.text,
-          isNullable: true,
-          dartType: 'String?',
-        ),
-        _i2.ColumnDefinition(
-          name: 'latitude',
-          columnType: _i2.ColumnType.doublePrecision,
-          isNullable: true,
-          dartType: 'double?',
-        ),
-        _i2.ColumnDefinition(
-          name: 'longitude',
-          columnType: _i2.ColumnType.doublePrecision,
-          isNullable: true,
-          dartType: 'double?',
-        ),
       ],
-      foreignKeys: [],
+      foreignKeys: [
+        _i2.ForeignKeyDefinition(
+          constraintName: 'user_fk_0',
+          columns: ['userInfoId'],
+          referenceTable: 'serverpod_user_info',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.noAction,
+          matchType: null,
+        )
+      ],
       indexes: [
         _i2.IndexDefinition(
           indexName: 'user_pkey',
@@ -554,7 +603,20 @@ class Protocol extends _i1.SerializationManagerServer {
           type: 'btree',
           isUnique: true,
           isPrimary: true,
-        )
+        ),
+        _i2.IndexDefinition(
+          indexName: 'user_info_id_unique_idx',
+          tableSpace: null,
+          elements: [
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'userInfoId',
+            )
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: false,
+        ),
       ],
       managed: true,
     ),
@@ -571,59 +633,65 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i4.Bus) {
       return _i4.Bus.fromJson(data) as T;
     }
-    if (t == _i5.Example) {
-      return _i5.Example.fromJson(data) as T;
+    if (t == _i5.DriverInfo) {
+      return _i5.DriverInfo.fromJson(data) as T;
     }
-    if (t == _i6.GPSData) {
-      return _i6.GPSData.fromJson(data) as T;
+    if (t == _i6.Example) {
+      return _i6.Example.fromJson(data) as T;
     }
-    if (t == _i7.Notification) {
-      return _i7.Notification.fromJson(data) as T;
+    if (t == _i7.GPSData) {
+      return _i7.GPSData.fromJson(data) as T;
     }
-    if (t == _i8.Routes) {
-      return _i8.Routes.fromJson(data) as T;
+    if (t == _i8.Notification) {
+      return _i8.Notification.fromJson(data) as T;
     }
-    if (t == _i9.Station) {
-      return _i9.Station.fromJson(data) as T;
+    if (t == _i9.Routes) {
+      return _i9.Routes.fromJson(data) as T;
     }
-    if (t == _i10.Stop) {
-      return _i10.Stop.fromJson(data) as T;
+    if (t == _i10.Station) {
+      return _i10.Station.fromJson(data) as T;
     }
-    if (t == _i11.User) {
-      return _i11.User.fromJson(data) as T;
+    if (t == _i11.Stop) {
+      return _i11.Stop.fromJson(data) as T;
+    }
+    if (t == _i12.User) {
+      return _i12.User.fromJson(data) as T;
     }
     if (t == _i1.getType<_i4.Bus?>()) {
       return (data != null ? _i4.Bus.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i5.Example?>()) {
-      return (data != null ? _i5.Example.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i5.DriverInfo?>()) {
+      return (data != null ? _i5.DriverInfo.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i6.GPSData?>()) {
-      return (data != null ? _i6.GPSData.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i6.Example?>()) {
+      return (data != null ? _i6.Example.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i7.Notification?>()) {
-      return (data != null ? _i7.Notification.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i7.GPSData?>()) {
+      return (data != null ? _i7.GPSData.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i8.Routes?>()) {
-      return (data != null ? _i8.Routes.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i8.Notification?>()) {
+      return (data != null ? _i8.Notification.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i9.Station?>()) {
-      return (data != null ? _i9.Station.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i9.Routes?>()) {
+      return (data != null ? _i9.Routes.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i10.Stop?>()) {
-      return (data != null ? _i10.Stop.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i10.Station?>()) {
+      return (data != null ? _i10.Station.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i11.User?>()) {
-      return (data != null ? _i11.User.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i11.Stop?>()) {
+      return (data != null ? _i11.Stop.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<List<_i6.GPSData>?>()) {
+    if (t == _i1.getType<_i12.User?>()) {
+      return (data != null ? _i12.User.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<List<_i7.GPSData>?>()) {
       return (data != null
-          ? (data as List).map((e) => deserialize<_i6.GPSData>(e)).toList()
+          ? (data as List).map((e) => deserialize<_i7.GPSData>(e)).toList()
           : null) as dynamic;
     }
-    if (t == _i1.getType<List<_i10.Stop>?>()) {
+    if (t == _i1.getType<List<_i11.Stop>?>()) {
       return (data != null
-          ? (data as List).map((e) => deserialize<_i10.Stop>(e)).toList()
+          ? (data as List).map((e) => deserialize<_i11.Stop>(e)).toList()
           : null) as dynamic;
     }
     if (t == _i1.getType<List<_i4.Bus>?>()) {
@@ -631,38 +699,42 @@ class Protocol extends _i1.SerializationManagerServer {
           ? (data as List).map((e) => deserialize<_i4.Bus>(e)).toList()
           : null) as dynamic;
     }
-    if (t == _i1.getType<List<_i7.Notification>?>()) {
+    if (t == _i1.getType<List<_i8.Notification>?>()) {
       return (data != null
-          ? (data as List).map((e) => deserialize<_i7.Notification>(e)).toList()
+          ? (data as List).map((e) => deserialize<_i8.Notification>(e)).toList()
           : null) as dynamic;
     }
-    if (t == List<_i12.Bus>) {
-      return (data as List).map((e) => deserialize<_i12.Bus>(e)).toList()
+    if (t == List<_i13.Bus>) {
+      return (data as List).map((e) => deserialize<_i13.Bus>(e)).toList()
           as dynamic;
     }
-    if (t == List<_i13.GPSData>) {
-      return (data as List).map((e) => deserialize<_i13.GPSData>(e)).toList()
+    if (t == List<_i14.DriverInfo>) {
+      return (data as List).map((e) => deserialize<_i14.DriverInfo>(e)).toList()
           as dynamic;
     }
-    if (t == List<_i14.Notification>) {
+    if (t == List<_i15.GPSData>) {
+      return (data as List).map((e) => deserialize<_i15.GPSData>(e)).toList()
+          as dynamic;
+    }
+    if (t == List<_i16.Notification>) {
       return (data as List)
-          .map((e) => deserialize<_i14.Notification>(e))
+          .map((e) => deserialize<_i16.Notification>(e))
           .toList() as dynamic;
     }
-    if (t == List<_i15.Routes>) {
-      return (data as List).map((e) => deserialize<_i15.Routes>(e)).toList()
+    if (t == List<_i17.Routes>) {
+      return (data as List).map((e) => deserialize<_i17.Routes>(e)).toList()
           as dynamic;
     }
     if (t == List<String>) {
       return (data as List).map((e) => deserialize<String>(e)).toList()
           as dynamic;
     }
-    if (t == List<_i16.Station>) {
-      return (data as List).map((e) => deserialize<_i16.Station>(e)).toList()
+    if (t == List<_i18.Station>) {
+      return (data as List).map((e) => deserialize<_i18.Station>(e)).toList()
           as dynamic;
     }
-    if (t == List<_i17.Stop>) {
-      return (data as List).map((e) => deserialize<_i17.Stop>(e)).toList()
+    if (t == List<_i19.Stop>) {
+      return (data as List).map((e) => deserialize<_i19.Stop>(e)).toList()
           as dynamic;
     }
     try {
@@ -681,25 +753,28 @@ class Protocol extends _i1.SerializationManagerServer {
     if (data is _i4.Bus) {
       return 'Bus';
     }
-    if (data is _i5.Example) {
+    if (data is _i5.DriverInfo) {
+      return 'DriverInfo';
+    }
+    if (data is _i6.Example) {
       return 'Example';
     }
-    if (data is _i6.GPSData) {
+    if (data is _i7.GPSData) {
       return 'GPSData';
     }
-    if (data is _i7.Notification) {
+    if (data is _i8.Notification) {
       return 'Notification';
     }
-    if (data is _i8.Routes) {
+    if (data is _i9.Routes) {
       return 'Routes';
     }
-    if (data is _i9.Station) {
+    if (data is _i10.Station) {
       return 'Station';
     }
-    if (data is _i10.Stop) {
+    if (data is _i11.Stop) {
       return 'Stop';
     }
-    if (data is _i11.User) {
+    if (data is _i12.User) {
       return 'User';
     }
     className = _i2.Protocol().getClassNameForObject(data);
@@ -722,26 +797,29 @@ class Protocol extends _i1.SerializationManagerServer {
     if (dataClassName == 'Bus') {
       return deserialize<_i4.Bus>(data['data']);
     }
+    if (dataClassName == 'DriverInfo') {
+      return deserialize<_i5.DriverInfo>(data['data']);
+    }
     if (dataClassName == 'Example') {
-      return deserialize<_i5.Example>(data['data']);
+      return deserialize<_i6.Example>(data['data']);
     }
     if (dataClassName == 'GPSData') {
-      return deserialize<_i6.GPSData>(data['data']);
+      return deserialize<_i7.GPSData>(data['data']);
     }
     if (dataClassName == 'Notification') {
-      return deserialize<_i7.Notification>(data['data']);
+      return deserialize<_i8.Notification>(data['data']);
     }
     if (dataClassName == 'Routes') {
-      return deserialize<_i8.Routes>(data['data']);
+      return deserialize<_i9.Routes>(data['data']);
     }
     if (dataClassName == 'Station') {
-      return deserialize<_i9.Station>(data['data']);
+      return deserialize<_i10.Station>(data['data']);
     }
     if (dataClassName == 'Stop') {
-      return deserialize<_i10.Stop>(data['data']);
+      return deserialize<_i11.Stop>(data['data']);
     }
     if (dataClassName == 'User') {
-      return deserialize<_i11.User>(data['data']);
+      return deserialize<_i12.User>(data['data']);
     }
     if (dataClassName.startsWith('serverpod.')) {
       data['className'] = dataClassName.substring(10);
@@ -771,18 +849,20 @@ class Protocol extends _i1.SerializationManagerServer {
     switch (t) {
       case _i4.Bus:
         return _i4.Bus.t;
-      case _i6.GPSData:
-        return _i6.GPSData.t;
-      case _i7.Notification:
-        return _i7.Notification.t;
-      case _i8.Routes:
-        return _i8.Routes.t;
-      case _i9.Station:
-        return _i9.Station.t;
-      case _i10.Stop:
-        return _i10.Stop.t;
-      case _i11.User:
-        return _i11.User.t;
+      case _i5.DriverInfo:
+        return _i5.DriverInfo.t;
+      case _i7.GPSData:
+        return _i7.GPSData.t;
+      case _i8.Notification:
+        return _i8.Notification.t;
+      case _i9.Routes:
+        return _i9.Routes.t;
+      case _i10.Station:
+        return _i10.Station.t;
+      case _i11.Stop:
+        return _i11.Stop.t;
+      case _i12.User:
+        return _i12.User.t;
     }
     return null;
   }

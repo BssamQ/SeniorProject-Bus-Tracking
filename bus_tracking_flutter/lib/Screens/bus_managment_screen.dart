@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../main.dart'; // Import main.dart to access the client
 
 class BusManagementScreen extends StatefulWidget {
+  const BusManagementScreen({super.key});
+
   @override
   _BusManagementScreen createState() => _BusManagementScreen();
 }
@@ -12,7 +14,6 @@ class _BusManagementScreen extends State<BusManagementScreen> {
   List<Routes> routes = [];
   String _selectedStatus = "Operating";
   String? _selectedRoute;
-
   final TextEditingController _busNumberController = TextEditingController();
   final TextEditingController _driverNameController = TextEditingController();
   final TextEditingController _ageController = TextEditingController();
@@ -49,7 +50,6 @@ class _BusManagementScreen extends State<BusManagementScreen> {
       status: _selectedStatus,
       routeID: _selectedRoute != null ? int.tryParse(_selectedRoute!) : null,
     );
-
     try {
       final success = await client.bus.addBus(bus);
       if (success) {
@@ -110,25 +110,23 @@ class _BusManagementScreen extends State<BusManagementScreen> {
               itemCount: buses.length,
               itemBuilder: (context, index) {
                 final bus = buses[index];
-
                 // Define color based on status
                 Color cardColor;
                 switch (bus.status) {
                   case "Operating":
-                    cardColor = Colors.green[50]!;  // Light green
+                    cardColor = Colors.green[50]!; // Light green
                     break;
                   case "In Maintenance":
-                    cardColor = Colors.orange[50]!;  // Light orange
+                    cardColor = Colors.orange[50]!; // Light orange
                     break;
                   case "Out of Service":
-                    cardColor = Colors.red[50]!;  // Light red
+                    cardColor = Colors.red[50]!; // Light red
                     break;
                   default:
-                    cardColor = Colors.grey[200]!;  // Light grey as fallback
+                    cardColor = Colors.grey[200]!; // Light grey as fallback
                 }
-
                 return Card(
-                  color: cardColor, // ← Set the card color here
+                  color: cardColor,
                   margin: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                   elevation: 8,
                   shape: RoundedRectangleBorder(
@@ -147,9 +145,12 @@ class _BusManagementScreen extends State<BusManagementScreen> {
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Driver: ${bus.driverName}", style: TextStyle(color: Colors.blue)),
-                        Text("Age: ${bus.age}", style: TextStyle(color: Colors.orange)),
-                        Text("Breakdowns: ${bus.breakdownCounter}", style: TextStyle(color: Colors.red)),
+                        Text("Driver: ${bus.driverName}",
+                            style: TextStyle(color: Colors.blue)),
+                        Text("Age: ${bus.age}",
+                            style: TextStyle(color: Colors.orange)),
+                        Text("Breakdowns: ${bus.breakdownCounter}",
+                            style: TextStyle(color: Colors.red)),
                         Text(
                           "Status: ${bus.status}",
                           style: TextStyle(
@@ -181,30 +182,29 @@ class _BusManagementScreen extends State<BusManagementScreen> {
                   ),
                 );
               },
-
             ),
           ),
           ElevatedButton(
             onPressed: _showAddBusDialog,
             style: ElevatedButton.styleFrom(
-              padding: EdgeInsets.symmetric(vertical: 12, horizontal: 25), backgroundColor: Colors.green[600], // Slightly darker green for a more refined look
+              padding: EdgeInsets.symmetric(vertical: 12, horizontal: 25),
+              backgroundColor: Colors.green[600],
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8), // Slightly rounded corners
+                borderRadius: BorderRadius.circular(8),
               ),
-              elevation: 4, // Less shadow for a more subtle effect
-              textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w500), // Medium-weight text for a refined look
+              elevation: 4,
+              textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.add, color: Colors.white), // Add an icon
+                Icon(Icons.add, color: Colors.white),
                 SizedBox(width: 8),
-                Text("Add Bus", style: TextStyle(fontSize: 16, color: Colors.white)),
+                Text("Add Bus",
+                    style: TextStyle(fontSize: 16, color: Colors.white)),
               ],
             ),
           )
-
-
         ],
       ),
     );
@@ -220,22 +220,34 @@ class _BusManagementScreen extends State<BusManagementScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Bus Number: ${bus.busNumber}", style: TextStyle(fontSize: 16, color: Colors.green)),
+                Text("Bus Number: ${bus.busNumber}",
+                    style: TextStyle(fontSize: 16, color: Colors.green)),
                 SizedBox(height: 10),
-                Text("Driver Name: ${bus.driverName}", style: TextStyle(fontSize: 16, color: Colors.blue)),
+                Text("Driver Name: ${bus.driverName}",
+                    style: TextStyle(fontSize: 16, color: Colors.blue)),
                 SizedBox(height: 10),
-                Text("Age: ${bus.age}", style: TextStyle(fontSize: 16, color: Colors.orange)),
+                Text("Age: ${bus.age}",
+                    style: TextStyle(fontSize: 16, color: Colors.orange)),
                 SizedBox(height: 10),
-                Text("Breakdown Count: ${bus.breakdownCounter}", style: TextStyle(fontSize: 16, color: Colors.red)),
+                Text("Breakdown Count: ${bus.breakdownCounter}",
+                    style: TextStyle(fontSize: 16, color: Colors.red)),
                 SizedBox(height: 10),
-                Text("Status: ${bus.status}", style: TextStyle(fontSize: 16, color: bus.status == "Operating" ? Colors.green : Colors.grey)),
+                Text("Status: ${bus.status}",
+                    style: TextStyle(
+                        fontSize: 16,
+                        color: bus.status == "Operating"
+                            ? Colors.green
+                            : Colors.grey)),
                 SizedBox(height: 10),
-                Text("Route: ${bus.routeID != null ? 'Route ${bus.routeID}' : 'Not assigned'}", style: TextStyle(fontSize: 16, color: Colors.blue)),
+                Text(
+                    "Route: ${bus.routeID != null ? 'Route ${bus.routeID}' : 'Not assigned'}",
+                    style: TextStyle(fontSize: 16, color: Colors.blue)),
               ],
             ),
           ),
           actions: [
-            TextButton(onPressed: () => Navigator.pop(context), child: Text("Close")),
+            TextButton(
+                onPressed: () => Navigator.pop(context), child: Text("Close")),
           ],
         );
       },
@@ -251,87 +263,21 @@ class _BusManagementScreen extends State<BusManagementScreen> {
     _selectedRoute = null; // Reset route selection
     _selectedStatus = "Operating"; // Reset status to default
 
-    List<Map<String, dynamic>> busStatuses = [
-      {"status": "Operating", "color": Colors.green, "icon": Icons.play_arrow},
-      {"status": "In Maintenance", "color": Colors.orange, "icon": Icons.build},
-      {"status": "Out of Service", "color": Colors.red, "icon": Icons.cancel},
-    ];
-
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text("Add New Bus"),
-          content: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("Bus Number:"),
-                TextField(controller: _busNumberController),
-                SizedBox(height: 10),
-                Text("Driver Name:"),
-                TextField(controller: _driverNameController),
-                SizedBox(height: 10),
-                Text("Age:"),
-                TextField(controller: _ageController),
-                SizedBox(height: 10),
-                Text("Breakdown Count:"),
-                TextField(controller: _breakdownController),
-                SizedBox(height: 10),
-                Text("Route:"),
-                DropdownButtonFormField<String>(
-                  value: _selectedRoute,
-                  onChanged: (newValue) {
-                    setState(() {
-                      _selectedRoute = newValue;
-                    });
-                  },
-                  items: routes.map((route) {
-                    return DropdownMenuItem(
-                      value: route.id.toString(),
-                      child: Text(route.routeName),
-                    );
-                  }).toList(),
-                ),
-                SizedBox(height: 10),
-                Text("Status:"),
-                DropdownButtonFormField<String>(
-                  value: _selectedStatus,
-                  onChanged: (newStatus) {
-                    setState(() {
-                      _selectedStatus = newStatus!;
-                    });
-                  },
-                  items: busStatuses.map((statusItem) {
-                    return DropdownMenuItem<String>(
-                      value: statusItem["status"],
-                      child: Row(
-                        children: [
-                          Icon(
-                            statusItem["icon"], // Use the icon directly
-                            color: statusItem["color"], // Use the color directly
-                          ),
-                          SizedBox(width: 10),
-                          Text(statusItem["status"]),
-                        ],
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(onPressed: _addBus, child: Text("Add")),
-            TextButton(onPressed: () => Navigator.pop(context), child: Text("Cancel")),
-          ],
+    // Ensure routes are loaded before showing the dialog
+    if (routes.isEmpty) {
+      _loadRoutes().then((_) {
+        showDialog(
+          context: context,
+          builder: (context) => _buildAddBusDialog(),
         );
-      },
-    );
+      });
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) => _buildAddBusDialog(),
+      );
+    }
   }
-
-
-
 
   void _showEditBusDialog(Bus bus) {
     _busNumberController.text = bus.busNumber;
@@ -339,89 +285,190 @@ class _BusManagementScreen extends State<BusManagementScreen> {
     _ageController.text = bus.age.toString();
     _breakdownController.text = bus.breakdownCounter.toString();
     _selectedRoute = bus.routeID?.toString();
+    _selectedStatus = bus.status;
 
-    showDialog(
+    // Ensure routes are loaded before showing the dialog
+    if (routes.isEmpty) {
+      _loadRoutes().then((_) {
+        showDialog(
+          context: context,
+          builder: (context) => _buildEditBusDialog(bus),
+        );
+      });
+    } else {
+      showDialog(
         context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text("Edit Bus"),
-            content: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("Bus Number:", style: TextStyle(color: Colors.green)),
-                  TextField(controller: _busNumberController),
-                  SizedBox(height: 10),
-                  Text("Driver Name:", style: TextStyle(color: Colors.blue)),
-                  TextField(controller: _driverNameController),
-                  SizedBox(height: 10),
-                  Text("Age:", style: TextStyle(color: Colors.orange)),
-                  TextField(controller: _ageController),
-                  SizedBox(height: 10),
-                  Text("Breakdown Count:", style: TextStyle(color: Colors.red)),
-                  TextField(controller: _breakdownController),
-                  SizedBox(height: 10),
-                  Text("Route:", style: TextStyle(color: Colors.blue)),
-                  DropdownButtonFormField<String>(
-                    value: _selectedRoute,
-                    onChanged: (newValue) {
-                      setState(() {
-                        _selectedRoute = newValue;
-                      });
-                    },
-                    items: routes.map((route) => DropdownMenuItem(
-                      value: route.id.toString(),
-                      child: Text(route.routeName),
-                    )).toList(),
-                  ),
-                  SizedBox(height: 10),
-                  Text("Status:", style: TextStyle(color: Colors.green)),
-                  Wrap(
-                    spacing: 10.0,
-                    children: ["Operating", "In Maintenance", "Out of Service"].map((status) {
-                      return GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _selectedStatus = status;
-                          });
-                        },
-                        child: Container(
-                          padding: EdgeInsets.all(8),
-                          margin: EdgeInsets.only(right: 10),
-                          decoration: BoxDecoration(
-                            color: _selectedStatus == status ? Colors.green : Colors.transparent,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Column(
-                            children: [
-                              Icon(Icons.check_circle, color: _selectedStatus == status ? Colors.green : Colors.grey),
-                              SizedBox(height: 5),
-                              Text(status, style: TextStyle(fontSize: 12)),
-                            ],
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                ],
-              ),
+        builder: (context) => _buildEditBusDialog(bus),
+      );
+    }
+  }
+
+  Widget _buildAddBusDialog() {
+    List<Map<String, dynamic>> busStatuses = [
+      {"status": "Operating", "color": Colors.green, "icon": Icons.play_arrow},
+      {"status": "In Maintenance", "color": Colors.orange, "icon": Icons.build},
+      {"status": "Out of Service", "color": Colors.red, "icon": Icons.cancel},
+    ];
+
+    return AlertDialog(
+      title: Text("Add New Bus"),
+      content: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text("Bus Number:"),
+            TextField(controller: _busNumberController),
+            SizedBox(height: 10),
+            Text("Driver Name:"),
+            TextField(controller: _driverNameController),
+            SizedBox(height: 10),
+            Text("Age:"),
+            TextField(controller: _ageController),
+            SizedBox(height: 10),
+            Text("Breakdown Count:"),
+            TextField(controller: _breakdownController),
+            SizedBox(height: 10),
+            Text("Route:"),
+            DropdownButtonFormField<String>(
+              value: _selectedRoute,
+              onChanged: (newValue) {
+                setState(() {
+                  _selectedRoute = newValue;
+                });
+              },
+              items: routes.map((route) {
+                return DropdownMenuItem(
+                  value: route.id.toString(),
+                  child: Text(route.routeName),
+                );
+              }).toList(),
             ),
-            actions: [
-              TextButton(onPressed: () {
-                bus.busNumber = _busNumberController.text;
-                bus.driverName = _driverNameController.text;
-                bus.age = int.tryParse(_ageController.text) ?? 0;
-                bus.breakdownCounter = int.tryParse(_breakdownController.text) ?? 0;
-                bus.status = _selectedStatus;
-                bus.routeID = _selectedRoute != null ? int.tryParse(_selectedRoute!) : null;
+            SizedBox(height: 10),
+            Text("Status:"),
+            DropdownButtonFormField<String>(
+              value: _selectedStatus,
+              onChanged: (newStatus) {
+                setState(() {
+                  _selectedStatus = newStatus!;
+                });
+              },
+              items: busStatuses.map((statusItem) {
+                return DropdownMenuItem<String>(
+                  value: statusItem["status"],
+                  child: Row(
+                    children: [
+                      Icon(statusItem["icon"], color: statusItem["color"]),
+                      SizedBox(width: 10),
+                      Text(statusItem["status"]),
+                    ],
+                  ),
+                );
+              }).toList(),
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(onPressed: _addBus, child: Text("Add")),
+        TextButton(
+            onPressed: () => Navigator.pop(context), child: Text("Cancel")),
+      ],
+    );
+  }
 
-                _updateBus(bus);
-                Navigator.pop(context);
-              }, child: Text("Update")),
+  Widget _buildEditBusDialog(Bus bus) {
+    List<Map<String, dynamic>> busStatuses = [
+      {"status": "Operating", "color": Colors.green, "icon": Icons.play_arrow},
+      {"status": "In Maintenance", "color": Colors.orange, "icon": Icons.build},
+      {"status": "Out of Service", "color": Colors.red, "icon": Icons.cancel},
+    ];
 
-              TextButton(onPressed: () => Navigator.pop(context), child: Text("Cancel")),
-            ],
-          );
-        });
+    return AlertDialog(
+      title: Text("Edit Bus"),
+      content: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text("Bus Number:", style: TextStyle(color: Colors.green)),
+            TextField(controller: _busNumberController),
+            SizedBox(height: 10),
+            Text("Driver Name:", style: TextStyle(color: Colors.blue)),
+            TextField(controller: _driverNameController),
+            SizedBox(height: 10),
+            Text("Age:", style: TextStyle(color: Colors.orange)),
+            TextField(
+              controller: _ageController,
+              keyboardType: TextInputType.number,
+            ),
+            SizedBox(height: 10),
+            Text("Breakdown Count:", style: TextStyle(color: Colors.red)),
+            TextField(
+              controller: _breakdownController,
+              keyboardType: TextInputType.number,
+            ),
+            SizedBox(height: 10),
+            Text("Route:", style: TextStyle(color: Colors.purple)),
+            DropdownButtonFormField<String>(
+              value: _selectedRoute,
+              onChanged: (newValue) {
+                setState(() {
+                  _selectedRoute = newValue;
+                });
+              },
+              items: routes.map((route) {
+                return DropdownMenuItem(
+                  value: route.id.toString(),
+                  child: Text(route.routeName),
+                );
+              }).toList(),
+            ),
+            SizedBox(height: 10),
+            Text("Status:", style: TextStyle(color: Colors.teal)),
+            DropdownButtonFormField<String>(
+              value: _selectedStatus,
+              onChanged: (newStatus) {
+                setState(() {
+                  _selectedStatus = newStatus!;
+                });
+              },
+              items: busStatuses.map((statusItem) {
+                return DropdownMenuItem<String>(
+                  value: statusItem["status"],
+                  child: Row(
+                    children: [
+                      Icon(statusItem["icon"], color: statusItem["color"]),
+                      SizedBox(width: 10),
+                      Text(statusItem["status"]),
+                    ],
+                  ),
+                );
+              }).toList(),
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () async {
+            final updatedBus = Bus(
+              id: bus.id,
+              busNumber: _busNumberController.text,
+              driverName: _driverNameController.text,
+              age: int.tryParse(_ageController.text) ?? 0,
+              breakdownCounter: int.tryParse(_breakdownController.text) ?? 0,
+              status: _selectedStatus,
+              routeID: _selectedRoute != null ? int.tryParse(_selectedRoute!) : null,
+            );
+            await _updateBus(updatedBus);
+            Navigator.pop(context);
+          },
+          child: Text("Update"),
+        ),
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text("Cancel"),
+        ),
+      ],
+    );
   }
 }

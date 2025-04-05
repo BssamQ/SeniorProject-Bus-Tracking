@@ -16,8 +16,7 @@ import 'Screens/waiting_for_bus_screen.dart';
 import 'Screens/on_bus_screen.dart';
 import 'Screens/list_station_screen.dart';
 import 'Screens/select_route_screen.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
+
 
 late SessionManager sessionManager;
 late Client client;
@@ -89,7 +88,7 @@ class _MyAppState extends State<MyApp> {
         '/select_route': (context) => SelectRouteScreen(isDarkMode: _isDarkMode, onThemeChanged: _toggleTheme),
         '/admin_main': (context) => AdminMain(), // Main dashboard
         '/bus_management': (context) => BusManagementScreen(), // Bus management
-        '/driver_management': (context) => DriverManagementScreen(),
+        '/driver_management': (context) => DriverManagementScreen(client: client, sessionManager: sessionManager),
         '/route_management': (context) => RouteManagementScreen(),
         '/dashboard': (context) => AdminDashboardScreen(),
       },

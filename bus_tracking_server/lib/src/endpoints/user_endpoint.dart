@@ -42,16 +42,24 @@ class UserEndpoint extends Endpoint {
     return false;
   }
 
-  Future<bool> login(Session session, String email, String password) async {
-    var users = await User.db.find(session, where: (t) => t.email.equals(email));
+  Future<String?> getUserRole(Session session) async {
+    // Get the authenticated user's ID from the session
+    final authenticationInfo = await session.authenticated;
+    final userId = authenticationInfo?.userId;
 
-    if (users.isNotEmpty) {
-      var user = users.first;
-      if (user.password == password) {
-        return true;
-      }
+    if (userId == null) {
+      // User is not authenticated
+      return null;
     }
-    return false;
+
+    // Find the User record that corresponds to the authenticated UserInfo
+    var user = await User.db.findFirstRow(
+        session,
+        where: (u) => u.userInfoId.equals(userId)
+    );
+
+    // Return the role if the user was found
+    return user?.role;
   }
 
 

@@ -34,11 +34,21 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: isDark ? Colors.grey[900] : Colors.grey[100],
       appBar: AppBar(
-        title: Text("Admin Dashboard"),
+        title: Text(
+          "Admin Dashboard",
+          style: TextStyle(
+            color: isDark ? Colors.white : Colors.white,
+          ),
+        ),
         backgroundColor: Colors.green.shade700,
+        iconTheme: IconThemeData(
+          color: isDark ? Colors.white : Colors.white,
+        ),
       ),
       body: _loading
           ? Center(child: CircularProgressIndicator())
@@ -79,28 +89,37 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     required Widget Function(BoxConstraints constraints) chartBuilder,
     required Widget legend,
   }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Card(
       elevation: 8,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      color: Colors.white,
+      color: isDark ? Colors.grey[800] : Colors.white,
       child: Padding(
         padding: EdgeInsets.all(16),
         child: Column(
           children: [
             Row(
               children: [
-                Icon(icon, color: Colors.green.shade700),
+                Icon(
+                  icon,
+                  color: Colors.green.shade700,
+                ),
                 SizedBox(width: 10),
                 Text(
                   title,
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: isDark ? Colors.white : Colors.black,
+                  ),
                 ),
               ],
             ),
             SizedBox(height: 16),
             LayoutBuilder(
               builder: (context, constraints) {
-                double chartHeight = constraints.maxWidth; // square chart
+                double chartHeight = constraints.maxWidth;
                 return Container(
                   height: chartHeight * 0.7,
                   child: chartBuilder(constraints),
@@ -115,7 +134,6 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     );
   }
 
-  // Pie Chart for Bus Status
   Widget _buildBusStatusPieChart(BoxConstraints constraints) {
     Map<String, int> statusCounts = {
       'Operating': 0,
@@ -129,7 +147,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
 
     int total = statusCounts.values.fold(0, (a, b) => a + b);
     if (total == 0) {
-      return Center(child: Text('No Data'));
+      return Center(child: Text('No Data', style: TextStyle(color: Theme.of(context).textTheme.bodyLarge!.color)));
     }
 
     return PieChart(
@@ -159,7 +177,11 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
             value: entry.value.toDouble(),
             title: '${percentage.toStringAsFixed(1)}%',
             radius: constraints.maxWidth * 0.15,
-            titleStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
+            titleStyle: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
           );
         }).toList(),
       ),
@@ -167,6 +189,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   }
 
   Widget _buildStatusLegend() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -177,15 +201,14 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     );
   }
 
-  // Pie Chart for Bus Age
   Widget _buildBusAgePieChart(BoxConstraints constraints) {
-    int group1 = _allBuses.where((b) =>  b.age >= 0 && b.age <= 3).length;
-    int group2 = _allBuses.where((b) =>   b.age >= 4 && b.age <= 6).length;
-    int group3 = _allBuses.where((b) =>  b.age >= 7).length;
+    int group1 = _allBuses.where((b) => b.age >= 0 && b.age <= 3).length;
+    int group2 = _allBuses.where((b) => b.age >= 4 && b.age <= 6).length;
+    int group3 = _allBuses.where((b) => b.age >= 7).length;
 
     int total = group1 + group2 + group3;
     if (total == 0) {
-      return Center(child: Text('No Data'));
+      return Center(child: Text('No Data', style: TextStyle(color: Theme.of(context).textTheme.bodyLarge!.color)));
     }
 
     return PieChart(
@@ -231,7 +254,6 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     );
   }
 
-  // Bar Chart for Breakdown Counters
   Widget _buildBreakdownBarChart(BoxConstraints constraints) {
     List<BarChartGroupData> barGroups = [];
 
@@ -256,7 +278,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
       );
     }
 
-    double maxY = (_allBuses.map((b) => b.breakdownCounter ).fold(0, (a, b) => a > b ? a : b) + 1).toDouble();
+    double maxY = (_allBuses.map((b) => b.breakdownCounter).fold(0, (a, b) => a > b ? a : b) + 1).toDouble();
 
     return BarChart(
       BarChartData(
@@ -276,7 +298,10 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                   padding: const EdgeInsets.only(top: 4.0),
                   child: Text(
                     _allBuses[value.toInt()].busNumber,
-                    style: TextStyle(fontSize: 10),
+                    style: TextStyle(
+                      fontSize: 10,
+                      color: Theme.of(context).textTheme.bodyLarge!.color,
+                    ),
                   ),
                 );
               },
@@ -289,6 +314,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   }
 
   Widget _buildLegendItem(Color color, String text) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Row(
       children: [
         Container(
@@ -300,7 +327,13 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
           ),
         ),
         SizedBox(width: 8),
-        Text(text, style: TextStyle(fontSize: 14)),
+        Text(
+          text,
+          style: TextStyle(
+            fontSize: 14,
+            color: isDark ? Colors.white : Colors.black,
+          ),
+        ),
       ],
     );
   }

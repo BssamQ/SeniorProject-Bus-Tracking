@@ -10,45 +10,37 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
-import 'notifications_class.dart' as _i2;
+import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i2;
+import 'notifications_class.dart' as _i3;
 
 abstract class User implements _i1.TableRow, _i1.ProtocolSerialization {
   User._({
     this.id,
-    required this.name,
-    required this.email,
-    required this.password,
+    required this.userInfoId,
+    this.userInfo,
     required this.role,
-    this.location,
-    this.latitude,
-    this.longitude,
     this.notifications,
   });
 
   factory User({
     int? id,
-    required String name,
-    required String email,
-    required String password,
+    required int userInfoId,
+    _i2.UserInfo? userInfo,
     required String role,
-    String? location,
-    double? latitude,
-    double? longitude,
-    List<_i2.Notification>? notifications,
+    List<_i3.Notification>? notifications,
   }) = _UserImpl;
 
   factory User.fromJson(Map<String, dynamic> jsonSerialization) {
     return User(
       id: jsonSerialization['id'] as int?,
-      name: jsonSerialization['name'] as String,
-      email: jsonSerialization['email'] as String,
-      password: jsonSerialization['password'] as String,
+      userInfoId: jsonSerialization['userInfoId'] as int,
+      userInfo: jsonSerialization['userInfo'] == null
+          ? null
+          : _i2.UserInfo.fromJson(
+              (jsonSerialization['userInfo'] as Map<String, dynamic>)),
       role: jsonSerialization['role'] as String,
-      location: jsonSerialization['location'] as String?,
-      latitude: (jsonSerialization['latitude'] as num?)?.toDouble(),
-      longitude: (jsonSerialization['longitude'] as num?)?.toDouble(),
       notifications: (jsonSerialization['notifications'] as List?)
-          ?.map((e) => _i2.Notification.fromJson((e as Map<String, dynamic>)))
+          ?.map((e) => _i3.Notification.fromJson((e as Map<String, dynamic>)))
           .toList(),
     );
   }
@@ -60,47 +52,31 @@ abstract class User implements _i1.TableRow, _i1.ProtocolSerialization {
   @override
   int? id;
 
-  String name;
+  int userInfoId;
 
-  String email;
-
-  String password;
+  _i2.UserInfo? userInfo;
 
   String role;
 
-  String? location;
-
-  double? latitude;
-
-  double? longitude;
-
-  List<_i2.Notification>? notifications;
+  List<_i3.Notification>? notifications;
 
   @override
   _i1.Table get table => t;
 
   User copyWith({
     int? id,
-    String? name,
-    String? email,
-    String? password,
+    int? userInfoId,
+    _i2.UserInfo? userInfo,
     String? role,
-    String? location,
-    double? latitude,
-    double? longitude,
-    List<_i2.Notification>? notifications,
+    List<_i3.Notification>? notifications,
   });
   @override
   Map<String, dynamic> toJson() {
     return {
       if (id != null) 'id': id,
-      'name': name,
-      'email': email,
-      'password': password,
+      'userInfoId': userInfoId,
+      if (userInfo != null) 'userInfo': userInfo?.toJson(),
       'role': role,
-      if (location != null) 'location': location,
-      if (latitude != null) 'latitude': latitude,
-      if (longitude != null) 'longitude': longitude,
       if (notifications != null)
         'notifications': notifications?.toJson(valueToJson: (v) => v.toJson()),
     };
@@ -110,21 +86,23 @@ abstract class User implements _i1.TableRow, _i1.ProtocolSerialization {
   Map<String, dynamic> toJsonForProtocol() {
     return {
       if (id != null) 'id': id,
-      'name': name,
-      'email': email,
-      'password': password,
+      'userInfoId': userInfoId,
+      if (userInfo != null) 'userInfo': userInfo?.toJsonForProtocol(),
       'role': role,
-      if (location != null) 'location': location,
-      if (latitude != null) 'latitude': latitude,
-      if (longitude != null) 'longitude': longitude,
       if (notifications != null)
         'notifications':
             notifications?.toJson(valueToJson: (v) => v.toJsonForProtocol()),
     };
   }
 
-  static UserInclude include({_i2.NotificationIncludeList? notifications}) {
-    return UserInclude._(notifications: notifications);
+  static UserInclude include({
+    _i2.UserInfoInclude? userInfo,
+    _i3.NotificationIncludeList? notifications,
+  }) {
+    return UserInclude._(
+      userInfo: userInfo,
+      notifications: notifications,
+    );
   }
 
   static UserIncludeList includeList({
@@ -158,48 +136,33 @@ class _Undefined {}
 class _UserImpl extends User {
   _UserImpl({
     int? id,
-    required String name,
-    required String email,
-    required String password,
+    required int userInfoId,
+    _i2.UserInfo? userInfo,
     required String role,
-    String? location,
-    double? latitude,
-    double? longitude,
-    List<_i2.Notification>? notifications,
+    List<_i3.Notification>? notifications,
   }) : super._(
           id: id,
-          name: name,
-          email: email,
-          password: password,
+          userInfoId: userInfoId,
+          userInfo: userInfo,
           role: role,
-          location: location,
-          latitude: latitude,
-          longitude: longitude,
           notifications: notifications,
         );
 
   @override
   User copyWith({
     Object? id = _Undefined,
-    String? name,
-    String? email,
-    String? password,
+    int? userInfoId,
+    Object? userInfo = _Undefined,
     String? role,
-    Object? location = _Undefined,
-    Object? latitude = _Undefined,
-    Object? longitude = _Undefined,
     Object? notifications = _Undefined,
   }) {
     return User(
       id: id is int? ? id : this.id,
-      name: name ?? this.name,
-      email: email ?? this.email,
-      password: password ?? this.password,
+      userInfoId: userInfoId ?? this.userInfoId,
+      userInfo:
+          userInfo is _i2.UserInfo? ? userInfo : this.userInfo?.copyWith(),
       role: role ?? this.role,
-      location: location is String? ? location : this.location,
-      latitude: latitude is double? ? latitude : this.latitude,
-      longitude: longitude is double? ? longitude : this.longitude,
-      notifications: notifications is List<_i2.Notification>?
+      notifications: notifications is List<_i3.Notification>?
           ? notifications
           : this.notifications?.map((e0) => e0.copyWith()).toList(),
     );
@@ -208,80 +171,65 @@ class _UserImpl extends User {
 
 class UserTable extends _i1.Table {
   UserTable({super.tableRelation}) : super(tableName: 'user') {
-    name = _i1.ColumnString(
-      'name',
-      this,
-    );
-    email = _i1.ColumnString(
-      'email',
-      this,
-    );
-    password = _i1.ColumnString(
-      'password',
+    userInfoId = _i1.ColumnInt(
+      'userInfoId',
       this,
     );
     role = _i1.ColumnString(
       'role',
       this,
     );
-    location = _i1.ColumnString(
-      'location',
-      this,
-    );
-    latitude = _i1.ColumnDouble(
-      'latitude',
-      this,
-    );
-    longitude = _i1.ColumnDouble(
-      'longitude',
-      this,
-    );
   }
 
-  late final _i1.ColumnString name;
+  late final _i1.ColumnInt userInfoId;
 
-  late final _i1.ColumnString email;
-
-  late final _i1.ColumnString password;
+  _i2.UserInfoTable? _userInfo;
 
   late final _i1.ColumnString role;
 
-  late final _i1.ColumnString location;
+  _i3.NotificationTable? ___notifications;
 
-  late final _i1.ColumnDouble latitude;
+  _i1.ManyRelation<_i3.NotificationTable>? _notifications;
 
-  late final _i1.ColumnDouble longitude;
+  _i2.UserInfoTable get userInfo {
+    if (_userInfo != null) return _userInfo!;
+    _userInfo = _i1.createRelationTable(
+      relationFieldName: 'userInfo',
+      field: User.t.userInfoId,
+      foreignField: _i2.UserInfo.t.id,
+      tableRelation: tableRelation,
+      createTable: (foreignTableRelation) =>
+          _i2.UserInfoTable(tableRelation: foreignTableRelation),
+    );
+    return _userInfo!;
+  }
 
-  _i2.NotificationTable? ___notifications;
-
-  _i1.ManyRelation<_i2.NotificationTable>? _notifications;
-
-  _i2.NotificationTable get __notifications {
+  _i3.NotificationTable get __notifications {
     if (___notifications != null) return ___notifications!;
     ___notifications = _i1.createRelationTable(
       relationFieldName: '__notifications',
       field: User.t.id,
-      foreignField: _i2.Notification.t.userID,
+      foreignField: _i3.Notification.t.userID,
       tableRelation: tableRelation,
       createTable: (foreignTableRelation) =>
-          _i2.NotificationTable(tableRelation: foreignTableRelation),
+          _i3.NotificationTable(tableRelation: foreignTableRelation),
     );
     return ___notifications!;
   }
 
-  _i1.ManyRelation<_i2.NotificationTable> get notifications {
+  _i1.ManyRelation<_i3.NotificationTable> get notifications {
     if (_notifications != null) return _notifications!;
     var relationTable = _i1.createRelationTable(
       relationFieldName: 'notifications',
       field: User.t.id,
-      foreignField: _i2.Notification.t.userID,
+      foreignField: _i3.Notification.t.userID,
       tableRelation: tableRelation,
       createTable: (foreignTableRelation) =>
-          _i2.NotificationTable(tableRelation: foreignTableRelation),
+          _i3.NotificationTable(tableRelation: foreignTableRelation),
     );
-    _notifications = _i1.ManyRelation<_i2.NotificationTable>(
+    _notifications = _i1.ManyRelation<_i3.NotificationTable>(
       tableWithRelations: relationTable,
-      table: _i2.NotificationTable(
+      table: _i3.NotificationTable(
           tableRelation: relationTable.tableRelation!.lastRelation),
     );
     return _notifications!;
@@ -290,17 +238,15 @@ class UserTable extends _i1.Table {
   @override
   List<_i1.Column> get columns => [
         id,
-        name,
-        email,
-        password,
+        userInfoId,
         role,
-        location,
-        latitude,
-        longitude,
       ];
 
   @override
   _i1.Table? getRelationTable(String relationField) {
+    if (relationField == 'userInfo') {
+      return userInfo;
+    }
     if (relationField == 'notifications') {
       return __notifications;
     }
@@ -309,14 +255,23 @@ class UserTable extends _i1.Table {
 }
 
 class UserInclude extends _i1.IncludeObject {
-  UserInclude._({_i2.NotificationIncludeList? notifications}) {
+  UserInclude._({
+    _i2.UserInfoInclude? userInfo,
+    _i3.NotificationIncludeList? notifications,
+  }) {
+    _userInfo = userInfo;
     _notifications = notifications;
   }
 
-  _i2.NotificationIncludeList? _notifications;
+  _i2.UserInfoInclude? _userInfo;
+
+  _i3.NotificationIncludeList? _notifications;
 
   @override
-  Map<String, _i1.Include?> get includes => {'notifications': _notifications};
+  Map<String, _i1.Include?> get includes => {
+        'userInfo': _userInfo,
+        'notifications': _notifications,
+      };
 
   @override
   _i1.Table get table => User.t;
@@ -507,7 +462,7 @@ class UserAttachRepository {
   Future<void> notifications(
     _i1.Session session,
     User user,
-    List<_i2.Notification> notification, {
+    List<_i3.Notification> notification, {
     _i1.Transaction? transaction,
   }) async {
     if (notification.any((e) => e.id == null)) {
@@ -519,9 +474,9 @@ class UserAttachRepository {
 
     var $notification =
         notification.map((e) => e.copyWith(userID: user.id)).toList();
-    await session.db.update<_i2.Notification>(
+    await session.db.update<_i3.Notification>(
       $notification,
-      columns: [_i2.Notification.t.userID],
+      columns: [_i3.Notification.t.userID],
       transaction: transaction,
     );
   }
@@ -530,10 +485,31 @@ class UserAttachRepository {
 class UserAttachRowRepository {
   const UserAttachRowRepository._();
 
+  Future<void> userInfo(
+    _i1.Session session,
+    User user,
+    _i2.UserInfo userInfo, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (user.id == null) {
+      throw ArgumentError.notNull('user.id');
+    }
+    if (userInfo.id == null) {
+      throw ArgumentError.notNull('userInfo.id');
+    }
+
+    var $user = user.copyWith(userInfoId: userInfo.id);
+    await session.db.updateRow<User>(
+      $user,
+      columns: [User.t.userInfoId],
+      transaction: transaction,
+    );
+  }
+
   Future<void> notifications(
     _i1.Session session,
     User user,
-    _i2.Notification notification, {
+    _i3.Notification notification, {
     _i1.Transaction? transaction,
   }) async {
     if (notification.id == null) {
@@ -544,9 +520,9 @@ class UserAttachRowRepository {
     }
 
     var $notification = notification.copyWith(userID: user.id);
-    await session.db.updateRow<_i2.Notification>(
+    await session.db.updateRow<_i3.Notification>(
       $notification,
-      columns: [_i2.Notification.t.userID],
+      columns: [_i3.Notification.t.userID],
       transaction: transaction,
     );
   }

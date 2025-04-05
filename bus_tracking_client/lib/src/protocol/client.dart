@@ -12,15 +12,16 @@
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import 'dart:async' as _i2;
 import 'package:bus_tracking_client/src/protocol/bus_class.dart' as _i3;
-import 'package:bus_tracking_client/src/protocol/gps_data_class.dart' as _i4;
+import 'package:bus_tracking_client/src/protocol/driver_class.dart' as _i4;
+import 'package:bus_tracking_client/src/protocol/gps_data_class.dart' as _i5;
 import 'package:bus_tracking_client/src/protocol/notifications_class.dart'
-    as _i5;
-import 'package:bus_tracking_client/src/protocol/route_class.dart' as _i6;
-import 'package:bus_tracking_client/src/protocol/stations.dart' as _i7;
-import 'package:bus_tracking_client/src/protocol/stop_class.dart' as _i8;
-import 'package:bus_tracking_client/src/protocol/user_class.dart' as _i9;
-import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i10;
-import 'protocol.dart' as _i11;
+    as _i6;
+import 'package:bus_tracking_client/src/protocol/route_class.dart' as _i7;
+import 'package:bus_tracking_client/src/protocol/stations.dart' as _i8;
+import 'package:bus_tracking_client/src/protocol/stop_class.dart' as _i9;
+import 'package:bus_tracking_client/src/protocol/user_class.dart' as _i10;
+import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i11;
+import 'protocol.dart' as _i12;
 
 /// {@category Endpoint}
 class EndpointBus extends _i1.EndpointRef {
@@ -105,6 +106,96 @@ class EndpointBus extends _i1.EndpointRef {
 }
 
 /// {@category Endpoint}
+class EndpointDriverInfo extends _i1.EndpointRef {
+  EndpointDriverInfo(_i1.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'driverInfo';
+
+  _i2.Future<_i4.DriverInfo> createDriver(_i4.DriverInfo driverInfo) =>
+      caller.callServerEndpoint<_i4.DriverInfo>(
+        'driverInfo',
+        'createDriver',
+        {'driverInfo': driverInfo},
+      );
+
+  _i2.Future<_i4.DriverInfo?> getDriverById(int id) =>
+      caller.callServerEndpoint<_i4.DriverInfo?>(
+        'driverInfo',
+        'getDriverById',
+        {'id': id},
+      );
+
+  _i2.Future<_i4.DriverInfo?> getDriverByUserInfoId(int userInfoId) =>
+      caller.callServerEndpoint<_i4.DriverInfo?>(
+        'driverInfo',
+        'getDriverByUserInfoId',
+        {'userInfoId': userInfoId},
+      );
+
+  _i2.Future<List<_i4.DriverInfo>> getAllDrivers() =>
+      caller.callServerEndpoint<List<_i4.DriverInfo>>(
+        'driverInfo',
+        'getAllDrivers',
+        {},
+      );
+
+  _i2.Future<_i4.DriverInfo?> getDriverForBus(int busId) =>
+      caller.callServerEndpoint<_i4.DriverInfo?>(
+        'driverInfo',
+        'getDriverForBus',
+        {'busId': busId},
+      );
+
+  _i2.Future<_i4.DriverInfo> updateDriver(_i4.DriverInfo driverInfo) =>
+      caller.callServerEndpoint<_i4.DriverInfo>(
+        'driverInfo',
+        'updateDriver',
+        {'driverInfo': driverInfo},
+      );
+
+  _i2.Future<bool> deleteDriver(int id) => caller.callServerEndpoint<bool>(
+        'driverInfo',
+        'deleteDriver',
+        {'id': id},
+      );
+
+  _i2.Future<bool> assignBusToDiver(
+    int driverId,
+    int busId,
+  ) =>
+      caller.callServerEndpoint<bool>(
+        'driverInfo',
+        'assignBusToDiver',
+        {
+          'driverId': driverId,
+          'busId': busId,
+        },
+      );
+
+  _i2.Future<_i3.Bus?> getDriverBus(int driverInfoId) =>
+      caller.callServerEndpoint<_i3.Bus?>(
+        'driverInfo',
+        'getDriverBus',
+        {'driverInfoId': driverInfoId},
+      );
+
+  _i2.Future<String?> getDriverName(int userInfoId) =>
+      caller.callServerEndpoint<String?>(
+        'driverInfo',
+        'getDriverName',
+        {'userInfoId': userInfoId},
+      );
+
+  _i2.Future<String?> getDriverEmail(int driverInfoId) =>
+      caller.callServerEndpoint<String?>(
+        'driverInfo',
+        'getDriverEmail',
+        {'driverInfoId': driverInfoId},
+      );
+}
+
+/// {@category Endpoint}
 class EndpointExample extends _i1.EndpointRef {
   EndpointExample(_i1.EndpointCaller caller) : super(caller);
 
@@ -125,14 +216,14 @@ class EndpointGPSData extends _i1.EndpointRef {
   @override
   String get name => 'gPSData';
 
-  _i2.Future<List<_i4.GPSData>> getGPSDataByBusId(int busId) =>
-      caller.callServerEndpoint<List<_i4.GPSData>>(
+  _i2.Future<List<_i5.GPSData>> getGPSDataByBusId(int busId) =>
+      caller.callServerEndpoint<List<_i5.GPSData>>(
         'gPSData',
         'getGPSDataByBusId',
         {'busId': busId},
       );
 
-  _i2.Future<bool> addGPSData(_i4.GPSData gpsData) =>
+  _i2.Future<bool> addGPSData(_i5.GPSData gpsData) =>
       caller.callServerEndpoint<bool>(
         'gPSData',
         'addGPSData',
@@ -153,14 +244,14 @@ class EndpointNotification extends _i1.EndpointRef {
   @override
   String get name => 'notification';
 
-  _i2.Future<List<_i5.Notification>> getNotificationsByUserId(int userId) =>
-      caller.callServerEndpoint<List<_i5.Notification>>(
+  _i2.Future<List<_i6.Notification>> getNotificationsByUserId(int userId) =>
+      caller.callServerEndpoint<List<_i6.Notification>>(
         'notification',
         'getNotificationsByUserId',
         {'userId': userId},
       );
 
-  _i2.Future<bool> addNotification(_i5.Notification notification) =>
+  _i2.Future<bool> addNotification(_i6.Notification notification) =>
       caller.callServerEndpoint<bool>(
         'notification',
         'addNotification',
@@ -189,28 +280,28 @@ class EndpointRoute extends _i1.EndpointRef {
   @override
   String get name => 'route';
 
-  _i2.Future<_i6.Routes?> getRouteById(int id) =>
-      caller.callServerEndpoint<_i6.Routes?>(
+  _i2.Future<_i7.Routes?> getRouteById(int id) =>
+      caller.callServerEndpoint<_i7.Routes?>(
         'route',
         'getRouteById',
         {'id': id},
       );
 
-  _i2.Future<List<_i6.Routes>> getAllRoutes() =>
-      caller.callServerEndpoint<List<_i6.Routes>>(
+  _i2.Future<List<_i7.Routes>> getAllRoutes() =>
+      caller.callServerEndpoint<List<_i7.Routes>>(
         'route',
         'getAllRoutes',
         {},
       );
 
-  _i2.Future<bool> addRoute(_i6.Routes route) =>
+  _i2.Future<bool> addRoute(_i7.Routes route) =>
       caller.callServerEndpoint<bool>(
         'route',
         'addRoute',
         {'route': route},
       );
 
-  _i2.Future<bool> updateRoute(_i6.Routes route) =>
+  _i2.Future<bool> updateRoute(_i7.Routes route) =>
       caller.callServerEndpoint<bool>(
         'route',
         'updateRoute',
@@ -237,13 +328,13 @@ class EndpointRoute extends _i1.EndpointRef {
         {},
       );
 
-  _i2.Future<List<_i6.Routes>> getRoutesByLocation(
+  _i2.Future<List<_i7.Routes>> getRoutesByLocation(
     double startLatitude,
     double startLongitude,
     double endLatitude,
     double endLongitude,
   ) =>
-      caller.callServerEndpoint<List<_i6.Routes>>(
+      caller.callServerEndpoint<List<_i7.Routes>>(
         'route',
         'getRoutesByLocation',
         {
@@ -275,15 +366,15 @@ class EndpointStation extends _i1.EndpointRef {
   @override
   String get name => 'station';
 
-  _i2.Future<_i7.Station?> getStationById({required int id}) =>
-      caller.callServerEndpoint<_i7.Station?>(
+  _i2.Future<_i8.Station?> getStationById({required int id}) =>
+      caller.callServerEndpoint<_i8.Station?>(
         'station',
         'getStationById',
         {'id': id},
       );
 
-  _i2.Future<_i7.Station> addStation(_i7.Station station) =>
-      caller.callServerEndpoint<_i7.Station>(
+  _i2.Future<_i8.Station> addStation(_i8.Station station) =>
+      caller.callServerEndpoint<_i8.Station>(
         'station',
         'addStation',
         {'station': station},
@@ -296,22 +387,22 @@ class EndpointStation extends _i1.EndpointRef {
         {'id': id},
       );
 
-  _i2.Future<List<_i7.Station>> searchStationsByName({required String name}) =>
-      caller.callServerEndpoint<List<_i7.Station>>(
+  _i2.Future<List<_i8.Station>> searchStationsByName({required String name}) =>
+      caller.callServerEndpoint<List<_i8.Station>>(
         'station',
         'searchStationsByName',
         {'name': name},
       );
 
-  _i2.Future<_i7.Station?> updateStation(_i7.Station station) =>
-      caller.callServerEndpoint<_i7.Station?>(
+  _i2.Future<_i8.Station?> updateStation(_i8.Station station) =>
+      caller.callServerEndpoint<_i8.Station?>(
         'station',
         'updateStation',
         {'station': station},
       );
 
-  _i2.Future<List<_i7.Station>> getAllStations() =>
-      caller.callServerEndpoint<List<_i7.Station>>(
+  _i2.Future<List<_i8.Station>> getAllStations() =>
+      caller.callServerEndpoint<List<_i8.Station>>(
         'station',
         'getAllStations',
         {},
@@ -325,27 +416,27 @@ class EndpointStop extends _i1.EndpointRef {
   @override
   String get name => 'stop';
 
-  _i2.Future<_i8.Stop?> getStopById(int id) =>
-      caller.callServerEndpoint<_i8.Stop?>(
+  _i2.Future<_i9.Stop?> getStopById(int id) =>
+      caller.callServerEndpoint<_i9.Stop?>(
         'stop',
         'getStopById',
         {'id': id},
       );
 
-  _i2.Future<List<_i8.Stop>> getAllStops() =>
-      caller.callServerEndpoint<List<_i8.Stop>>(
+  _i2.Future<List<_i9.Stop>> getAllStops() =>
+      caller.callServerEndpoint<List<_i9.Stop>>(
         'stop',
         'getAllStops',
         {},
       );
 
-  _i2.Future<bool> addStop(_i8.Stop stop) => caller.callServerEndpoint<bool>(
+  _i2.Future<bool> addStop(_i9.Stop stop) => caller.callServerEndpoint<bool>(
         'stop',
         'addStop',
         {'stop': stop},
       );
 
-  _i2.Future<bool> updateStop(_i8.Stop stop) => caller.callServerEndpoint<bool>(
+  _i2.Future<bool> updateStop(_i9.Stop stop) => caller.callServerEndpoint<bool>(
         'stop',
         'updateStop',
         {'stop': stop},
@@ -365,20 +456,21 @@ class EndpointUser extends _i1.EndpointRef {
   @override
   String get name => 'user';
 
-  _i2.Future<_i9.User?> getUserById({int? id}) =>
-      caller.callServerEndpoint<_i9.User?>(
+  _i2.Future<_i10.User?> getUserById({int? id}) =>
+      caller.callServerEndpoint<_i10.User?>(
         'user',
         'getUserById',
         {'id': id},
       );
 
-  _i2.Future<bool> addUser(_i9.User user) => caller.callServerEndpoint<bool>(
+  _i2.Future<bool> addUser(_i10.User user) => caller.callServerEndpoint<bool>(
         'user',
         'addUser',
         {'user': user},
       );
 
-  _i2.Future<bool> updateUser(_i9.User user) => caller.callServerEndpoint<bool>(
+  _i2.Future<bool> updateUser(_i10.User user) =>
+      caller.callServerEndpoint<bool>(
         'user',
         'updateUser',
         {'user': user},
@@ -390,26 +482,19 @@ class EndpointUser extends _i1.EndpointRef {
         {'id': id},
       );
 
-  _i2.Future<bool> login(
-    String email,
-    String password,
-  ) =>
-      caller.callServerEndpoint<bool>(
+  _i2.Future<String?> getUserRole() => caller.callServerEndpoint<String?>(
         'user',
-        'login',
-        {
-          'email': email,
-          'password': password,
-        },
+        'getUserRole',
+        {},
       );
 }
 
 class Modules {
   Modules(Client client) {
-    auth = _i10.Caller(client);
+    auth = _i11.Caller(client);
   }
 
-  late final _i10.Caller auth;
+  late final _i11.Caller auth;
 }
 
 class Client extends _i1.ServerpodClientShared {
@@ -428,7 +513,7 @@ class Client extends _i1.ServerpodClientShared {
     bool? disconnectStreamsOnLostInternetConnection,
   }) : super(
           host,
-          _i11.Protocol(),
+          _i12.Protocol(),
           securityContext: securityContext,
           authenticationKeyManager: authenticationKeyManager,
           streamingConnectionTimeout: streamingConnectionTimeout,
@@ -439,6 +524,7 @@ class Client extends _i1.ServerpodClientShared {
               disconnectStreamsOnLostInternetConnection,
         ) {
     bus = EndpointBus(this);
+    driverInfo = EndpointDriverInfo(this);
     example = EndpointExample(this);
     gPSData = EndpointGPSData(this);
     notification = EndpointNotification(this);
@@ -450,6 +536,8 @@ class Client extends _i1.ServerpodClientShared {
   }
 
   late final EndpointBus bus;
+
+  late final EndpointDriverInfo driverInfo;
 
   late final EndpointExample example;
 
@@ -470,6 +558,7 @@ class Client extends _i1.ServerpodClientShared {
   @override
   Map<String, _i1.EndpointRef> get endpointRefLookup => {
         'bus': bus,
+        'driverInfo': driverInfo,
         'example': example,
         'gPSData': gPSData,
         'notification': notification,

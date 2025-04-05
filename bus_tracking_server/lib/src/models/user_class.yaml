@@ -1,11 +1,10 @@
 class: User
 table: user
 fields:
-  name: String
-  email: String
-  password: String
+  userInfo: module:auth:UserInfo?, relation
   role: String
-  location: String?  # His building
-  latitude: double?
-  longitude: double?
-  notifications: List<Notification>?, relation(name=user_notifications)  # One-to-Many
+  notifications: List<Notification>?, relation(name=user_notifications)
+indexes:
+  user_info_id_unique_idx:
+    fields: userInfoId
+    unique: true

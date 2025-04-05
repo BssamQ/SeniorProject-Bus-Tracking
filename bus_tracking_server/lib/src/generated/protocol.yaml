@@ -10,6 +10,18 @@ bus:
   - getBusesByStatusOperating:
   - getBusesByStatusInMaintenance:
   - getBusesByStatusOutOfService:
+driverInfo:
+  - createDriver:
+  - getDriverById:
+  - getDriverByUserInfoId:
+  - getAllDrivers:
+  - getDriverForBus:
+  - updateDriver:
+  - deleteDriver:
+  - assignBusToDiver:
+  - getDriverBus:
+  - getDriverName:
+  - getDriverEmail:
 example:
   - hello:
 gPSData:
@@ -49,4 +61,4 @@ user:
   - addUser:
   - updateUser:
   - deleteUser:
-  - login:
+  - getUserRole:

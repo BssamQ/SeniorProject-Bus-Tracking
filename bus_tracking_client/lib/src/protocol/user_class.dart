@@ -10,45 +10,37 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
-import 'notifications_class.dart' as _i2;
+import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i2;
+import 'notifications_class.dart' as _i3;
 
 abstract class User implements _i1.SerializableModel {
   User._({
     this.id,
-    required this.name,
-    required this.email,
-    required this.password,
+    required this.userInfoId,
+    this.userInfo,
     required this.role,
-    this.location,
-    this.latitude,
-    this.longitude,
     this.notifications,
   });
 
   factory User({
     int? id,
-    required String name,
-    required String email,
-    required String password,
+    required int userInfoId,
+    _i2.UserInfo? userInfo,
     required String role,
-    String? location,
-    double? latitude,
-    double? longitude,
-    List<_i2.Notification>? notifications,
+    List<_i3.Notification>? notifications,
   }) = _UserImpl;
 
   factory User.fromJson(Map<String, dynamic> jsonSerialization) {
     return User(
       id: jsonSerialization['id'] as int?,
-      name: jsonSerialization['name'] as String,
-      email: jsonSerialization['email'] as String,
-      password: jsonSerialization['password'] as String,
+      userInfoId: jsonSerialization['userInfoId'] as int,
+      userInfo: jsonSerialization['userInfo'] == null
+          ? null
+          : _i2.UserInfo.fromJson(
+              (jsonSerialization['userInfo'] as Map<String, dynamic>)),
       role: jsonSerialization['role'] as String,
-      location: jsonSerialization['location'] as String?,
-      latitude: (jsonSerialization['latitude'] as num?)?.toDouble(),
-      longitude: (jsonSerialization['longitude'] as num?)?.toDouble(),
       notifications: (jsonSerialization['notifications'] as List?)
-          ?.map((e) => _i2.Notification.fromJson((e as Map<String, dynamic>)))
+          ?.map((e) => _i3.Notification.fromJson((e as Map<String, dynamic>)))
           .toList(),
     );
   }
@@ -58,44 +50,28 @@ abstract class User implements _i1.SerializableModel {
   /// the id will be null.
   int? id;
 
-  String name;
+  int userInfoId;
 
-  String email;
-
-  String password;
+  _i2.UserInfo? userInfo;
 
   String role;
 
-  String? location;
-
-  double? latitude;
-
-  double? longitude;
-
-  List<_i2.Notification>? notifications;
+  List<_i3.Notification>? notifications;
 
   User copyWith({
     int? id,
-    String? name,
-    String? email,
-    String? password,
+    int? userInfoId,
+    _i2.UserInfo? userInfo,
     String? role,
-    String? location,
-    double? latitude,
-    double? longitude,
-    List<_i2.Notification>? notifications,
+    List<_i3.Notification>? notifications,
   });
   @override
   Map<String, dynamic> toJson() {
     return {
       if (id != null) 'id': id,
-      'name': name,
-      'email': email,
-      'password': password,
+      'userInfoId': userInfoId,
+      if (userInfo != null) 'userInfo': userInfo?.toJson(),
       'role': role,
-      if (location != null) 'location': location,
-      if (latitude != null) 'latitude': latitude,
-      if (longitude != null) 'longitude': longitude,
       if (notifications != null)
         'notifications': notifications?.toJson(valueToJson: (v) => v.toJson()),
     };
@@ -112,48 +88,33 @@ class _Undefined {}
 class _UserImpl extends User {
   _UserImpl({
     int? id,
-    required String name,
-    required String email,
-    required String password,
+    required int userInfoId,
+    _i2.UserInfo? userInfo,
     required String role,
-    String? location,
-    double? latitude,
-    double? longitude,
-    List<_i2.Notification>? notifications,
+    List<_i3.Notification>? notifications,
   }) : super._(
           id: id,
-          name: name,
-          email: email,
-          password: password,
+          userInfoId: userInfoId,
+          userInfo: userInfo,
           role: role,
-          location: location,
-          latitude: latitude,
-          longitude: longitude,
           notifications: notifications,
         );
 
   @override
   User copyWith({
     Object? id = _Undefined,
-    String? name,
-    String? email,
-    String? password,
+    int? userInfoId,
+    Object? userInfo = _Undefined,
     String? role,
-    Object? location = _Undefined,
-    Object? latitude = _Undefined,
-    Object? longitude = _Undefined,
     Object? notifications = _Undefined,
   }) {
     return User(
       id: id is int? ? id : this.id,
-      name: name ?? this.name,
-      email: email ?? this.email,
-      password: password ?? this.password,
+      userInfoId: userInfoId ?? this.userInfoId,
+      userInfo:
+          userInfo is _i2.UserInfo? ? userInfo : this.userInfo?.copyWith(),
       role: role ?? this.role,
-      location: location is String? ? location : this.location,
-      latitude: latitude is double? ? latitude : this.latitude,
-      longitude: longitude is double? ? longitude : this.longitude,
-      notifications: notifications is List<_i2.Notification>?
+      notifications: notifications is List<_i3.Notification>?
           ? notifications
           : this.notifications?.map((e0) => e0.copyWith()).toList(),
     );
