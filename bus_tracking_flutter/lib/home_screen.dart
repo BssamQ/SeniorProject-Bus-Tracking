@@ -34,6 +34,12 @@ class HomeScreen extends StatelessWidget {
               },
               child: const Text('Admin Page'),
             ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/driver');
+              },
+              child: const Text('Driver Page'),
+            ),
           ],
         ),
       ),

@@ -21,8 +21,12 @@ class OnBusScreen extends StatelessWidget {
           children: [
             Image.asset('assets/images/kfupm_logo1.png', height: 60),
             SizedBox(width: 9),
-            Text('BUS SYSTEM', style: TextStyle(color: Colors.black,fontSize: 20,
-              fontWeight: FontWeight.bold,)),
+            Text('BUS SYSTEM',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                )),
           ],
         ),
       ),
@@ -35,7 +39,8 @@ class OnBusScreen extends StatelessWidget {
             ),
             children: [
               TileLayer(
-                urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                urlTemplate:
+                    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
                 subdomains: ['a', 'b', 'c'],
               ),
               PolylineLayer(
@@ -53,13 +58,15 @@ class OnBusScreen extends StatelessWidget {
                     point: currentBusLocation,
                     width: 40,
                     height: 40,
-                    child: Icon(Icons.directions_bus, color: Colors.green, size: 40),
+                    child: Icon(Icons.directions_bus,
+                        color: Colors.green, size: 40),
                   ),
                   Marker(
                     point: nextStationLocation,
                     width: 40,
                     height: 40,
-                    child: Icon(Icons.location_on, color: Colors.blue, size: 40),
+                    child:
+                        Icon(Icons.location_on, color: Colors.blue, size: 40),
                   ),
                 ],
               ),
@@ -80,7 +87,8 @@ class OnBusScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text("Next Station", style: TextStyle(color: Colors.grey, fontSize: 14)),
+                  Text("Next Station",
+                      style: TextStyle(color: Colors.grey, fontSize: 14)),
                   SizedBox(height: 5),
                   Text(
                     "Station 15",
@@ -94,7 +102,8 @@ class OnBusScreen extends StatelessWidget {
                       children: [
                         TextSpan(
                           text: "7 min",
-                          style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              color: Colors.blue, fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
@@ -106,22 +115,34 @@ class OnBusScreen extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Type", style: TextStyle(color: Colors.grey, fontSize: 14)),
-                          Text("Bus A", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                          Text("Type",
+                              style:
+                                  TextStyle(color: Colors.grey, fontSize: 14)),
+                          Text("Bus A",
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold)),
                         ],
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Driver Name", style: TextStyle(color: Colors.grey, fontSize: 14)),
-                          Text("Mohammed Ahmed", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                          Text("Driver Name",
+                              style:
+                                  TextStyle(color: Colors.grey, fontSize: 14)),
+                          Text("Mohammed Ahmed",
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold)),
                         ],
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Passengers", style: TextStyle(color: Colors.grey, fontSize: 14)),
-                          Text("14", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                          Text("Passengers",
+                              style:
+                                  TextStyle(color: Colors.grey, fontSize: 14)),
+                          Text("14",
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold)),
                         ],
                       ),
                     ],

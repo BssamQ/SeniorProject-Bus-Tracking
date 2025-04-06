@@ -10,10 +10,14 @@ class AdminMain extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: isDarkMode ? Colors.black : Colors.white, // Adjust AppBar color
+        backgroundColor:
+            isDarkMode ? Colors.black : Colors.white, // Adjust AppBar color
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: isDarkMode ? Colors.white : Colors.black), // Adjust icon color
+          icon: Icon(Icons.arrow_back,
+              color: isDarkMode
+                  ? Colors.white
+                  : Colors.black), // Adjust icon color
           onPressed: () => Navigator.pop(context),
         ),
         title: Row(
@@ -31,7 +35,7 @@ class AdminMain extends StatelessWidget {
                     child: CircularProgressIndicator(
                       value: loadingProgress.expectedTotalBytes != null
                           ? loadingProgress.cumulativeBytesLoaded /
-                          loadingProgress.expectedTotalBytes!
+                              loadingProgress.expectedTotalBytes!
                           : null,
                     ),
                   ),
@@ -45,7 +49,10 @@ class AdminMain extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.person, color: isDarkMode ? Colors.white : Colors.black), // Adjust icon color
+            icon: Icon(Icons.person,
+                color: isDarkMode
+                    ? Colors.white
+                    : Colors.black), // Adjust icon color
             onPressed: () async {
               await Navigator.pushNamed(context, '/preferences');
             },
@@ -63,7 +70,9 @@ class AdminMain extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: isDarkMode ? Colors.white : Colors.black, // Adjust text color
+                  color: isDarkMode
+                      ? Colors.white
+                      : Colors.black, // Adjust text color
                 ),
               ),
             ),
@@ -102,13 +111,12 @@ class AdminMain extends StatelessWidget {
                     context,
                     icon: Icons.dashboard,
                     title: "Dashboard",
-                    onTap: () =>
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => AdminDashboardScreen (),
-                          ),
-                        ),
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AdminDashboardScreen(),
+                      ),
+                    ),
                     isDarkMode: isDarkMode,
                   ), // The 4th button to navigate to AdminDashboard
                 ],
@@ -121,12 +129,12 @@ class AdminMain extends StatelessWidget {
   }
 
   Widget _buildAdminOption(
-      BuildContext context, {
-        required IconData icon,
-        required String title,
-        required VoidCallback onTap,
-        required bool isDarkMode,
-      }) {
+    BuildContext context, {
+    required IconData icon,
+    required String title,
+    required VoidCallback onTap,
+    required bool isDarkMode,
+  }) {
     // Adjust box color based on the theme
     Color boxColor = isDarkMode ? Colors.grey[800]! : Colors.white;
 
@@ -160,4 +168,3 @@ class AdminMain extends StatelessWidget {
     );
   }
 }
-

@@ -16,7 +16,7 @@ import 'Screens/waiting_for_bus_screen.dart';
 import 'Screens/on_bus_screen.dart';
 import 'Screens/list_station_screen.dart';
 import 'Screens/select_route_screen.dart';
-
+import 'Screens/Driver_Screen.dart';
 
 late SessionManager sessionManager;
 late Client client;
@@ -79,18 +79,23 @@ class _MyAppState extends State<MyApp> {
       initialRoute: '/',
       routes: {
         '/': (context) => LoginScreen(),
-        '/home': (context) => HomeScreen(isDarkMode: _isDarkMode, onThemeChanged: _toggleTheme),
-        '/preferences': (context) => PreferencesScreen(isDarkMode: _isDarkMode, onThemeChanged: _toggleTheme),
+        '/home': (context) =>
+            HomeScreen(isDarkMode: _isDarkMode, onThemeChanged: _toggleTheme),
+        '/preferences': (context) => PreferencesScreen(
+            isDarkMode: _isDarkMode, onThemeChanged: _toggleTheme),
         '/select_bus': (context) => SelectBusScreen(),
         '/waiting_for_bus': (context) => WaitingForBusScreen(),
         '/on_bus': (context) => OnBusScreen(),
         '/list_station': (context) => ListStationScreen(),
-        '/select_route': (context) => SelectRouteScreen(isDarkMode: _isDarkMode, onThemeChanged: _toggleTheme),
+        '/select_route': (context) => SelectRouteScreen(
+            isDarkMode: _isDarkMode, onThemeChanged: _toggleTheme),
         '/admin_main': (context) => AdminMain(), // Main dashboard
         '/bus_management': (context) => BusManagementScreen(), // Bus management
-        '/driver_management': (context) => DriverManagementScreen(client: client, sessionManager: sessionManager),
+        '/driver_management': (context) => DriverManagementScreen(
+            client: client, sessionManager: sessionManager),
         '/route_management': (context) => RouteManagementScreen(),
         '/dashboard': (context) => AdminDashboardScreen(),
+        '/driver': (context) => const DriverScreen(),
       },
     );
   }
