@@ -150,7 +150,20 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
                       ),
                     ],
                   ),
-                  Text("Student", style: TextStyle(color: _isDarkMode ? Colors.white70 : Colors.grey[600])),
+                  FutureBuilder<String?>(
+                    future: client.user.getUserRole(), // your async call
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Text("Loading...", style: TextStyle(color: _isDarkMode ? Colors.white70 : Colors.grey[600]));
+                      } else if (snapshot.hasError) {
+                        return Text("Error loading role", style: TextStyle(color: Colors.red));
+                      } else {
+                        final role = snapshot.data ?? "Unknown";
+                        return Text(role, style: TextStyle(color: _isDarkMode ? Colors.white70 : Colors.grey[600]));
+                      }
+                    },
+                  )
+                  ,
                 ],
               ),
             ),

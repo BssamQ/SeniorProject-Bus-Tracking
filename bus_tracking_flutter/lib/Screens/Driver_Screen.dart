@@ -152,11 +152,11 @@ class _DriverScreenState extends State<DriverScreen> {
                   Text('Plate Number', style: TextStyle(color: Colors.white70)),
               subtitle: Text('XYZ 4567', style: TextStyle(color: Colors.white)),
             ),
-            const ListTile(
+            /*const ListTile(
               title: Text('Capacity', style: TextStyle(color: Colors.white70)),
               subtitle:
                   Text('45 passengers', style: TextStyle(color: Colors.white)),
-            ),
+            ),*/
             const Divider(color: Colors.white24),
             const Text('Route Info',
                 style: TextStyle(

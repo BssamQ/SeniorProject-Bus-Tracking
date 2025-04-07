@@ -8,6 +8,7 @@ bus:
   - getBusesByAgeGroup2:
   - getBusesByAgeGroup3:
   - getBusesByStatusOperating:
+  - getAvailableOperatingBuses:
   - getBusesByStatusInMaintenance:
   - getBusesByStatusOutOfService:
 driverInfo:
@@ -60,5 +61,10 @@ user:
   - getUserById:
   - addUser:
   - updateUser:
+  - getUserName:
+  - getUserEmail:
+  - getUserCreatedDate:
   - deleteUser:
   - getUserRole:
+  - getNonDriverUsers:
+  - updateUserRole:

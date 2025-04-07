@@ -90,6 +90,13 @@ class EndpointBus extends _i1.EndpointRef {
         {},
       );
 
+  _i2.Future<List<_i3.Bus>> getAvailableOperatingBuses() =>
+      caller.callServerEndpoint<List<_i3.Bus>>(
+        'bus',
+        'getAvailableOperatingBuses',
+        {},
+      );
+
   _i2.Future<List<_i3.Bus>> getBusesByStatusInMaintenance() =>
       caller.callServerEndpoint<List<_i3.Bus>>(
         'bus',
@@ -476,6 +483,27 @@ class EndpointUser extends _i1.EndpointRef {
         {'user': user},
       );
 
+  _i2.Future<String?> getUserName(int userInfoId) =>
+      caller.callServerEndpoint<String?>(
+        'user',
+        'getUserName',
+        {'userInfoId': userInfoId},
+      );
+
+  _i2.Future<String?> getUserEmail(int userInfoId) =>
+      caller.callServerEndpoint<String?>(
+        'user',
+        'getUserEmail',
+        {'userInfoId': userInfoId},
+      );
+
+  _i2.Future<DateTime?> getUserCreatedDate(int userInfoId) =>
+      caller.callServerEndpoint<DateTime?>(
+        'user',
+        'getUserCreatedDate',
+        {'userInfoId': userInfoId},
+      );
+
   _i2.Future<bool> deleteUser(int id) => caller.callServerEndpoint<bool>(
         'user',
         'deleteUser',
@@ -486,6 +514,26 @@ class EndpointUser extends _i1.EndpointRef {
         'user',
         'getUserRole',
         {},
+      );
+
+  _i2.Future<List<_i10.User>> getNonDriverUsers() =>
+      caller.callServerEndpoint<List<_i10.User>>(
+        'user',
+        'getNonDriverUsers',
+        {},
+      );
+
+  _i2.Future<bool> updateUserRole(
+    int userId,
+    String newRole,
+  ) =>
+      caller.callServerEndpoint<bool>(
+        'user',
+        'updateUserRole',
+        {
+          'userId': userId,
+          'newRole': newRole,
+        },
       );
 }
 

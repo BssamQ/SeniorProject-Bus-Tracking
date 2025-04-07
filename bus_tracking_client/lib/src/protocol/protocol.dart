@@ -27,7 +27,8 @@ import 'package:bus_tracking_client/src/protocol/notifications_class.dart'
 import 'package:bus_tracking_client/src/protocol/route_class.dart' as _i15;
 import 'package:bus_tracking_client/src/protocol/stations.dart' as _i16;
 import 'package:bus_tracking_client/src/protocol/stop_class.dart' as _i17;
-import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i18;
+import 'package:bus_tracking_client/src/protocol/user_class.dart' as _i18;
+import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i19;
 export 'bus_class.dart';
 export 'driver_class.dart';
 export 'example.dart';
@@ -159,8 +160,12 @@ class Protocol extends _i1.SerializationManager {
       return (data as List).map((e) => deserialize<_i17.Stop>(e)).toList()
           as dynamic;
     }
+    if (t == List<_i18.User>) {
+      return (data as List).map((e) => deserialize<_i18.User>(e)).toList()
+          as dynamic;
+    }
     try {
-      return _i18.Protocol().deserialize<T>(data, t);
+      return _i19.Protocol().deserialize<T>(data, t);
     } on _i1.DeserializationTypeNotFoundException catch (_) {}
     return super.deserialize<T>(data, t);
   }
@@ -196,7 +201,7 @@ class Protocol extends _i1.SerializationManager {
     if (data is _i10.User) {
       return 'User';
     }
-    className = _i18.Protocol().getClassNameForObject(data);
+    className = _i19.Protocol().getClassNameForObject(data);
     if (className != null) {
       return 'serverpod_auth.$className';
     }
@@ -238,7 +243,7 @@ class Protocol extends _i1.SerializationManager {
     }
     if (dataClassName.startsWith('serverpod_auth.')) {
       data['className'] = dataClassName.substring(15);
-      return _i18.Protocol().deserializeByClassName(data);
+      return _i19.Protocol().deserializeByClassName(data);
     }
     return super.deserializeByClassName(data);
   }

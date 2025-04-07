@@ -29,6 +29,7 @@ import 'package:bus_tracking_server/src/generated/notifications_class.dart'
 import 'package:bus_tracking_server/src/generated/route_class.dart' as _i17;
 import 'package:bus_tracking_server/src/generated/stations.dart' as _i18;
 import 'package:bus_tracking_server/src/generated/stop_class.dart' as _i19;
+import 'package:bus_tracking_server/src/generated/user_class.dart' as _i20;
 export 'bus_class.dart';
 export 'driver_class.dart';
 export 'example.dart';
@@ -735,6 +736,10 @@ class Protocol extends _i1.SerializationManagerServer {
     }
     if (t == List<_i19.Stop>) {
       return (data as List).map((e) => deserialize<_i19.Stop>(e)).toList()
+          as dynamic;
+    }
+    if (t == List<_i20.User>) {
+      return (data as List).map((e) => deserialize<_i20.User>(e)).toList()
           as dynamic;
     }
     try {

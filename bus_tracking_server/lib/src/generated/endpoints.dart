@@ -214,6 +214,16 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['bus'] as _i2.BusEndpoint)
                   .getBusesByStatusOperating(session),
         ),
+        'getAvailableOperatingBuses': _i1.MethodConnector(
+          name: 'getAvailableOperatingBuses',
+          params: {},
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['bus'] as _i2.BusEndpoint)
+                  .getAvailableOperatingBuses(session),
+        ),
         'getBusesByStatusInMaintenance': _i1.MethodConnector(
           name: 'getBusesByStatusInMaintenance',
           params: {},
@@ -1035,6 +1045,60 @@ class Endpoints extends _i1.EndpointDispatch {
             params['user'],
           ),
         ),
+        'getUserName': _i1.MethodConnector(
+          name: 'getUserName',
+          params: {
+            'userInfoId': _i1.ParameterDescription(
+              name: 'userInfoId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['user'] as _i10.UserEndpoint).getUserName(
+            session,
+            params['userInfoId'],
+          ),
+        ),
+        'getUserEmail': _i1.MethodConnector(
+          name: 'getUserEmail',
+          params: {
+            'userInfoId': _i1.ParameterDescription(
+              name: 'userInfoId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['user'] as _i10.UserEndpoint).getUserEmail(
+            session,
+            params['userInfoId'],
+          ),
+        ),
+        'getUserCreatedDate': _i1.MethodConnector(
+          name: 'getUserCreatedDate',
+          params: {
+            'userInfoId': _i1.ParameterDescription(
+              name: 'userInfoId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['user'] as _i10.UserEndpoint).getUserCreatedDate(
+            session,
+            params['userInfoId'],
+          ),
+        ),
         'deleteUser': _i1.MethodConnector(
           name: 'deleteUser',
           params: {
@@ -1061,6 +1125,40 @@ class Endpoints extends _i1.EndpointDispatch {
             Map<String, dynamic> params,
           ) async =>
               (endpoints['user'] as _i10.UserEndpoint).getUserRole(session),
+        ),
+        'getNonDriverUsers': _i1.MethodConnector(
+          name: 'getNonDriverUsers',
+          params: {},
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['user'] as _i10.UserEndpoint)
+                  .getNonDriverUsers(session),
+        ),
+        'updateUserRole': _i1.MethodConnector(
+          name: 'updateUserRole',
+          params: {
+            'userId': _i1.ParameterDescription(
+              name: 'userId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+            'newRole': _i1.ParameterDescription(
+              name: 'newRole',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['user'] as _i10.UserEndpoint).updateUserRole(
+            session,
+            params['userId'],
+            params['newRole'],
+          ),
         ),
       },
     );

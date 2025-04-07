@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:bus_tracking_client/bus_tracking_client.dart';
 import 'package:serverpod_auth_shared_flutter/serverpod_auth_shared_flutter.dart';
 
+import 'driver_assignment_screen.dart';
+
 class DriverManagementScreen extends StatefulWidget {
   final Client client;
   final SessionManager sessionManager;
@@ -31,6 +33,7 @@ class _DriverManagementScreenState extends State<DriverManagementScreen> {
     sessionManager = widget.sessionManager;
     _fetchDrivers();
   }
+
 
   Future<void> _fetchDrivers() async {
     try {
@@ -70,36 +73,138 @@ class _DriverManagementScreenState extends State<DriverManagementScreen> {
   }
 
   void _addDriver() async {
-    await Navigator.push(
+    final result = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => DriverFormScreen(
-          client: client,
-          sessionManager: sessionManager,
-        ),
+        builder: (context) => DriverAssignmentScreen(client: client),
       ),
     );
-    _fetchDrivers();
+
+    if (result == true) {
+      _fetchDrivers(); // Refresh the driver list
+    }
+  }
+  Future<String?> _fetchRouteName(int? routeId) async {
+    try {
+      return await widget.client.route.getRouteNameById(routeId!);
+    } catch (e) {
+      print('Error fetching route name: $e');
+      return null;
+    }
   }
 
-  void _editDriver(DriverInfo driver) async {
-    await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => DriverFormScreen(
-          client: client,
-          sessionManager: sessionManager,
-          driver: driver,
-        ),
-      ),
+  void _editDriver(DriverInfo driverInfo) async {
+
+    // Fetch driver details from the server
+    final driver = await widget.client.driverInfo.getDriverById(driverInfo.id!);
+    final bus = await client.bus.getBusById(driver!.busId);
+
+    // Fetch available buses
+    final buses = await widget.client.bus.getAvailableOperatingBuses();
+
+    // Get user info (username, email, created date)
+    final userInfo = await widget.client.user.getUserName(driver.userInfoId);
+    final email = await widget.client.user.getUserEmail(driver.userInfoId);
+    final createdDate = await widget.client.user.getUserCreatedDate(driver.userInfoId);
+
+    // Show the edit screen with the current driver details
+    showDialog(
+      context: context,
+      builder: (context) {
+        Bus? selectedBus;
+        return AlertDialog(
+          title: Text('Edit Driver'),
+          content: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Display current details
+                Text('Username: ${userInfo ?? 'Unknown'}'),
+                Text('Email: ${email ?? 'Unknown'}'),
+                Text('Account Created: ${createdDate ?? 'Unknown'}'),
+                Text('Current Bus: ${bus?.busNumber ?? 'None'}'),
+                FutureBuilder<String?>(
+                  future: _fetchRouteName(bus!.routeID),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Text('Loading route...');
+                    } else if (snapshot.hasError) {
+                      return Text('Error fetching route');
+                    } else if (snapshot.hasData) {
+                      return Text('Current Route: ${snapshot.data ?? 'None'}');
+                    } else {
+                      return Text('No route available');
+                    }
+                  },
+                ),
+
+
+                SizedBox(height: 16),
+                // Dropdown to select new bus
+                DropdownButtonFormField<Bus>(
+                  value: selectedBus,
+                  hint: Text("Select New Bus"),
+                  items: buses.map((bus) {
+                    return DropdownMenuItem<Bus>(
+                      value: bus,
+                      child: Text('${bus.busNumber} '),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    selectedBus = value;
+                  },
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () => Navigator.pop(context),
+            ),
+            ElevatedButton(
+              child: Text('Save Changes'),
+              onPressed: () async {
+                if (selectedBus != null) {
+                  // Update driver with new bus information
+                  driver.busId = selectedBus!.id!;
+
+                  // Call the updateDriver method
+                  await widget.client.driverInfo.updateDriver(driver);
+
+                  // Close the dialog
+                  Navigator.pop(context);
+
+                  // Refresh the list of drivers
+                  setState(() {
+                    _fetchDrivers(); // This fetches the updated driver list and refreshes the UI
+                  });
+
+                  // Show success message
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Driver updated successfully')),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Please select a bus')),
+                  );
+                }
+              }
+,
+            ),
+          ],
+        );
+      },
     );
-    _fetchDrivers();
+
   }
 
-  void _deleteDriver(int driverId) async {
+
+  void _deleteDriver(int driverId, int userId) async {
     try {
       bool success = await client.driverInfo.deleteDriver(driverId);
       if (success) {
+        client.user.updateUserRole(userId, "Student");
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Driver removed'),
@@ -132,12 +237,6 @@ class _DriverManagementScreenState extends State<DriverManagementScreen> {
       appBar: AppBar(
         title: Text("Driver Management"),
         backgroundColor: Colors.teal,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: _addDriver,
-          ),
-        ],
       ),
       body: drivers.isEmpty
           ? Center(
@@ -152,9 +251,8 @@ class _DriverManagementScreenState extends State<DriverManagementScreen> {
         itemBuilder: (context, index) {
           var driver = drivers[index];
           final name = driverNames[driver.id!] ?? 'Unknown';
-          print(driverNames[driver.id!]);
           final busNumber = driverBuses[driver.id!]?.busNumber ?? 'None';
-          print(driverBuses[driver.id!]?.busNumber);
+
 
           return ListTile(
             leading: CircleAvatar(
@@ -174,7 +272,7 @@ class _DriverManagementScreenState extends State<DriverManagementScreen> {
                 if (value == 'edit') {
                   _editDriver(driver);
                 } else if (value == 'delete') {
-                  _deleteDriver(driver.id!);
+                  _deleteDriver(driver.id!, driver.userInfoId);
                 }
               },
               itemBuilder: (BuildContext context) => [

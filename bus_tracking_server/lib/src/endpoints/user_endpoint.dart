@@ -1,5 +1,6 @@
 import 'package:bus_tracking_server/src/generated/protocol.dart';
 import 'package:serverpod/server.dart';
+import 'package:serverpod_auth_server/module.dart';
 
 class UserEndpoint extends Endpoint {
   // Search the user by name
@@ -18,6 +19,7 @@ class UserEndpoint extends Endpoint {
     return true;
   }
 
+
   // Change an existing user
   Future<bool> updateUser(Session session, User user) async {
     if (user.id == null) {
@@ -30,6 +32,48 @@ class UserEndpoint extends Endpoint {
       return true; // Return true if the user was updated
     }
     return false;
+  }
+  Future<String?> getUserName(Session session, int userInfoId) async {
+    // First, find the user in your User table
+    var user = await User.db.findFirstRow(
+      session,
+      where: (t) => t.userInfoId.equals(userInfoId),
+    );
+    if (user == null) {
+      return null;
+    }
+
+    // Then fetch the related UserInfo from serverpod_auth
+    var userInfo = await UserInfo.db.findById(session, userInfoId);
+    return userInfo?.userName;
+  }
+  Future<String?> getUserEmail(Session session, int userInfoId) async {
+    // First, find the user in your User table
+    var user = await User.db.findFirstRow(
+      session,
+      where: (t) => t.userInfoId.equals(userInfoId),
+    );
+    if (user == null) {
+      return null;
+    }
+
+    // Then fetch the related UserInfo from serverpod_auth
+    var userInfo = await UserInfo.db.findById(session, userInfoId);
+    return userInfo?.email;
+  }
+  Future<DateTime?> getUserCreatedDate(Session session, int userInfoId) async {
+    // First, find the user in your User table
+    var user = await User.db.findFirstRow(
+      session,
+      where: (t) => t.userInfoId.equals(userInfoId),
+    );
+    if (user == null) {
+      return null;
+    }
+
+    // Then fetch the related UserInfo from serverpod_auth
+    var userInfo = await UserInfo.db.findById(session, userInfoId);
+    return userInfo?.created;
   }
 
   // Delete a user
@@ -52,6 +96,8 @@ class UserEndpoint extends Endpoint {
       return null;
     }
 
+
+
     // Find the User record that corresponds to the authenticated UserInfo
     var user = await User.db.findFirstRow(
         session,
@@ -62,6 +108,21 @@ class UserEndpoint extends Endpoint {
     return user?.role;
   }
 
+  Future<List<User>> getNonDriverUsers(Session session) async {
+    return await User.db.find(
+      session,
+      where: (u) => u.role.notEquals('Driver'),
+    );
+  }
+  Future<bool> updateUserRole(Session session, int userId, String newRole) async {
+    var user = await User.db.findById(session, userId);
+    if (user != null) {
+      user.role = newRole;
+      await User.db.update(session, [user]);
+      return true;
+    }
+    return false;
+  }
 
 }
 

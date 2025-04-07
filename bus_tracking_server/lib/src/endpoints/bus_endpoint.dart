@@ -84,6 +84,30 @@ class BusEndpoint extends Endpoint {
     return filteredBuses;
   }
 
+  Future<List<Bus>> getAvailableOperatingBuses(Session session) async {
+    // Get all buses with status 'Operating'
+    List<Bus> operatingBuses = await Bus.db.find(
+      session,
+      where: (b) => b.status.equals('Operating'),
+    );
+
+    // Get all driver entries
+    List<DriverInfo> allDrivers = await DriverInfo.db.find(session);
+
+    // Get list of busIds that are already taken
+    Set<int> takenBusIds = allDrivers
+        .map((driver) => driver.busId)
+        .toSet();
+
+    // Filter out buses that are already assigned to drivers
+    List<Bus> availableBuses = operatingBuses
+        .where((bus) => !takenBusIds.contains(bus.id))
+        .toList();
+
+    return availableBuses;
+  }
+
+
   // Get buses with status "In Maintenance"
   Future<List<Bus>> getBusesByStatusInMaintenance(Session session) async {
     // Get all buses from the database
