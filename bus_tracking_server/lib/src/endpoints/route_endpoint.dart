@@ -9,14 +9,19 @@ class RouteEndpoint extends Endpoint {
 
   // Get all routes
   Future<List<Routes>> getAllRoutes(Session session) async {
-    return await Routes.db.find(session);
+    return await Routes.db.find(
+      session,
+      include: Routes.include(buses: Bus.includeList()),
+    );
   }
 
+
   // Add a new route
-  Future<bool> addRoute(Session session, Routes route) async {
-    await Routes.db.insert(session, [route]);
-    return true;
+  Future<Routes> addRoute(Session session, Routes route) async {
+    final insertedRoute = await Routes.db.insertRow(session, route);
+    return insertedRoute;
   }
+
 
   // Update an existing route
   Future<bool> updateRoute(Session session, Routes route) async {
@@ -74,4 +79,54 @@ class RouteEndpoint extends Endpoint {
     }
     return false;
   }
+
+  Future<List<Bus>> getBusesForRoute(Session session, int routeId) async {
+    return await Bus.db.find(
+      session,
+      where: (bus) => bus.routeID.equals(routeId),
+    );
+  }
+
+  // Assign an existing route to a set of buses
+  Future<bool> assignRouteToBuses(Session session, int routeId, List<int> busIds) async {
+    // Fetch the buses you want to assign
+    List<Bus> busesToUpdate = await Bus.db.find(
+      session,
+      where: (bus) => bus.id.inSet(busIds.toSet()), // Convert list to set for filtering
+    );
+
+    // If no buses were found, return false
+    if (busesToUpdate.isEmpty) return false;
+
+    // Assign the route ID to each bus
+    for (var bus in busesToUpdate) {
+      bus.routeID = routeId;
+    }
+
+    // Update all buses in the database
+    await Bus.db.update(session, busesToUpdate);
+
+    return true;
+  }
+
+  Future<bool> reassignBusesToRoute(Session session, int newRouteId, Set<int> busIds) async {
+    // Fetch the buses to reassign
+    List<Bus> busesToUpdate = await Bus.db.find(
+      session,
+      where: (bus) => bus.id.inSet(busIds),
+    );
+
+    if (busesToUpdate.isEmpty) return false;
+
+    // Update the routeID for each bus
+    for (var bus in busesToUpdate) {
+      bus.routeID = newRouteId;
+    }
+
+    // Batch update
+    await Bus.db.update(session, busesToUpdate);
+    return true;
+  }
+
+
 }

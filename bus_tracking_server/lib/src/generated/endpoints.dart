@@ -244,6 +244,15 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['bus'] as _i2.BusEndpoint)
                   .getBusesByStatusOutOfService(session),
         ),
+        'getUnassignedBuses': _i1.MethodConnector(
+          name: 'getUnassignedBuses',
+          params: {},
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['bus'] as _i2.BusEndpoint).getUnassignedBuses(session),
+        ),
       },
     );
     connectors['driverInfo'] = _i1.EndpointConnector(
@@ -789,6 +798,72 @@ class Endpoints extends _i1.EndpointDispatch {
             session,
             params['routeId'],
             params['newStartTime'],
+          ),
+        ),
+        'getBusesForRoute': _i1.MethodConnector(
+          name: 'getBusesForRoute',
+          params: {
+            'routeId': _i1.ParameterDescription(
+              name: 'routeId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['route'] as _i7.RouteEndpoint).getBusesForRoute(
+            session,
+            params['routeId'],
+          ),
+        ),
+        'assignRouteToBuses': _i1.MethodConnector(
+          name: 'assignRouteToBuses',
+          params: {
+            'routeId': _i1.ParameterDescription(
+              name: 'routeId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+            'busIds': _i1.ParameterDescription(
+              name: 'busIds',
+              type: _i1.getType<List<int>>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['route'] as _i7.RouteEndpoint).assignRouteToBuses(
+            session,
+            params['routeId'],
+            params['busIds'],
+          ),
+        ),
+        'reassignBusesToRoute': _i1.MethodConnector(
+          name: 'reassignBusesToRoute',
+          params: {
+            'newRouteId': _i1.ParameterDescription(
+              name: 'newRouteId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+            'busIds': _i1.ParameterDescription(
+              name: 'busIds',
+              type: _i1.getType<Set<int>>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['route'] as _i7.RouteEndpoint).reassignBusesToRoute(
+            session,
+            params['newRouteId'],
+            params['busIds'],
           ),
         ),
       },

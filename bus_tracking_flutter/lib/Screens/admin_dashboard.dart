@@ -71,12 +71,12 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               legend: _buildAgeLegend(),
             ),
             SizedBox(height: 20),
-            _buildChartCard(
-              title: "Breakdown Counts",
-              icon: Icons.report_problem,
-              chartBuilder: _buildBreakdownBarChart,
-              legend: SizedBox.shrink(),
-            ),
+            // _buildChartCard(
+            //   title: "Breakdown Counts",
+            //   icon: Icons.report_problem,
+            //   chartBuilder: _buildBreakdownBarChart,
+            //   legend: SizedBox.shrink(),
+            // ),
           ],
         ),
       ),
@@ -254,64 +254,64 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     );
   }
 
-  Widget _buildBreakdownBarChart(BoxConstraints constraints) {
-    List<BarChartGroupData> barGroups = [];
-
-    for (int i = 0; i < _allBuses.length; i++) {
-      final bus = _allBuses[i];
-      barGroups.add(
-        BarChartGroupData(
-          x: i,
-          barRods: [
-            BarChartRodData(
-              toY: (bus.breakdownCounter).toDouble(),
-              width: constraints.maxWidth / (_allBuses.length * 1.5),
-              borderRadius: BorderRadius.circular(8),
-              gradient: LinearGradient(
-                colors: [Colors.redAccent, Colors.deepOrangeAccent],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
-    double maxY = (_allBuses.map((b) => b.breakdownCounter).fold(0, (a, b) => a > b ? a : b) + 1).toDouble();
-
-    return BarChart(
-      BarChartData(
-        maxY: maxY,
-        barGroups: barGroups,
-        gridData: FlGridData(show: false),
-        titlesData: FlTitlesData(
-          leftTitles: AxisTitles(
-            sideTitles: SideTitles(showTitles: true, reservedSize: 28),
-          ),
-          bottomTitles: AxisTitles(
-            sideTitles: SideTitles(
-              showTitles: true,
-              getTitlesWidget: (value, meta) {
-                if (value.toInt() >= _allBuses.length) return Container();
-                return Padding(
-                  padding: const EdgeInsets.only(top: 4.0),
-                  child: Text(
-                    _allBuses[value.toInt()].busNumber,
-                    style: TextStyle(
-                      fontSize: 10,
-                      color: Theme.of(context).textTheme.bodyLarge!.color,
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-        ),
-        borderData: FlBorderData(show: false),
-      ),
-    );
-  }
+  // Widget _buildBreakdownBarChart(BoxConstraints constraints) {
+  //   List<BarChartGroupData> barGroups = [];
+  //
+  //   for (int i = 0; i < _allBuses.length; i++) {
+  //     final bus = _allBuses[i];
+  //     barGroups.add(
+  //       BarChartGroupData(
+  //         x: i,
+  //         barRods: [
+  //           BarChartRodData(
+  //             toY: (bus.breakdownCounter).toDouble(),
+  //             width: constraints.maxWidth / (_allBuses.length * 1.5),
+  //             borderRadius: BorderRadius.circular(8),
+  //             gradient: LinearGradient(
+  //               colors: [Colors.redAccent, Colors.deepOrangeAccent],
+  //               begin: Alignment.topCenter,
+  //               end: Alignment.bottomCenter,
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //     );
+  //   }
+  //
+  //   double maxY = (_allBuses.map((b) => b.breakdownCounter).fold(0, (a, b) => a > b ? a : b) + 1).toDouble();
+  //
+  //   return BarChart(
+  //     BarChartData(
+  //       maxY: maxY,
+  //       barGroups: barGroups,
+  //       gridData: FlGridData(show: false),
+  //       titlesData: FlTitlesData(
+  //         leftTitles: AxisTitles(
+  //           sideTitles: SideTitles(showTitles: true, reservedSize: 28),
+  //         ),
+  //         bottomTitles: AxisTitles(
+  //           sideTitles: SideTitles(
+  //             showTitles: true,
+  //             getTitlesWidget: (value, meta) {
+  //               if (value.toInt() >= _allBuses.length) return Container();
+  //               return Padding(
+  //                 padding: const EdgeInsets.only(top: 4.0),
+  //                 child: Text(
+  //                   _allBuses[value.toInt()].busNumber,
+  //                   style: TextStyle(
+  //                     fontSize: 10,
+  //                     color: Theme.of(context).textTheme.bodyLarge!.color,
+  //                   ),
+  //                 ),
+  //               );
+  //             },
+  //           ),
+  //         ),
+  //       ),
+  //       borderData: FlBorderData(show: false),
+  //     ),
+  //   );
+  // }
 
   Widget _buildLegendItem(Color color, String text) {
     final isDark = Theme.of(context).brightness == Brightness.dark;

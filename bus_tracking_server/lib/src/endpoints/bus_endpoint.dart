@@ -129,4 +129,11 @@ class BusEndpoint extends Endpoint {
 
     return filteredBuses;
   }
+  Future<List<Bus>> getUnassignedBuses(Session session) async {
+    return await Bus.db.find(
+      session,
+      where: (b) => b.routeID.equals(null),
+    );
+  }
+
 }

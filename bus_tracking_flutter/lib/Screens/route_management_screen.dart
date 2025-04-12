@@ -123,9 +123,32 @@ class _RouteManagementScreenState extends State<RouteManagementScreen> {
     ];
     return colors[index % colors.length];
   }
+  void _showBusDetails(Bus bus) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text("Bus Details"),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text("Bus Number: ${bus.busNumber}"),
+            Text("Driver Name: ${bus.driverName}"),
+            Text("Age: ${bus.age}"),
+            Text("Status: ${bus.status}"),
+          ],
+        ),
+        actions: [
+          TextButton(
+            child: Text("Close"),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ],
+      ),
+    );
+  }
 
   void _openEditRouteModal(Routes route) {
-    // Define the available times.
     final List<String> availableTimes = [
       '8:00 AM', '9:00 AM', '10:00 AM', '11:00 AM',
       '12:00 PM', '1:00 PM', '2:00 PM', '3:00 PM',
@@ -135,7 +158,6 @@ class _RouteManagementScreenState extends State<RouteManagementScreen> {
     String startTime = route.routeStartTime ?? '8:00 AM';
     String endTime = route.routeEndTime;
 
-    // Ensure the times are one of the available items.
     if (!availableTimes.contains(startTime)) {
       startTime = availableTimes[0];
     }
@@ -181,11 +203,86 @@ class _RouteManagementScreenState extends State<RouteManagementScreen> {
                       }
                     },
                   ),
+                  SizedBox(height: 10),
+                  if (route.buses == null)
+                    Text("No buses assigned to this route.")
+                  else if (route.buses!.length <= 2)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Buses:", style: TextStyle(fontWeight: FontWeight.bold)),
+                        ...route.buses!.map((bus) => ListTile(
+                          title: Text("Bus #${bus.busNumber}"),
+                          subtitle: Text("Driver: ${bus.driverName}"),
+                          trailing: IconButton(
+                            icon: Icon(Icons.delete, color: Colors.red),
+                            onPressed: () async {
+                              final updatedBus = bus.copyWith(routeID: null);
+                              await client.bus.updateBus(updatedBus);
+                              Navigator.pop(context);
+                              _fetchStationsAndRoutes();
+                            },
+                          ),
+                          onTap: () => _showBusDetails(bus),
+                        )),
+                      ],
+                    )
+                  else
+                    ElevatedButton.icon(
+                      icon: Icon(Icons.directions_bus),
+                      label: Text("View Assigned Buses"),
+                      onPressed: () {
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (context) => ListView(
+                            padding: EdgeInsets.all(16),
+                            children: route.buses!.map((bus) => ListTile(
+                              title: Text("Bus #${bus.busNumber}"),
+                              subtitle: Text("Driver: ${bus.driverName}"),
+                              trailing: IconButton(
+                                icon: Icon(Icons.delete, color: Colors.red),
+                                onPressed: () async {
+                                  final updatedBus = bus.copyWith(routeID: null);
+                                  await client.bus.updateBus(updatedBus);
+                                  Navigator.pop(context); // Close bus list
+                                  Navigator.pop(context); // Close edit modal
+                                  _fetchStationsAndRoutes(); // Refresh
+                                },
+                              ),
+                              onTap: () {
+                                Navigator.pop(context);
+                                _showBusDetails(bus);
+                              },
+                            )).toList(),
+                          ),
+                        );
+                      },
+                    ),
+
+                  ElevatedButton.icon(
+                    icon: Icon(Icons.add),
+                    label: Text("Assign Bus to Route"),
+                    onPressed: () async {
+                      Navigator.pop(context);
+                      _openAssignBusesModal(route.id!);
+                    },
+                  ),
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+
                       ElevatedButton(
                         onPressed: () async {
+                          // Set routeId to null for all buses assigned to this route
+                          if (route.buses != null && route.buses!.isNotEmpty) {
+                            for (final bus in route.buses!) {
+                              final updatedBus = bus.copyWith(routeID: null);
+                              await client.bus.updateBus(updatedBus);
+                            }
+                          }
+
+                          // Delete the route
                           await client.route.deleteRoute(route.id!);
                           _fetchStationsAndRoutes();
                           Navigator.pop(context);
@@ -215,12 +312,12 @@ class _RouteManagementScreenState extends State<RouteManagementScreen> {
         );
       },
     ).whenComplete(() {
-      // Clear the highlighted route when done editing.
       setState(() {
         _highlightedRouteIndex = null;
       });
     });
   }
+
 
   void _openNewRouteModal() {
     showModalBottomSheet(
@@ -297,7 +394,7 @@ class _RouteManagementScreenState extends State<RouteManagementScreen> {
                         stops: [],
                         buses: [],
                       );
-                      await client.route.addRoute(newRoute);
+
                       setState(() {
                         newStartStation = null;
                         newEndStation = null;
@@ -305,8 +402,14 @@ class _RouteManagementScreenState extends State<RouteManagementScreen> {
                         newEndTime = null;
                         newRouteName = '';
                       });
+
+                      Routes createdRoute = await client.route.addRoute(newRoute);
                       _fetchStationsAndRoutes();
                       Navigator.pop(context);
+                      Future.delayed(Duration(milliseconds: 300), () {
+                        //print("Opening assign buses modal for route ID: ${newRoute.id}");
+                        _openAssignBusesModal(createdRoute.id!);
+                      });
                     } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text("Failed to add route: $e")),
@@ -322,6 +425,105 @@ class _RouteManagementScreenState extends State<RouteManagementScreen> {
       ),
     );
   }
+  void _openAssignBusesModal(int routeId) async {
+    final availableBuses = await client.bus.getUnassignedBuses();
+
+    final selectedBusIds = <int>{};
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+                left: 16,
+                right: 16,
+                top: 24,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text("Assign Buses", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  SizedBox(height: 12),
+                  if (availableBuses.isEmpty)
+                    Column(
+                      children: [
+                        Text("No available buses to assign.", style: TextStyle(fontSize: 16)),
+                        SizedBox(height: 20),
+                        ElevatedButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: Text("Quit"),
+                        ),
+                      ],
+                    )
+                  else ...[
+                    SizedBox(
+                      height: 300,
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: availableBuses.length,
+                        itemBuilder: (context, index) {
+                          final bus = availableBuses[index];
+                          final isSelected = selectedBusIds.contains(bus.id);
+
+                          return CheckboxListTile(
+                            title: Text('Bus #${bus.busNumber} - ${bus.driverName}'),
+                            subtitle: Text('Age: ${bus.age}, Status: ${bus.status}'),
+                            value: isSelected,
+                            onChanged: (value) {
+                              setState(() {
+                                if (value == true) {
+                                  selectedBusIds.add(bus.id!);
+                                } else {
+                                  selectedBusIds.remove(bus.id!);
+                                }
+                              });
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: availableBuses.isEmpty ? null : () async {
+                        if (selectedBusIds.isNotEmpty) {
+                          bool allSuccess = true;
+
+                          for (int busId in selectedBusIds) {
+                            final bus = availableBuses.firstWhere((b) => b.id == busId);
+                            final updatedBus = bus.copyWith(routeID: routeId);
+                            final success = await client.bus.updateBus(updatedBus);
+                            if (!success) {
+                              allSuccess = false;
+                            }
+                          }
+
+                          if (allSuccess) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Buses assigned!")));
+                            Navigator.pop(context);
+                            _fetchStationsAndRoutes();
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Some buses failed to update")));
+                          }
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("No buses selected")));
+                        }
+                      },
+                      child: Text("Assign Selected Buses"),
+                    ),
+                  ],
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+
 
   List<DropdownMenuItem<String>> _generateTimeDropdownItems() {
     final List<String> times = [
@@ -334,7 +536,7 @@ class _RouteManagementScreenState extends State<RouteManagementScreen> {
 
   late List<TaggedPolyline> _interactivePolylines;
 
-  // New method: Opens a modal bottom sheet with the list of routes.
+  //  Opens a modal bottom sheet with the list of routes.
   void _openRoutesListModal() {
     showModalBottomSheet(
       context: context,

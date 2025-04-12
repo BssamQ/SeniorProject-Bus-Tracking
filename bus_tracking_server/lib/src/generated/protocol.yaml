@@ -11,6 +11,7 @@ bus:
   - getAvailableOperatingBuses:
   - getBusesByStatusInMaintenance:
   - getBusesByStatusOutOfService:
+  - getUnassignedBuses:
 driverInfo:
   - createDriver:
   - getDriverById:
@@ -44,6 +45,9 @@ route:
   - getAllRouteNames:
   - getRoutesByLocation:
   - updateRouteStartTime:
+  - getBusesForRoute:
+  - assignRouteToBuses:
+  - reassignBusesToRoute:
 station:
   - getStationById:
   - addStation:

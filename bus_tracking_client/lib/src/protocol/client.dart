@@ -110,6 +110,13 @@ class EndpointBus extends _i1.EndpointRef {
         'getBusesByStatusOutOfService',
         {},
       );
+
+  _i2.Future<List<_i3.Bus>> getUnassignedBuses() =>
+      caller.callServerEndpoint<List<_i3.Bus>>(
+        'bus',
+        'getUnassignedBuses',
+        {},
+      );
 }
 
 /// {@category Endpoint}
@@ -301,8 +308,8 @@ class EndpointRoute extends _i1.EndpointRef {
         {},
       );
 
-  _i2.Future<bool> addRoute(_i7.Routes route) =>
-      caller.callServerEndpoint<bool>(
+  _i2.Future<_i7.Routes> addRoute(_i7.Routes route) =>
+      caller.callServerEndpoint<_i7.Routes>(
         'route',
         'addRoute',
         {'route': route},
@@ -362,6 +369,39 @@ class EndpointRoute extends _i1.EndpointRef {
         {
           'routeId': routeId,
           'newStartTime': newStartTime,
+        },
+      );
+
+  _i2.Future<List<_i3.Bus>> getBusesForRoute(int routeId) =>
+      caller.callServerEndpoint<List<_i3.Bus>>(
+        'route',
+        'getBusesForRoute',
+        {'routeId': routeId},
+      );
+
+  _i2.Future<bool> assignRouteToBuses(
+    int routeId,
+    List<int> busIds,
+  ) =>
+      caller.callServerEndpoint<bool>(
+        'route',
+        'assignRouteToBuses',
+        {
+          'routeId': routeId,
+          'busIds': busIds,
+        },
+      );
+
+  _i2.Future<bool> reassignBusesToRoute(
+    int newRouteId,
+    Set<int> busIds,
+  ) =>
+      caller.callServerEndpoint<bool>(
+        'route',
+        'reassignBusesToRoute',
+        {
+          'newRouteId': newRouteId,
+          'busIds': busIds,
         },
       );
 }
