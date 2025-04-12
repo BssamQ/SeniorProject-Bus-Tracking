@@ -868,6 +868,35 @@ class _DriverInfoEndpoint {
       }
     });
   }
+
+  _i3.Future<_i5.DriverInfo?> getDriverByBusId(
+    _i1.TestSessionBuilder sessionBuilder,
+    int busId,
+  ) async {
+    return _i1.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _i1.InternalTestSessionBuilder).internalBuild(
+        endpoint: 'driverInfo',
+        method: 'getDriverByBusId',
+      );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'driverInfo',
+          methodName: 'getDriverByBusId',
+          parameters: _i1.testObjectToJson({'busId': busId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue = await (_localCallContext.method.call(
+          _localUniqueSession,
+          _localCallContext.arguments,
+        ) as _i3.Future<_i5.DriverInfo?>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
 }
 
 class _ExampleEndpoint {

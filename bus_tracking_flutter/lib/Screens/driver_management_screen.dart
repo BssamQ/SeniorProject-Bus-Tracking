@@ -165,8 +165,13 @@ class _DriverManagementScreenState extends State<DriverManagementScreen> {
             ElevatedButton(
               child: Text('Save Changes'),
               onPressed: () async {
+
+                final clearedOldBus = bus.copyWith(driverName: null);
+                await widget.client.bus.updateBus(clearedOldBus);
                 if (selectedBus != null) {
                   // Update driver with new bus information
+                  final updatedBus = selectedBus!.copyWith(driverName: userInfo ?? 'Unknown');
+                  await widget.client.bus.updateBus(updatedBus);
                   driver.busId = selectedBus!.id!;
 
                   // Call the updateDriver method

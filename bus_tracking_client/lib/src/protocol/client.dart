@@ -207,6 +207,13 @@ class EndpointDriverInfo extends _i1.EndpointRef {
         'getDriverEmail',
         {'driverInfoId': driverInfoId},
       );
+
+  _i2.Future<_i4.DriverInfo?> getDriverByBusId(int busId) =>
+      caller.callServerEndpoint<_i4.DriverInfo?>(
+        'driverInfo',
+        'getDriverByBusId',
+        {'busId': busId},
+      );
 }
 
 /// {@category Endpoint}

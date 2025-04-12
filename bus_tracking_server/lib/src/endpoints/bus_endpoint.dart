@@ -30,6 +30,7 @@ class BusEndpoint extends Endpoint {
     return false;
   }
 
+
   // Delete a bus
   Future<bool> deleteBus(Session session, int id) async {
     var bus = await Bus.db.findById(session, id);

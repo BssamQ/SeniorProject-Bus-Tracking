@@ -94,5 +94,13 @@ class DriverInfoEndpoint extends Endpoint {
     return userInfo?.email;
   }
 
+  Future<DriverInfo?> getDriverByBusId(Session session, int busId) async {
+    final drivers = await DriverInfo.db.find(
+      session,
+      where: (d) => d.busId.equals(busId),
+    );
+    return drivers.isNotEmpty ? drivers.first : null;
+  }
+
 
 }

@@ -24,6 +24,7 @@ driverInfo:
   - getDriverBus:
   - getDriverName:
   - getDriverEmail:
+  - getDriverByBusId:
 example:
   - hello:
 gPSData:
