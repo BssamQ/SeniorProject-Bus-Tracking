@@ -1,6 +1,7 @@
 import 'package:bus_tracking_server/src/generated/protocol.dart';
 import 'package:serverpod/server.dart';
 import 'package:serverpod_auth_server/module.dart';
+import 'package:serverpod_auth_server/serverpod_auth_server.dart' as auth;
 
 class UserEndpoint extends Endpoint {
   // Search the user by name
@@ -57,10 +58,20 @@ class UserEndpoint extends Endpoint {
       return null;
     }
 
+
+
     // Then fetch the related UserInfo from serverpod_auth
     var userInfo = await UserInfo.db.findById(session, userInfoId);
     return userInfo?.email;
   }
+
+  Future<UserInfo?> getUserByEmail(Session session, String email) async {
+    return await UserInfo.db.findFirstRow(
+      session,
+      where: (t) => t.email.equals(email),
+    );
+  }
+
   Future<DateTime?> getUserCreatedDate(Session session, int userInfoId) async {
     // First, find the user in your User table
     var user = await User.db.findFirstRow(
@@ -123,6 +134,30 @@ class UserEndpoint extends Endpoint {
     }
     return false;
   }
+
+
+  Future<int?> createUserWithDriverRole(
+      Session session, {
+        required String email,
+        required String password,
+        required String name,
+      }) async {
+    final userInfo = await auth.Emails.createUser(session, name, email, password);
+
+    if (userInfo == null || userInfo.id == null) {
+      return null;
+    }
+
+    final user = User(
+      userInfoId: userInfo.id!,
+      role: "Driver",
+    );
+
+    await User.db.insertRow(session, user);
+
+    return userInfo.id; // Return this to the client
+  }
+
 
 }
 

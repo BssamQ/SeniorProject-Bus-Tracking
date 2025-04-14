@@ -68,8 +68,10 @@ user:
   - updateUser:
   - getUserName:
   - getUserEmail:
+  - getUserByEmail:
   - getUserCreatedDate:
   - deleteUser:
   - getUserRole:
   - getNonDriverUsers:
   - updateUserRole:
+  - createUserWithDriverRole:

@@ -44,7 +44,7 @@ class _BusManagementScreen extends State<BusManagementScreen> {
   Future<void> _addBus() async {
     final bus = Bus(
       busNumber: _busNumberController.text,
-      driverName: _driverNameController.text,
+      driverName: "No Driver Assigned",
       age: int.tryParse(_ageController.text) ?? 0,
       breakdownCounter: int.tryParse(_breakdownController.text) ?? 0,
       status: _selectedStatus,
@@ -319,31 +319,14 @@ class _BusManagementScreen extends State<BusManagementScreen> {
             Text("Bus Number:"),
             TextField(controller: _busNumberController),
             SizedBox(height: 10),
-            Text("Driver Name:"),
-            TextField(controller: _driverNameController),
-            SizedBox(height: 10),
+            // Removed: Driver Name input
             Text("Age:"),
             TextField(controller: _ageController),
             SizedBox(height: 10),
             Text("Breakdown Count:"),
             TextField(controller: _breakdownController),
             SizedBox(height: 10),
-            Text("Route:"),
-            DropdownButtonFormField<String>(
-              value: _selectedRoute,
-              onChanged: (newValue) {
-                setState(() {
-                  _selectedRoute = newValue;
-                });
-              },
-              items: routes.map((route) {
-                return DropdownMenuItem(
-                  value: route.id.toString(),
-                  child: Text(route.routeName),
-                );
-              }).toList(),
-            ),
-            SizedBox(height: 10),
+            // Removed: Route dropdown
             Text("Status:"),
             DropdownButtonFormField<String>(
               value: _selectedStatus,
@@ -370,11 +353,11 @@ class _BusManagementScreen extends State<BusManagementScreen> {
       ),
       actions: [
         TextButton(onPressed: _addBus, child: Text("Add")),
-        TextButton(
-            onPressed: () => Navigator.pop(context), child: Text("Cancel")),
+        TextButton(onPressed: () => Navigator.pop(context), child: Text("Cancel")),
       ],
     );
   }
+
 
   Widget _buildEditBusDialog(Bus bus) {
     List<Map<String, dynamic>> busStatuses = [
@@ -392,9 +375,7 @@ class _BusManagementScreen extends State<BusManagementScreen> {
             Text("Bus Number:", style: TextStyle(color: Colors.green)),
             TextField(controller: _busNumberController),
             SizedBox(height: 10),
-            Text("Driver Name:", style: TextStyle(color: Colors.blue)),
-            TextField(controller: _driverNameController),
-            SizedBox(height: 10),
+            // Removed: Driver Name
             Text("Age:", style: TextStyle(color: Colors.orange)),
             TextField(
               controller: _ageController,
@@ -407,22 +388,7 @@ class _BusManagementScreen extends State<BusManagementScreen> {
               keyboardType: TextInputType.number,
             ),
             SizedBox(height: 10),
-            Text("Route:", style: TextStyle(color: Colors.purple)),
-            DropdownButtonFormField<String>(
-              value: _selectedRoute,
-              onChanged: (newValue) {
-                setState(() {
-                  _selectedRoute = newValue;
-                });
-              },
-              items: routes.map((route) {
-                return DropdownMenuItem(
-                  value: route.id.toString(),
-                  child: Text(route.routeName),
-                );
-              }).toList(),
-            ),
-            SizedBox(height: 10),
+            // Removed: Route selection
             Text("Status:", style: TextStyle(color: Colors.teal)),
             DropdownButtonFormField<String>(
               value: _selectedStatus,
@@ -450,14 +416,13 @@ class _BusManagementScreen extends State<BusManagementScreen> {
       actions: [
         TextButton(
           onPressed: () async {
-            final updatedBus = Bus(
-              id: bus.id,
+            final updatedBus = bus.copyWith(
               busNumber: _busNumberController.text,
-              driverName: _driverNameController.text,
+              // driverName omitted
               age: int.tryParse(_ageController.text) ?? 0,
               breakdownCounter: int.tryParse(_breakdownController.text) ?? 0,
               status: _selectedStatus,
-              routeID: _selectedRoute != null ? int.tryParse(_selectedRoute!) : null,
+              // routeID omitted
             );
             await _updateBus(updatedBus);
             Navigator.pop(context);
@@ -465,9 +430,7 @@ class _BusManagementScreen extends State<BusManagementScreen> {
           child: Text("Update"),
         ),
         TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: Text("Cancel"),
-        ),
+            onPressed: () => Navigator.pop(context), child: Text("Cancel")),
       ],
     );
   }

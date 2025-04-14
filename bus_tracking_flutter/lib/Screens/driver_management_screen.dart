@@ -43,6 +43,7 @@ class _DriverManagementScreenState extends State<DriverManagementScreen> {
 
       for (var driver in driverList) {
         final name = await client.driverInfo.getDriverName(driver.userInfoId) ?? 'Unknown';
+        print("driver.userinfoId = ${driver.userInfoId}");
         final bus = await client.driverInfo.getDriverBus(driver.id!);
 
         names[driver.id!] = name;
@@ -94,7 +95,6 @@ class _DriverManagementScreenState extends State<DriverManagementScreen> {
   }
 
   void _editDriver(DriverInfo driverInfo) async {
-
     // Fetch driver details from the server
     final driver = await widget.client.driverInfo.getDriverById(driverInfo.id!);
     final bus = await client.bus.getBusById(driver!.busId);
@@ -137,8 +137,6 @@ class _DriverManagementScreenState extends State<DriverManagementScreen> {
                     }
                   },
                 ),
-
-
                 SizedBox(height: 16),
                 // Dropdown to select new bus
                 DropdownButtonFormField<Bus>(
@@ -165,27 +163,25 @@ class _DriverManagementScreenState extends State<DriverManagementScreen> {
             ElevatedButton(
               child: Text('Save Changes'),
               onPressed: () async {
-
-                final clearedOldBus = bus.copyWith(driverName: null);
+                // ✅ Set old bus's driver name to "No Driver Assigned"
+                final clearedOldBus = bus.copyWith(driverName: "No Driver Assigned");
                 await widget.client.bus.updateBus(clearedOldBus);
+
                 if (selectedBus != null) {
-                  // Update driver with new bus information
+                  // ✅ Assign new driver name to selected bus
                   final updatedBus = selectedBus!.copyWith(driverName: userInfo ?? 'Unknown');
                   await widget.client.bus.updateBus(updatedBus);
-                  driver.busId = selectedBus!.id!;
 
-                  // Call the updateDriver method
+                  // Update driver record
+                  driver.busId = selectedBus!.id!;
                   await widget.client.driverInfo.updateDriver(driver);
 
-                  // Close the dialog
+                  // Close dialog and refresh list
                   Navigator.pop(context);
-
-                  // Refresh the list of drivers
                   setState(() {
-                    _fetchDrivers(); // This fetches the updated driver list and refreshes the UI
+                    _fetchDrivers();
                   });
 
-                  // Show success message
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('Driver updated successfully')),
                   );
@@ -194,22 +190,21 @@ class _DriverManagementScreenState extends State<DriverManagementScreen> {
                     SnackBar(content: Text('Please select a bus')),
                   );
                 }
-              }
-,
+              },
             ),
           ],
         );
       },
     );
-
   }
+
 
 
   void _deleteDriver(int driverId, int userId) async {
     try {
       bool success = await client.driverInfo.deleteDriver(driverId);
       if (success) {
-        client.user.updateUserRole(userId, "Student");
+        await client.user.updateUserRole(userId, "Student"); // <-- Await here!
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Driver removed'),
@@ -217,7 +212,8 @@ class _DriverManagementScreenState extends State<DriverManagementScreen> {
           ),
         );
         _fetchDrivers();
-      } else {
+      }
+      else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Failed to remove driver'),

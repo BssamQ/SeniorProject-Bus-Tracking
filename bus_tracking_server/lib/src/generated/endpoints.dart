@@ -1175,6 +1175,24 @@ class Endpoints extends _i1.EndpointDispatch {
             params['userInfoId'],
           ),
         ),
+        'getUserByEmail': _i1.MethodConnector(
+          name: 'getUserByEmail',
+          params: {
+            'email': _i1.ParameterDescription(
+              name: 'email',
+              type: _i1.getType<String>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['user'] as _i10.UserEndpoint).getUserByEmail(
+            session,
+            params['email'],
+          ),
+        ),
         'getUserCreatedDate': _i1.MethodConnector(
           name: 'getUserCreatedDate',
           params: {
@@ -1252,6 +1270,36 @@ class Endpoints extends _i1.EndpointDispatch {
             session,
             params['userId'],
             params['newRole'],
+          ),
+        ),
+        'createUserWithDriverRole': _i1.MethodConnector(
+          name: 'createUserWithDriverRole',
+          params: {
+            'email': _i1.ParameterDescription(
+              name: 'email',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+            'password': _i1.ParameterDescription(
+              name: 'password',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+            'name': _i1.ParameterDescription(
+              name: 'name',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['user'] as _i10.UserEndpoint).createUserWithDriverRole(
+            session,
+            email: params['email'],
+            password: params['password'],
+            name: params['name'],
           ),
         ),
       },

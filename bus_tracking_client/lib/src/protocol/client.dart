@@ -544,6 +544,13 @@ class EndpointUser extends _i1.EndpointRef {
         {'userInfoId': userInfoId},
       );
 
+  _i2.Future<_i11.UserInfo?> getUserByEmail(String email) =>
+      caller.callServerEndpoint<_i11.UserInfo?>(
+        'user',
+        'getUserByEmail',
+        {'email': email},
+      );
+
   _i2.Future<DateTime?> getUserCreatedDate(int userInfoId) =>
       caller.callServerEndpoint<DateTime?>(
         'user',
@@ -580,6 +587,21 @@ class EndpointUser extends _i1.EndpointRef {
         {
           'userId': userId,
           'newRole': newRole,
+        },
+      );
+
+  _i2.Future<int?> createUserWithDriverRole({
+    required String email,
+    required String password,
+    required String name,
+  }) =>
+      caller.callServerEndpoint<int?>(
+        'user',
+        'createUserWithDriverRole',
+        {
+          'email': email,
+          'password': password,
+          'name': name,
         },
       );
 }

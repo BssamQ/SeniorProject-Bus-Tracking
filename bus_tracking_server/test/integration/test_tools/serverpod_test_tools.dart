@@ -23,6 +23,7 @@ import 'package:bus_tracking_server/src/generated/route_class.dart' as _i8;
 import 'package:bus_tracking_server/src/generated/stations.dart' as _i9;
 import 'package:bus_tracking_server/src/generated/stop_class.dart' as _i10;
 import 'package:bus_tracking_server/src/generated/user_class.dart' as _i11;
+import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i12;
 import 'package:bus_tracking_server/src/generated/protocol.dart';
 import 'package:bus_tracking_server/src/generated/endpoints.dart';
 export 'package:serverpod_test/serverpod_test_public_exports.dart';
@@ -2031,6 +2032,35 @@ class _UserEndpoint {
     });
   }
 
+  _i3.Future<_i12.UserInfo?> getUserByEmail(
+    _i1.TestSessionBuilder sessionBuilder,
+    String email,
+  ) async {
+    return _i1.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _i1.InternalTestSessionBuilder).internalBuild(
+        endpoint: 'user',
+        method: 'getUserByEmail',
+      );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'user',
+          methodName: 'getUserByEmail',
+          parameters: _i1.testObjectToJson({'email': email}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue = await (_localCallContext.method.call(
+          _localUniqueSession,
+          _localCallContext.arguments,
+        ) as _i3.Future<_i12.UserInfo?>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
   _i3.Future<DateTime?> getUserCreatedDate(
     _i1.TestSessionBuilder sessionBuilder,
     int userInfoId,
@@ -2168,6 +2198,41 @@ class _UserEndpoint {
           _localUniqueSession,
           _localCallContext.arguments,
         ) as _i3.Future<bool>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _i3.Future<int?> createUserWithDriverRole(
+    _i1.TestSessionBuilder sessionBuilder, {
+    required String email,
+    required String password,
+    required String name,
+  }) async {
+    return _i1.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _i1.InternalTestSessionBuilder).internalBuild(
+        endpoint: 'user',
+        method: 'createUserWithDriverRole',
+      );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'user',
+          methodName: 'createUserWithDriverRole',
+          parameters: _i1.testObjectToJson({
+            'email': email,
+            'password': password,
+            'name': name,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue = await (_localCallContext.method.call(
+          _localUniqueSession,
+          _localCallContext.arguments,
+        ) as _i3.Future<int?>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();

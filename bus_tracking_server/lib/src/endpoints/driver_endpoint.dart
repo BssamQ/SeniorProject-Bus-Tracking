@@ -77,7 +77,7 @@ class DriverInfoEndpoint extends Endpoint {
     }
 
     // Then find the associated UserInfo to get the name
-    var userInfo = await UserInfo.db.findById(session, userInfoId);
+    var userInfo = await UserInfo.db.findById(session, driverInfo.userInfoId);
     return userInfo?.userName;
   }
 
