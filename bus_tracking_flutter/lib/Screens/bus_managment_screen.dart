@@ -147,7 +147,7 @@ class _BusManagementScreen extends State<BusManagementScreen> {
                       children: [
                         Text("Driver: ${bus.driverName}",
                             style: TextStyle(color: Colors.blue)),
-                        Text("Age: ${bus.age}",
+                        Text("Years of Service: ${bus.age}",
                             style: TextStyle(color: Colors.orange)),
                         Text("Breakdowns: ${bus.breakdownCounter}",
                             style: TextStyle(color: Colors.red)),
@@ -226,7 +226,7 @@ class _BusManagementScreen extends State<BusManagementScreen> {
                 Text("Driver Name: ${bus.driverName}",
                     style: TextStyle(fontSize: 16, color: Colors.blue)),
                 SizedBox(height: 10),
-                Text("Age: ${bus.age}",
+                Text("Years of Service: ${bus.age}",
                     style: TextStyle(fontSize: 16, color: Colors.orange)),
                 SizedBox(height: 10),
                 Text("Breakdown Count: ${bus.breakdownCounter}",
@@ -320,7 +320,7 @@ class _BusManagementScreen extends State<BusManagementScreen> {
             TextField(controller: _busNumberController),
             SizedBox(height: 10),
             // Removed: Driver Name input
-            Text("Age:"),
+            Text("Years of Service:"),
             TextField(controller: _ageController),
             SizedBox(height: 10),
             Text("Breakdown Count:"),
@@ -376,7 +376,7 @@ class _BusManagementScreen extends State<BusManagementScreen> {
             TextField(controller: _busNumberController),
             SizedBox(height: 10),
             // Removed: Driver Name
-            Text("Age:", style: TextStyle(color: Colors.orange)),
+            Text("Years of Service:", style: TextStyle(color: Colors.orange)),
             TextField(
               controller: _ageController,
               keyboardType: TextInputType.number,

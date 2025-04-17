@@ -65,6 +65,70 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
     await prefs.setString('selectedStation', stationName);
   }
 
+  void _showChangePasswordDialog() {
+    final oldPasswordController = TextEditingController();
+    final newPasswordController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Change Password"),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: oldPasswordController,
+              obscureText: true,
+              decoration: InputDecoration(labelText: 'Current Password'),
+            ),
+            TextField(
+              controller: newPasswordController,
+              obscureText: true,
+              decoration: InputDecoration(labelText: 'New Password'),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text("Cancel"),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              final success = await _changePassword(
+                oldPasswordController.text,
+                newPasswordController.text,
+              );
+              Navigator.pop(context);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(success
+                      ? 'Password changed successfully'
+                      : 'Failed to change password'),
+                ),
+              );
+            },
+            child: Text("Change"),
+          ),
+        ],
+      ),
+    );
+  }
+  Future<bool> _changePassword(String oldPassword, String newPassword) async {
+    try {
+      // Using positional parameters instead of named parameters
+      final result = await client.modules.auth.email.changePassword(
+          oldPassword,
+          newPassword
+      );
+      return result;
+    } catch (e) {
+      print("Error changing password: $e");
+      return false;
+    }
+  }
+
+
   void _toggleTheme(bool value) {
     setState(() {
       _isDarkMode = value;
@@ -140,18 +204,29 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
                           ),
                         ),
                       ),
-                      IconButton(
+                      SizedBox(
+                        width: 150, // Makes the button full width
+                        child: ElevatedButton.icon(
+                          icon: Icon(Icons.lock),
+                          label: Text("Change Password"),
+                          onPressed: _showChangePasswordDialog,
+                        ),
+                      ),
+                      /*IconButton(
                         icon: Icon(_isEditing ? Icons.check : Icons.edit, color: _isDarkMode ? Colors.white : Colors.black),
                         onPressed: () {
                           setState(() {
                             _isEditing = !_isEditing; // Toggle editing state
                           });
                         },
-                      ),
+                      ),*/
+
+
+
                     ],
                   ),
                   FutureBuilder<String?>(
-                    future: client.user.getUserRole(), // your async call
+                    future: client.user.getUserRole(), // async call
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return Text("Loading...", style: TextStyle(color: _isDarkMode ? Colors.white70 : Colors.grey[600]));
