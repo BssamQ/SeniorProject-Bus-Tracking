@@ -1,0 +1,8 @@
+class: Emergency
+table: emergency
+fields:
+  driverId: int, relation(parent=driver_info)
+  busId: int, relation(parent=bus)
+  message: String
+  timestamp: DateTime
+  isResolved: bool
