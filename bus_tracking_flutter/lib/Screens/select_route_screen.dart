@@ -9,10 +9,10 @@ class SelectRouteScreen extends StatefulWidget {
   final Function(bool) onThemeChanged;
 
   const SelectRouteScreen({
-    Key? key,
+    super.key,
     required this.isDarkMode,
     required this.onThemeChanged,
-  }) : super(key: key);
+  });
 
   @override
   _SelectRouteScreenState createState() => _SelectRouteScreenState();
@@ -124,6 +124,49 @@ class _SelectRouteScreenState extends State<SelectRouteScreen> {
       endPoint = locationCoordinates[stop];
     });
   }
+  void _showStartStationSelector(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return ListView(
+          children: locationCoordinates.keys.map((station) {
+            return ListTile(
+              title: Text(station),
+              enabled: selectedEnd != station,
+              onTap: selectedEnd != station
+                  ? () {
+                _selectStart(station);
+                Navigator.pop(context);
+              }
+                  : null,
+            );
+          }).toList(),
+        );
+      },
+    );
+  }
+
+  void _showEndStationSelector(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return ListView(
+          children: locationCoordinates.keys.map((station) {
+            return ListTile(
+              title: Text(station),
+              enabled: selectedStart != station,
+              onTap: selectedStart != station
+                  ? () {
+                _selectEnd(station);
+                Navigator.pop(context);
+              }
+                  : null,
+            );
+          }).toList(),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -134,117 +177,113 @@ class _SelectRouteScreenState extends State<SelectRouteScreen> {
       appBar: AppBar(
         title: Text('Select Route'),
       ),
-      body: Column(
+      body: Stack(
         children: [
-          Expanded(
-            child: FlutterMap(
-              mapController: _mapController,
-              options: MapOptions(
-                initialCenter: LatLng(26.3123370, 50.1422222),
-                initialZoom: 16.0,
-              ),
-              children: [
-                TileLayer(
-                  urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                  subdomains: ['a', 'b', 'c'],
-                ),
-                MarkerLayer(
-                  markers: locationCoordinates.entries.map((entry) {
-                    return Marker(
-                      point: entry.value,
-                      width: 50,
-                      height: 50,
-                      child: GestureDetector(
-                        onTap: () => _onMarkerTap(entry.value),
-                        child: Icon(
-                          Icons.directions_bus,
-                          color: (entry.value == startPoint || entry.value == endPoint)
-                              ? Colors.green
-                              : Colors.blue,
-                          size: 40,
-                        ),
-                      ),
-                    );
-                  }).toList(),
-                ),
-                if (_routePoints != null)
-                  PolylineLayer(
-                    polylines: [
-                      Polyline(
-                        points: _routePoints!,
-                        strokeWidth: 4,
-                        color: Colors.red,
-                      ),
-                    ],
-                  ),
-              ],
+          // Map in the background
+          FlutterMap(
+            mapController: _mapController,
+            options: MapOptions(
+              initialCenter: LatLng(26.3123370, 50.1422222),
+              initialZoom: 16.0,
             ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              // Start button
-              ElevatedButton(
-                onPressed: () {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (context) {
-                      return ListView(
-                        children: locationCoordinates.keys.map((station) {
-                          return ListTile(
-                            title: Text(station),
-                            enabled: selectedEnd != station,
-                            onTap: selectedEnd != station
-                                ? () {
-                              _selectStart(station);
-                              Navigator.pop(context);
-                            }
-                                : null,
-                          );
-                        }).toList(),
-                      );
-                    },
-                  );
-                },
-                child: Text(selectedStart ?? 'Select Start'),
+              TileLayer(
+                urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                subdomains: ['a', 'b', 'c'],
               ),
-              // End button
-              ElevatedButton(
-                onPressed: () {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (context) {
-                      return ListView(
-                        children: locationCoordinates.keys.map((station) {
-                          return ListTile(
-                            title: Text(station),
-                            enabled: selectedStart != station,
-                            onTap: selectedStart != station
-                                ? () {
-                              _selectEnd(station);
-                              Navigator.pop(context);
-                            }
-                                : null,
-                          );
-                        }).toList(),
-                      );
-                    },
+              MarkerLayer(
+                markers: locationCoordinates.entries.map((entry) {
+                  return Marker(
+                    point: entry.value,
+                    width: 50,
+                    height: 50,
+                    child: GestureDetector(
+                      onTap: () => _onMarkerTap(entry.value),
+                      child: Icon(
+                        Icons.directions_bus,
+                        color: (entry.value == startPoint || entry.value == endPoint)
+                            ? Colors.green
+                            : Colors.blue,
+                        size: 40,
+                      ),
+                    ),
                   );
-                },
-                child: Text(selectedEnd ?? 'Select End'),
+                }).toList(),
               ),
+              if (_routePoints != null)
+                PolylineLayer(
+                  polylines: [
+                    Polyline(
+                      points: _routePoints!,
+                      strokeWidth: 4,
+                      color: Colors.red,
+                    ),
+                  ],
+                ),
             ],
           ),
-          ElevatedButton(
-            onPressed: canDrawRoute ? _drawRoute : null,
-            child: Text(
-              'Draw Route',
-              style: TextStyle(
-                color: canDrawRoute ? Colors.white : Colors.grey,
-              ),
-            ),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: canDrawRoute ? Colors.green : Colors.grey,
+
+          // Floating buttons over the map
+          Positioned(
+            left: 16,
+            right: 16,
+            bottom: 30,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () => _showStartStationSelector(context),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFF008540),
+                          foregroundColor: Colors.black,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                        ),
+                        child: Text(selectedStart ?? 'Select Start'),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () => _showEndStationSelector(context),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFF008540),
+                          foregroundColor: Colors.black,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                        ),
+                        child: Text(selectedEnd ?? 'Select End'),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: canDrawRoute ? _drawRoute : null,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: canDrawRoute ? const Color(0xFF00296B) : Colors.grey[400],
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                    child: const Text(
+                      'Draw Route',
+                      style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],

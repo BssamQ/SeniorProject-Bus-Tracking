@@ -236,8 +236,11 @@ class _DriverManagementScreenState extends State<DriverManagementScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Driver Management"),
-        backgroundColor: Colors.teal,
+        title: Text("Driver Management", style: TextStyle(
+          color: Colors.white, // 👈 White text
+          fontWeight: FontWeight.bold,
+        ),),
+        backgroundColor: Colors.green,
       ),
       body: drivers.isEmpty
           ? Center(
@@ -297,7 +300,7 @@ class _DriverManagementScreenState extends State<DriverManagementScreen> {
 
       floatingActionButton: FloatingActionButton(
         onPressed: _addDriver,
-        backgroundColor: Colors.teal,
+        backgroundColor: Colors.green,
         child: Icon(Icons.add),
       ),
     );

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../main.dart';
 import 'admin_dashboard.dart';
+import 'driver_management_screen.dart';
 
 class AdminMain extends StatelessWidget {
   @override
@@ -96,7 +98,15 @@ class AdminMain extends StatelessWidget {
                     icon: Icons.person,
                     title: "Driver Management",
                     onTap: () =>
-                        Navigator.pushNamed(context, '/driver_management'),
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DriverManagementScreen(
+                              client: client,
+                              sessionManager: sessionManager,
+                            ),
+                          ),
+                        ),
                     isDarkMode: isDarkMode,
                   ),
                   _buildAdminOption(

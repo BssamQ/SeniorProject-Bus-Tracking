@@ -100,7 +100,10 @@ class _BusManagementScreen extends State<BusManagementScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Bus Management"),
+        title: Text("Bus Management", style: TextStyle(
+          color: Colors.white, // 👈 White text
+          fontWeight: FontWeight.bold,
+        ),),
         backgroundColor: Colors.green, // Set the AppBar color to green
       ),
       body: Column(
@@ -130,7 +133,7 @@ class _BusManagementScreen extends State<BusManagementScreen> {
                   margin: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                   elevation: 8,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(16),
                   ),
                   child: ListTile(
                     contentPadding: EdgeInsets.all(15),
@@ -151,15 +154,27 @@ class _BusManagementScreen extends State<BusManagementScreen> {
                             style: TextStyle(color: Colors.orange)),
                         Text("Breakdowns: ${bus.breakdownCounter}",
                             style: TextStyle(color: Colors.red)),
-                        Text(
-                          "Status: ${bus.status}",
-                          style: TextStyle(
-                            color: bus.status == "Operating"
-                                ? Colors.green
-                                : bus.status == "In Maintenance"
-                                ? Colors.orange
-                                : Colors.red,
-                          ),
+                        Wrap(
+                          spacing: 8,
+                          children: [
+                            Chip(
+                              label: Text(bus.status),
+                              backgroundColor: bus.status == "Operating"
+                                  ? Colors.green[100]
+                                  : bus.status == "In Maintenance"
+                                  ? Colors.orange[100]
+                                  : Colors.red[100],
+                              avatar: Icon(
+                                bus.status == "Operating"
+                                    ? Icons.check_circle
+                                    : bus.status == "In Maintenance"
+                                    ? Icons.build
+                                    : Icons.cancel,
+                                size: 16,
+                                color: Colors.black54,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -190,7 +205,7 @@ class _BusManagementScreen extends State<BusManagementScreen> {
               padding: EdgeInsets.symmetric(vertical: 12, horizontal: 25),
               backgroundColor: Colors.green[600],
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(16),
               ),
               elevation: 4,
               textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
@@ -316,25 +331,44 @@ class _BusManagementScreen extends State<BusManagementScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Bus Number:"),
-            TextField(controller: _busNumberController),
+            TextFormField(
+              controller: _busNumberController,
+              decoration: InputDecoration(
+                labelText: "Bus Number",
+                border: OutlineInputBorder(),
+              ),
+            ),
+
             SizedBox(height: 10),
             // Removed: Driver Name input
-            Text("Years of Service:"),
-            TextField(controller: _ageController),
+            TextFormField(
+              controller: _ageController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                labelText: "Years of Service",
+                border: OutlineInputBorder(),
+              ),
+            ),
+
             SizedBox(height: 10),
-            Text("Breakdown Count:"),
-            TextField(controller: _breakdownController),
+            TextFormField(
+              controller: _breakdownController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                labelText: "Breakdown Count",
+                border: OutlineInputBorder(),
+              ),
+            ),
+
             SizedBox(height: 10),
             // Removed: Route dropdown
-            Text("Status:"),
+            // Text("Status:"),
             DropdownButtonFormField<String>(
               value: _selectedStatus,
-              onChanged: (newStatus) {
-                setState(() {
-                  _selectedStatus = newStatus!;
-                });
-              },
+              decoration: InputDecoration(
+                labelText: 'Bus Status',
+                border: OutlineInputBorder(),
+              ),
               items: busStatuses.map((statusItem) {
                 return DropdownMenuItem<String>(
                   value: statusItem["status"],
@@ -347,6 +381,7 @@ class _BusManagementScreen extends State<BusManagementScreen> {
                   ),
                 );
               }).toList(),
+              onChanged: (newValue) => setState(() => _selectedStatus = newValue!),
             ),
           ],
         ),
@@ -374,20 +409,20 @@ class _BusManagementScreen extends State<BusManagementScreen> {
           children: [
             Text("Bus Number:", style: TextStyle(color: Colors.green)),
             TextField(controller: _busNumberController),
-            SizedBox(height: 10),
+            SizedBox(height: 12),
             // Removed: Driver Name
             Text("Years of Service:", style: TextStyle(color: Colors.orange)),
             TextField(
               controller: _ageController,
               keyboardType: TextInputType.number,
             ),
-            SizedBox(height: 10),
+            SizedBox(height: 12),
             Text("Breakdown Count:", style: TextStyle(color: Colors.red)),
             TextField(
               controller: _breakdownController,
               keyboardType: TextInputType.number,
             ),
-            SizedBox(height: 10),
+            SizedBox(height: 12),
             // Removed: Route selection
             Text("Status:", style: TextStyle(color: Colors.teal)),
             DropdownButtonFormField<String>(

@@ -12,6 +12,8 @@ class WaitingForBusScreen extends StatelessWidget {
   final LatLng busLocation = LatLng(26.3045, 50.1425);
   final LatLng stationLocation = LatLng(26.3041, 50.1412);
 
+  WaitingForBusScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

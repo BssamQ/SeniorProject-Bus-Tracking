@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class ListStationScreen extends StatefulWidget {
+  const ListStationScreen({super.key});
+
   @override
   _ListStationScreenState createState() => _ListStationScreenState();
 }
