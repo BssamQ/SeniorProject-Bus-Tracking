@@ -8,10 +8,10 @@ class PreferencesScreen extends StatefulWidget {
   final Function(bool) onThemeChanged;
 
   const PreferencesScreen({
-    Key? key,
+    super.key,
     required this.isDarkMode,
     required this.onThemeChanged,
-  }) : super(key: key);
+  });
 
   @override
   _PreferencesScreenState createState() => _PreferencesScreenState();
@@ -158,7 +158,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
                       Navigator.pop(context);
                     },
                   );
-                }).toList(),
+                }),
               ],
             ),
           ),

@@ -3,20 +3,22 @@ import 'package:bus_tracking_client/bus_tracking_client.dart';
 import 'package:serverpod_auth_shared_flutter/serverpod_auth_shared_flutter.dart';
 import 'package:serverpod_flutter/serverpod_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'Screens/AdminDash.dart';
-import 'Screens/admin_dashboard.dart';
-import 'Screens/bus_managment_screen.dart';
-import 'Screens/driver_management_screen.dart';
 import 'Screens/login_screen.dart';
 import 'Screens/home_screen.dart';
 import 'Screens/preferences_screen.dart';
-import 'Screens/route_management_screen.dart';
 import 'Screens/select_bus_screen.dart';
 import 'Screens/waiting_for_bus_screen.dart';
 import 'Screens/on_bus_screen.dart';
 import 'Screens/list_station_screen.dart';
 import 'Screens/select_route_screen.dart';
 import 'Screens/Driver_Screen.dart';
+
+import 'Screens/bus_managment_screen.dart';
+import 'Screens/driver_management_screen.dart';
+import 'Screens/route_management_screen.dart';
+
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 
 late SessionManager sessionManager;
 late Client client;
@@ -79,23 +81,17 @@ class _MyAppState extends State<MyApp> {
       initialRoute: '/',
       routes: {
         '/': (context) => LoginScreen(),
-        '/home': (context) =>
-            HomeScreen(isDarkMode: _isDarkMode, onThemeChanged: _toggleTheme),
-        '/preferences': (context) => PreferencesScreen(
-            isDarkMode: _isDarkMode, onThemeChanged: _toggleTheme),
+        '/home': (context) => HomeScreen(isDarkMode: _isDarkMode, onThemeChanged: _toggleTheme),
+        '/preferences': (context) => PreferencesScreen(isDarkMode: _isDarkMode, onThemeChanged: _toggleTheme),
         '/select_bus': (context) => SelectBusScreen(),
         '/waiting_for_bus': (context) => WaitingForBusScreen(),
         '/on_bus': (context) => OnBusScreen(),
         '/list_station': (context) => ListStationScreen(),
-        '/select_route': (context) => SelectRouteScreen(
-            isDarkMode: _isDarkMode, onThemeChanged: _toggleTheme),
-        '/admin_main': (context) => AdminMain(), // Main dashboard
-        '/bus_management': (context) => BusManagementScreen(), // Bus management
-        '/driver_management': (context) => DriverManagementScreen(
-            client: client, sessionManager: sessionManager),
-        '/route_management': (context) => RouteManagementScreen(),
-        '/dashboard': (context) => AdminDashboardScreen(),
+        '/select_route': (context) => SelectRouteScreen(isDarkMode: _isDarkMode, onThemeChanged: _toggleTheme),
         '/driver': (context) => const DriverScreen(),
+        '/bus_management': (context) => const BusManagementScreen(),
+        // '/driver_management': (context) => const DriverManagementScreen(),
+        // '/route_management': (context) => const RouteManagementScreen(),
       },
     );
   }

@@ -278,19 +278,25 @@ class _DriverAssignmentScreenState extends State<DriverAssignmentScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ElevatedButton.icon(
-                  icon: Icon(Icons.check),
-                  label: Text("Assign Driver"),
+                  icon: Icon(Icons.check, color: Colors.white),
+                  label: Text("Assign Driver", style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.teal,
+                    backgroundColor: const Color(0xFF003E51),
                     padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                   ),
                   onPressed: _assignDriver,
                 ),
                 ElevatedButton.icon(
-                  icon: Icon(Icons.person_add),
-                  label: Text("New Driver Account"),
+                  icon: Icon(Icons.person_add, color: Colors.white),
+                  label: Text("New Driver Account", style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.lightGreen,
+                    backgroundColor: const Color(0xFF008540),
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                   ),
                   onPressed: _showCreateDriverDialog,
