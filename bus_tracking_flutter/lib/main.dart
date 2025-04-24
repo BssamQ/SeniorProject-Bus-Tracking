@@ -16,9 +16,11 @@ import 'Screens/Driver_Screen.dart';
 import 'Screens/bus_managment_screen.dart';
 import 'Screens/driver_management_screen.dart';
 import 'Screens/route_management_screen.dart';
+import 'screens/admin_notifications_screen.dart';
 
 
 
+//push
 late SessionManager sessionManager;
 late Client client;
 SharedPreferences? prefs;
@@ -87,10 +89,14 @@ class _MyAppState extends State<MyApp> {
         '/on_bus': (context) => OnBusScreen(),
         '/list_station': (context) => ListStationScreen(),
         '/select_route': (context) => SelectRouteScreen(isDarkMode: _isDarkMode, onThemeChanged: _toggleTheme),
-        '/driver': (context) => const DriverScreen(),
+        '/driver': (context) => DriverScreen(
+          isDarkMode: _isDarkMode,
+          onThemeChanged: _toggleTheme,
+        ),
         '/bus_management': (context) => const BusManagementScreen(),
         '/driver_management': (context) => DriverManagementScreen(client: client, sessionManager: sessionManager,),
         '/route_management': (context) => RouteManagementScreen(),
+        '/admin_notifications': (context) => const AdminNotificationsScreen(),
       },
     );
   }

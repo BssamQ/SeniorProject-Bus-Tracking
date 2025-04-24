@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'Screens/AdminDash.dart';
+import 'Screens/admin_dash.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

@@ -35,6 +35,10 @@ notification:
   - getNotificationsByUserId:
   - addNotification:
   - markNotificationAsRead:
+  - createEmergencyNotification:
+  - getNotificationsForDriver:
+  - markNotificationRead:
+  - getAllNotifications:
   - deleteNotification:
 route:
   - getRouteById:

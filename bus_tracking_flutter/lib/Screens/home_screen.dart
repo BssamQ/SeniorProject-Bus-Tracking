@@ -21,7 +21,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final LatLng _initialPosition = LatLng(26.3123370, 50.1422222);
   String username = "Guest";
   bool _isDarkMode = false;
   LatLng? pickupPosition;

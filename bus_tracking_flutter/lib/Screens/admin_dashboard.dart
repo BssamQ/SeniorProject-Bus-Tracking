@@ -189,7 +189,6 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   }
 
   Widget _buildStatusLegend() {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,

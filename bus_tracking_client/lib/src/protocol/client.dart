@@ -286,6 +286,40 @@ class EndpointNotification extends _i1.EndpointRef {
         {'notificationId': notificationId},
       );
 
+  _i2.Future<void> createEmergencyNotification(
+    int driverId,
+    String message,
+  ) =>
+      caller.callServerEndpoint<void>(
+        'notification',
+        'createEmergencyNotification',
+        {
+          'driverId': driverId,
+          'message': message,
+        },
+      );
+
+  _i2.Future<List<_i6.Notification>> getNotificationsForDriver() =>
+      caller.callServerEndpoint<List<_i6.Notification>>(
+        'notification',
+        'getNotificationsForDriver',
+        {},
+      );
+
+  _i2.Future<void> markNotificationRead(int notificationId) =>
+      caller.callServerEndpoint<void>(
+        'notification',
+        'markNotificationRead',
+        {'notificationId': notificationId},
+      );
+
+  _i2.Future<List<_i6.Notification>> getAllNotifications() =>
+      caller.callServerEndpoint<List<_i6.Notification>>(
+        'notification',
+        'getAllNotifications',
+        {},
+      );
+
   _i2.Future<bool> deleteNotification(int notificationId) =>
       caller.callServerEndpoint<bool>(
         'notification',

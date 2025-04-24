@@ -625,6 +625,70 @@ class Endpoints extends _i1.EndpointDispatch {
             params['notificationId'],
           ),
         ),
+        'createEmergencyNotification': _i1.MethodConnector(
+          name: 'createEmergencyNotification',
+          params: {
+            'driverId': _i1.ParameterDescription(
+              name: 'driverId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            ),
+            'message': _i1.ParameterDescription(
+              name: 'message',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['notification'] as _i6.NotificationEndpoint)
+                  .createEmergencyNotification(
+            session,
+            params['driverId'],
+            params['message'],
+          ),
+        ),
+        'getNotificationsForDriver': _i1.MethodConnector(
+          name: 'getNotificationsForDriver',
+          params: {},
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['notification'] as _i6.NotificationEndpoint)
+                  .getNotificationsForDriver(session),
+        ),
+        'markNotificationRead': _i1.MethodConnector(
+          name: 'markNotificationRead',
+          params: {
+            'notificationId': _i1.ParameterDescription(
+              name: 'notificationId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['notification'] as _i6.NotificationEndpoint)
+                  .markNotificationRead(
+            session,
+            params['notificationId'],
+          ),
+        ),
+        'getAllNotifications': _i1.MethodConnector(
+          name: 'getAllNotifications',
+          params: {},
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['notification'] as _i6.NotificationEndpoint)
+                  .getAllNotifications(session),
+        ),
         'deleteNotification': _i1.MethodConnector(
           name: 'deleteNotification',
           params: {

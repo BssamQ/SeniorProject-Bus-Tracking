@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../main.dart';
 import 'admin_dashboard.dart';
 import 'driver_management_screen.dart';
+import 'admin_notifications_screen.dart';
+
 
 class AdminMain extends StatelessWidget {
   @override
@@ -128,7 +130,15 @@ class AdminMain extends StatelessWidget {
                       ),
                     ),
                     isDarkMode: isDarkMode,
-                  ), // The 4th button to navigate to AdminDashboard
+                  ),
+                  _buildAdminOption(
+                    context,
+                    icon: Icons.notifications,
+                    title: "Notifications",
+                    onTap: () => Navigator.pushNamed(context, '/admin_notifications'),
+                    isDarkMode: isDarkMode,
+                  ),
+
                 ],
               ),
             ),
