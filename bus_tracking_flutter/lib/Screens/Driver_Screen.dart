@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 
+import '../Screens/bus_simulator.dart';
+import '../Screens/route_loader.dart';
+
 class DriverScreen extends StatefulWidget {
   const DriverScreen({super.key});
 
@@ -12,71 +15,57 @@ class DriverScreen extends StatefulWidget {
 
 class _DriverScreenState extends State<DriverScreen> {
   bool isTripStarted = false;
-  bool isSharingLocation = false;
-  LatLng currentBusLocation = LatLng(26.3055, 50.1425);
+  LatLng _busPosition = LatLng(26.3055, 50.1425);
   final LatLng nextStationLocation = LatLng(26.3070, 50.1450);
   Timer? movementTimer;
 
-  void _toggleTrip() {
-    if (isSharingLocation) {
-      setState(() {
-        isTripStarted = !isTripStarted;
-      });
+  late BusSimulator _busSimulator;
 
-      if (isTripStarted) {
-        _startBusMovement();
-      } else {
-        movementTimer?.cancel();
-      }
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please share live location first!')),
-      );
-    }
+  final String busNumber = "BUS-204";
+  final String driverName = "Mohammed Ahmed";
+  final String routeName = "Route 1";
+  final String nextStop = "Building 57";
+
+  @override
+  void initState() {
+    super.initState();
+    _initBusSimulator();
   }
 
-  void _toggleLocation() {
-    setState(() {
-      isSharingLocation = !isSharingLocation;
-    });
+  Future<void> _initBusSimulator() async {
+    final goRoute = await JsonRouteLoader.loadFullGoRoute();
+    final returnRoute = await JsonRouteLoader.loadFullReturnRoute();
 
-    if (!isSharingLocation && isTripStarted) {
-      setState(() {
-        isTripStarted = false;
-      });
-      movementTimer?.cancel();
-    }
-  }
+    final goStations = await JsonRouteLoader.getStationIndices(goRoute);
+    final returnStations = await JsonRouteLoader.getStationIndices(returnRoute);
 
-  void _startBusMovement() {
-    movementTimer = Timer.periodic(const Duration(seconds: 2), (timer) {
-      setState(() {
-        currentBusLocation =
-            _moveTowards(currentBusLocation, nextStationLocation, 0.0004);
-      });
-
-      if (_reachedDestination(currentBusLocation, nextStationLocation)) {
-        timer.cancel();
+    _busSimulator = BusSimulator(
+      goRoute: goRoute,
+      returnRoute: returnRoute,
+      goStationIndices: goStations,
+      returnStationIndices: returnStations,
+      onLocationUpdated: (LatLng pos) {
         setState(() {
-          isTripStarted = false;
+          _busPosition = pos;
         });
-      }
-    });
-  }
-
-  LatLng _moveTowards(LatLng from, LatLng to, double step) {
-    final double latDiff = to.latitude - from.latitude;
-    final double lngDiff = to.longitude - from.longitude;
-    return LatLng(
-      from.latitude + (latDiff * step),
-      from.longitude + (lngDiff * step),
+      },
     );
   }
 
-  bool _reachedDestination(LatLng a, LatLng b) {
-    const threshold = 0.0003;
-    return (a.latitude - b.latitude).abs() < threshold &&
-        (a.longitude - b.longitude).abs() < threshold;
+  @override
+  void dispose() {
+    _busSimulator.stop();
+    movementTimer?.cancel();
+    super.dispose();
+  }
+
+  void _toggleTrip() {
+    setState(() => isTripStarted = !isTripStarted);
+    if (isTripStarted) {
+      _busSimulator.start();
+    } else {
+      _busSimulator.stop();
+    }
   }
 
   void _showEmergencyDialog() {
@@ -97,9 +86,7 @@ class _DriverScreenState extends State<DriverScreen> {
           TextButton(
             onPressed: () {
               Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Emergency reported!')),
-              );
+              _showSnackBar('Emergency reported!');
             },
             child: const Text('Confirm',
                 style: TextStyle(color: Colors.greenAccent)),
@@ -109,154 +96,155 @@ class _DriverScreenState extends State<DriverScreen> {
     );
   }
 
-  void _logout() {
-    Navigator.pushReplacementNamed(context, '/');
-  }
-
-  @override
-  void dispose() {
-    movementTimer?.cancel();
-    super.dispose();
+  void _showSnackBar(String message) {
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      appBar: AppBar(
-        backgroundColor: Colors.grey[900],
-        title: const Text('Driver Dashboard',
-            style: TextStyle(color: Colors.white)),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout, color: Colors.white),
-            onPressed: _logout,
-          )
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: ListView(
-          children: [
-            const Text('Bus Details',
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white)),
-            const ListTile(
-              title: Text('Bus ID', style: TextStyle(color: Colors.white70)),
-              subtitle: Text('BUS-204', style: TextStyle(color: Colors.white)),
+      body: Stack(
+        children: [
+          FlutterMap(
+            options: MapOptions(
+              initialCenter: _busPosition,
+              initialZoom: 15.5,
+              keepAlive: true,
             ),
-            const ListTile(
-              title:
-                  Text('Plate Number', style: TextStyle(color: Colors.white70)),
-              subtitle: Text('XYZ 4567', style: TextStyle(color: Colors.white)),
-            ),
-            /*const ListTile(
-              title: Text('Capacity', style: TextStyle(color: Colors.white70)),
-              subtitle:
-                  Text('45 passengers', style: TextStyle(color: Colors.white)),
-            ),*/
-            const Divider(color: Colors.white24),
-            const Text('Route Info',
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white)),
-            const ListTile(
-              title: Text('Route', style: TextStyle(color: Colors.white70)),
-              subtitle: Text('Route 1', style: TextStyle(color: Colors.white)),
-            ),
-            const ListTile(
-              title: Text('Next Stop', style: TextStyle(color: Colors.white70)),
-              subtitle:
-                  Text('Building 57', style: TextStyle(color: Colors.white)),
-            ),
-            const Divider(color: Colors.white24),
-            ElevatedButton.icon(
-              onPressed: _toggleTrip,
-              icon: Icon(isTripStarted ? Icons.stop : Icons.play_arrow),
-              label: Text(isTripStarted ? 'End Trip' : 'Start Trip'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: isTripStarted ? Colors.red : Colors.green,
+            children: [
+              TileLayer(
+                urlTemplate:
+                    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                subdomains: ['a', 'b', 'c'],
               ),
-            ),
-            const SizedBox(height: 12),
-            ElevatedButton.icon(
-              onPressed: _toggleLocation,
-              icon: Icon(
-                  isSharingLocation ? Icons.location_off : Icons.location_on),
-              label: Text(isSharingLocation
-                  ? 'Stop Sharing Location'
-                  : 'Share Live Location'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: isSharingLocation ? Colors.grey : Colors.blue,
-              ),
-            ),
-            const SizedBox(height: 12),
-            ElevatedButton.icon(
-              onPressed: _showEmergencyDialog,
-              icon: const Icon(Icons.warning),
-              label: const Text('Emergency'),
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
-            ),
-            const SizedBox(height: 24),
-            if (isSharingLocation) ...[
-              const Divider(color: Colors.white38),
-              const Text('Live Map',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold)),
-              const SizedBox(height: 8),
-              SizedBox(
-                height: 400,
-                child: FlutterMap(
-                  options: MapOptions(
-                    initialCenter: currentBusLocation,
-                    initialZoom: 15.5,
-                    keepAlive: true,
+              PolylineLayer(
+                polylines: [
+                  Polyline(
+                    points: [_busPosition, nextStationLocation],
+                    strokeWidth: 4,
+                    color: Colors.orange,
                   ),
-                  children: [
-                    TileLayer(
-                      urlTemplate:
-                          "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                      subdomains: const ['a', 'b', 'c'],
-                      userAgentPackageName: 'com.example.app',
-                    ),
-                    PolylineLayer(
-                      polylines: [
-                        Polyline(
-                          points: [currentBusLocation, nextStationLocation],
-                          strokeWidth: 4,
-                          color: Colors.orange,
-                        ),
-                      ],
-                    ),
-                    MarkerLayer(
-                      markers: [
-                        Marker(
-                          point: currentBusLocation,
-                          width: 40,
-                          height: 40,
-                          child: const Icon(Icons.directions_bus,
-                              color: Colors.green, size: 40),
-                        ),
-                        Marker(
-                          point: nextStationLocation,
-                          width: 40,
-                          height: 40,
-                          child: const Icon(Icons.flag,
-                              color: Colors.blue, size: 40),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                ],
+              ),
+              MarkerLayer(
+                markers: [
+                  Marker(
+                    point: _busPosition,
+                    width: 40,
+                    height: 40,
+                    child: const Icon(Icons.directions_bus,
+                        color: Colors.green, size: 40),
+                  ),
+                  Marker(
+                    point: nextStationLocation,
+                    width: 40,
+                    height: 40,
+                    child: const Icon(Icons.flag, color: Colors.blue, size: 40),
+                  ),
+                ],
               ),
             ],
-          ],
-        ),
+          ),
+
+          // EXIT ICON (top-left) → go back to login screen
+          Positioned(
+            top: 40,
+            left: 15,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.6),
+                shape: BoxShape.circle,
+              ),
+              child: IconButton(
+                icon: const Icon(Icons.exit_to_app, color: Colors.white),
+                onPressed: () {
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, '/', (route) => false);
+                },
+              ),
+            ),
+          ),
+
+          // PROFILE ICON (top-right) → preferences
+          Positioned(
+            top: 40,
+            right: 15,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.6),
+                shape: BoxShape.circle,
+              ),
+              child: IconButton(
+                icon: const Icon(Icons.person, color: Colors.white),
+                onPressed: () async {
+                  await Navigator.pushNamed(context, '/preferences');
+                },
+              ),
+            ),
+          ),
+
+          // INFO PANEL
+          Positioned(
+            top: 90,
+            right: 10,
+            child: Container(
+              width: 250,
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.7),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('Bus Details',
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white)),
+                  const SizedBox(height: 4),
+                  Text('Bus ID: $busNumber',
+                      style: const TextStyle(color: Colors.white70)),
+                  Text('Driver: $driverName',
+                      style: const TextStyle(color: Colors.white70)),
+                  const Divider(color: Colors.white24),
+                  const Text('Route Info',
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white)),
+                  Text('Route: $routeName',
+                      style: const TextStyle(color: Colors.white70)),
+                  Text('Next Stop: $nextStop',
+                      style: const TextStyle(color: Colors.white70)),
+                  const SizedBox(height: 12),
+                  ElevatedButton.icon(
+                    onPressed: _toggleTrip,
+                    icon: Icon(isTripStarted ? Icons.stop : Icons.play_arrow),
+                    label: Text(isTripStarted ? 'End Trip' : 'Start Trip'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          isTripStarted ? Colors.red : Colors.green,
+                      minimumSize: const Size.fromHeight(40),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  ElevatedButton.icon(
+                    onPressed: _showEmergencyDialog,
+                    icon: const Icon(Icons.warning),
+                    label: const Text('Emergency'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.orange,
+                      minimumSize: const Size.fromHeight(40),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
