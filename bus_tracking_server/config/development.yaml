@@ -28,11 +28,22 @@ webServer:
   publicScheme: http
 
 # This is the database setup for your server.
+
+#database:
+#  host: localhost
+#  port: 8090
+#  name: bus_system_db
+#  user: postgres
+
+
+
+# Railway connection 
 database:
-  host: localhost
-  port: 5432
-  name: bus_system_db
+  host: mainline.proxy.rlwy.net
+  port: 17574
   user: postgres
+  password: UztNZcAKDxAnIRcWXBkKKDGarMgXWhor
+  name: railway
 
 
 # This is the setup for Redis.
