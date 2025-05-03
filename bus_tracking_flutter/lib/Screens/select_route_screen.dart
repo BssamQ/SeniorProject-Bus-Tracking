@@ -269,178 +269,262 @@ class _SelectRouteScreenState extends State<SelectRouteScreen> {
     bool canDrawRoute = startPoint != null && endPoint != null;
 
     return Scaffold(
-      appBar: AppBar(title: Text('Select Route')),
-      body: Column(
+      backgroundColor: widget.isDarkMode ? Colors.black : Colors.white,
+      body: Stack(
         children: [
-          Expanded(
-            child: FlutterMap(
-              mapController: _mapController,
-              options: MapOptions(
-                initialCenter: _busPosition,
-                initialZoom: 16.0,
-              ),
-              children: [
-                TileLayer(
-                  urlTemplate:
-                  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                  subdomains: ['a', 'b', 'c'],
-                ),
-                MarkerLayer(
-                  markers: [
-                    ...locationCoordinates.entries.map((entry) {
-                      return Marker(
-                        point: entry.value,
-                        width: 50,
-                        height: 50,
-                        child: GestureDetector(
-                          onTap: () => _onMarkerTap(entry.value),
-                          child: Icon(
-                            Icons.directions_bus,
-                            color: (entry.value == startPoint ||
-                                entry.value == endPoint)
-                                ? Colors.green
-                                : Colors.blue,
-                            size: 40,
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                    Marker(
-                      point: _busPosition,
-                      width: 40,
-                      height: 40,
-                      child: Icon(Icons.directions_bus,
-                          color: Colors.green, size: 40),
-                    ),
-                  ],
-                ),
-                if (_routePoints != null)
-                  PolylineLayer(
-                    polylines: [
-                      Polyline(
-                        points: _routePoints!,
-                        strokeWidth: 4,
-                        color: Colors.red,
-                      ),
-                    ],
-                  ),
-              ],
+          // 🌍 Map Layer
+          FlutterMap(
+            mapController: _mapController,
+            options: MapOptions(
+              initialCenter: _busPosition,
+              initialZoom: 16.0,
             ),
-          ),
-          if (estimatedTimeToStart != null || estimatedTimeToDestination != null)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Column(
-                children: [
-                  AnimatedSwitcher(
-                    duration: Duration(milliseconds: 500),
-                    transitionBuilder: (Widget child, Animation<double> animation) {
-                      return SlideTransition(
-                        position: Tween<Offset>(
-                          begin: Offset(0.0, 0.5),
-                          end: Offset.zero,
-                        ).animate(animation),
-                        child: child,
-                      );
-                    },
-                    child: estimatedTimeToStart != null
-                        ? Column(
-                      key: ValueKey('pickup'),
-                      children: [
-                        Text(
-                          'Estimated time to pickup: $estimatedTimeToStart',
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            children: [
+              TileLayer(
+                urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                subdomains: ['a', 'b', 'c'],
+              ),
+              MarkerLayer(
+                markers: [
+                  ...locationCoordinates.entries.map((entry) {
+                    return Marker(
+                      point: entry.value,
+                      width: 50,
+                      height: 50,
+                      child: GestureDetector(
+                        onTap: () => _onMarkerTap(entry.value),
+                        child: Icon(
+                          Icons.directions_bus,
+                          color: (entry.value == startPoint || entry.value == endPoint)
+                              ? Colors.green
+                              : Colors.blue,
+                          size: 40,
                         ),
-                        const SizedBox(height: 4),
-                        Text('Bus Number: $busNumber'),
-                        Text('Driver Name: $driverName'),
-                      ],
-                    )
-                        : estimatedTimeToDestination != null
-                        ? Column(
-                      key: ValueKey('destination'),
-                      children: [
-                        Text(
-                          'Estimated time to destination: $estimatedTimeToDestination',
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                        ),
-                        const SizedBox(height: 4),
-                        Text('Bus Number: $busNumber'),
-                        Text('Driver Name: $driverName'),
-                      ],
-                    )
-                        : SizedBox.shrink(),
+                      ),
+                    );
+                  }).toList(),
+                  Marker(
+                    point: _busPosition,
+                    width: 40,
+                    height: 40,
+                    child: Icon(Icons.directions_bus, color: Colors.green, size: 40),
                   ),
                 ],
               ),
-            ),
-
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (context) {
-                      return ListView(
-                        children: locationCoordinates.keys.map((station) {
-                          return ListTile(
-                            title: Text(station),
-                            enabled: selectedEnd != station,
-                            onTap: selectedEnd != station
-                                ? () {
-                              _selectStart(station);
-                              Navigator.pop(context);
-                            }
-                                : null,
-                          );
-                        }).toList(),
-                      );
-                    },
-                  );
-                },
-                child: Text(selectedStart ?? 'Select Start'),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (context) {
-                      return ListView(
-                        children: locationCoordinates.keys.map((station) {
-                          return ListTile(
-                            title: Text(station),
-                            enabled: selectedStart != station,
-                            onTap: selectedStart != station
-                                ? () {
-                              _selectEnd(station);
-                              Navigator.pop(context);
-                            }
-                                : null,
-                          );
-                        }).toList(),
-                      );
-                    },
-                  );
-                },
-                child: Text(selectedEnd ?? 'Select End'),
-              ),
+              if (_routePoints != null)
+                PolylineLayer(
+                  polylines: [
+                    Polyline(
+                      points: _routePoints!,
+                      strokeWidth: 4,
+                      color: Colors.red,
+                    ),
+                  ],
+                ),
             ],
           ),
-          ElevatedButton(
-            onPressed: canDrawRoute ? _drawRoute : null,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: canDrawRoute ? Colors.green : Colors.grey,
-            ),
-            child: Text(
-              'Draw Route',
-              style:
-              TextStyle(color: canDrawRoute ? Colors.white : Colors.grey),
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              height: 25, // Standard status bar height (can adjust)
+              decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(0.5) // Dark mode: dark gray semi-transparent
+              ),
             ),
           ),
+
+
+          // Back Button (Left)
+          Positioned(
+            top: 70,
+            left: 20,
+            child: CircleAvatar(
+              radius: 28,
+              backgroundColor: Colors.black.withOpacity(0.8),
+              child: IconButton(
+                icon: Icon(Icons.arrow_back, size: 26, color: Colors.white),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ),
+          ),
+
+          // Person Button (Right)
+          Positioned(
+            top: 70,
+            right: 20,
+            child: CircleAvatar(
+              radius: 28,
+              backgroundColor: Colors.black.withOpacity(0.8),
+              child: IconButton(
+                icon: Icon(Icons.person, size: 26, color: Colors.white),
+                onPressed: () => Navigator.pushNamed(context, '/preferences'),
+              ),
+            ),
+          ),
+
+          // 📍 Select Buttons
+          Positioned(
+            bottom: 110,
+            left: 20,
+            right: 20,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) {
+                        return ListView(
+                          children: locationCoordinates.keys.map((station) {
+                            return ListTile(
+                              title: Text(station),
+                              enabled: selectedEnd != station,
+                              onTap: selectedEnd != station
+                                  ? () {
+                                _selectStart(station);
+                                Navigator.pop(context);
+                              }
+                                  : null,
+                            );
+                          }).toList(),
+                        );
+                      },
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:
+                    widget.isDarkMode ? Colors.black87 : Colors.white,
+                  ),
+                  child: Text(
+                    selectedStart ?? 'Select Start',
+                    style: TextStyle(
+                      color: widget.isDarkMode ? Colors.green : Colors.black,
+                    ),
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) {
+                        return ListView(
+                          children: locationCoordinates.keys.map((station) {
+                            return ListTile(
+                              title: Text(station),
+                              enabled: selectedStart != station,
+                              onTap: selectedStart != station
+                                  ? () {
+                                _selectEnd(station);
+                                Navigator.pop(context);
+                              }
+                                  : null,
+                            );
+                          }).toList(),
+                        );
+                      },
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:
+                    widget.isDarkMode ? Colors.black87 : Colors.white,
+                  ),
+                  child: Text(
+                    selectedEnd ?? 'Select End',
+                    style: TextStyle(
+                      color: widget.isDarkMode ? Colors.green : Colors.black,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // 🧭 Draw Route Button
+          Positioned(
+            bottom: 50,
+            left: 60,
+            right: 60,
+            child: ElevatedButton(
+              onPressed: (startPoint != null && endPoint != null)
+                  ? _drawRoute
+                  : null,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green, // Always green
+                disabledForegroundColor: Colors.green.withOpacity(0.38), disabledBackgroundColor: Colors.green.withOpacity(0.12),       // When disabled, keep it green
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+              ),
+              child: Text(
+                'Draw Route',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+
+
+
+          // 🕒 Route Info Box (Estimated Time)
+          if (estimatedTimeToStart != null || estimatedTimeToDestination != null)
+            Positioned(
+              bottom: 160,
+              left: 20,
+              right: 20,
+              child: Container(
+                padding: EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: widget.isDarkMode
+                      ? Colors.grey[900]!.withOpacity(0.9)
+                      : Colors.white.withOpacity(0.9),
+                  borderRadius: BorderRadius.circular(15),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 8,
+                    ),
+                  ],
+                ),
+                child: Column(
+                  children: [
+                    if (estimatedTimeToStart != null)
+                      Text(
+                        'Pickup: $estimatedTimeToStart',
+                        style: TextStyle(
+                          color: Colors.green,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    if (estimatedTimeToDestination != null)
+                      Text(
+                        'Destination: $estimatedTimeToDestination',
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    SizedBox(height: 4),
+                    Text('Bus: $busNumber | Driver: $driverName',
+                        style: TextStyle(
+                            color: widget.isDarkMode
+                                ? Colors.white70
+                                : Colors.black54)),
+                  ],
+                ),
+              ),
+            ),
         ],
       ),
     );
+
   }
 }

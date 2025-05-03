@@ -98,108 +98,150 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: _isDarkMode ? Colors.black : Colors.white,
-      appBar: AppBar(
-        backgroundColor: _isDarkMode ? Colors.black : Colors.white,
-        elevation: 0,
-        title: Row(
-          children: [
-            Image.network(
-              'https://upload.wikimedia.org/wikipedia/ar/archive/3/37/20221103091849%21King_Fahd_University_of_Petroleum_%26_Minerals_Logo.png',
-              height: 60,
-              errorBuilder: (context, error, stackTrace) {
-                return Icon(Icons.school, size: 60);
-              },
+      body: Stack(
+        children: [
+          // Map
+          FlutterMap(
+            options: MapOptions(
+              initialCenter: _busPosition,
+              initialZoom: 16.0,
             ),
-            SizedBox(width: 9),
-            Text(
-              'BUS SYSTEM',
-              style: TextStyle(
-                color: _isDarkMode ? Colors.white : Colors.black,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+            children: [
+              TileLayer(
+                urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                subdomains: ['a', 'b', 'c'],
+              ),
+              if (showRoute && pickupPosition != null && destinationPosition != null)
+                PolylineLayer(
+                  polylines: [
+                    Polyline(
+                      points: [pickupPosition!, destinationPosition!],
+                      color: Colors.blue,
+                      strokeWidth: 4,
+                    ),
+                  ],
+                ),
+              MarkerLayer(
+                markers: [
+                  Marker(
+                    point: _busPosition,
+                    width: 40,
+                    height: 40,
+                    child: Icon(Icons.directions_bus, color: Colors.green, size: 40),
+                  ),
+                  if (pickupPosition != null)
+                    Marker(
+                      point: pickupPosition!,
+                      width: 40,
+                      height: 40,
+                      child: Icon(Icons.location_pin, color: Colors.orange, size: 40),
+                    ),
+                  if (destinationPosition != null)
+                    Marker(
+                      point: destinationPosition!,
+                      width: 40,
+                      height: 40,
+                      child: Icon(Icons.location_pin, color: Colors.blue, size: 40),
+                    ),
+                ],
+              ),
+            ],
+          ),
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              height: 25, // Standard status bar height (can adjust)
+              decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(0.5) // Dark mode: dark gray semi-transparent
               ),
             ),
-          ],
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.person,
-                color: _isDarkMode ? Colors.white : Colors.black),
-            onPressed: () async {
-              await Navigator.pushNamed(context, '/preferences');
-              _loadPreferences();
-            },
           ),
-        ],
-      ),
-      body: FlutterMap(
-        options: MapOptions(
-          initialCenter: _busPosition,
-          initialZoom: 16.0,
-        ),
-        children: [
-          TileLayer(
-            urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-            subdomains: ['a', 'b', 'c'],
+
+          // 🔽 Back + Person buttons
+          // Back Button (Left)
+          Positioned(
+            top: 70,
+            left: 20,
+            child: CircleAvatar(
+              radius: 28,
+              backgroundColor: Colors.black.withOpacity(0.8),
+              child: IconButton(
+                icon: Icon(Icons.arrow_back, size: 26, color: Colors.white),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ),
           ),
-          if (showRoute &&
-              pickupPosition != null &&
-              destinationPosition != null)
-            PolylineLayer(
-              polylines: [
-                Polyline(
-                  points: [pickupPosition!, destinationPosition!],
-                  color: Colors.blue,
-                  strokeWidth: 4,
+
+// Person Button (Right)
+          Positioned(
+            top: 70,
+            right: 20,
+            child: CircleAvatar(
+              radius: 28,
+              backgroundColor: Colors.black.withOpacity(0.8),
+              child: IconButton(
+                icon: Icon(Icons.person, size: 26, color: Colors.white),
+                onPressed: () async {
+                  await Navigator.pushNamed(context, '/preferences');
+                  _loadPreferences();
+                },
+              ),
+            ),
+          ),
+
+
+          // 🔽 Bottom Buttons (Explore + Select Route)
+          Positioned(
+            bottom: 32,
+            left: 16,
+            right: 16,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Explorer button stays the same
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black.withOpacity(0.3),
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  onPressed: () {},
+                  // icon: Icon(Icons.explore),
+                  label: Text('Explore'),
+                ),
+                const SizedBox(height: 12),
+                // Select Route button adapts to dark mode
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: widget.isDarkMode ? Colors.grey[900] : Color(0xFF008540),
+                    foregroundColor: widget.isDarkMode ? Color(0xFF00FF66) : Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 50),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(35),
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/select_route');
+                  },
+                  icon: Icon(Icons.directions),
+                  label: Text('Select Route'),
                 ),
               ],
             ),
-          MarkerLayer(
-            markers: [
-              Marker(
-                point: _busPosition,
-                width: 40,
-                height: 40,
-                child:
-                    Icon(Icons.directions_bus, color: Colors.green, size: 40),
-              ),
-              if (pickupPosition != null)
-                Marker(
-                  point: pickupPosition!,
-                  width: 40,
-                  height: 40,
-                  child:
-                      Icon(Icons.location_pin, color: Colors.orange, size: 40),
-                ),
-              if (destinationPosition != null)
-                Marker(
-                  point: destinationPosition!,
-                  width: 40,
-                  height: 40,
-                  child: Icon(Icons.location_pin, color: Colors.blue, size: 40),
-                ),
-            ],
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: _isDarkMode ? Colors.black : Colors.white,
-        selectedItemColor: _isDarkMode ? Colors.green : Colors.blue,
-        currentIndex: 0,
-        onTap: (index) {
-          if (index == 1) {
-            Navigator.pushNamed(context, '/select_route');
-          }
-        },
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.explore), label: 'Explore'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.directions), label: 'Select Route'),
-        ],
-      ),
+
     );
   }
+
 }
