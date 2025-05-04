@@ -29,9 +29,9 @@ webServer:
 
 # This is the database setup for your server.
 database:
-  host: localhost
+  host: serverpod-demo-db.cvsyc4yaajfm.eu-north-1.rds.amazonaws.com
   port: 5432
-  name: bus_system_db
+  name: serverpod-demo-db
   user: postgres
 
 
