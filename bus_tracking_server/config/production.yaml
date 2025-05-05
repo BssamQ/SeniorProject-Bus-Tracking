@@ -32,7 +32,7 @@ webServer:
 database:
   host: database.private-production.examplepod.com
   port: 5432
-  name: serverpod
+  name: postgres
   user: postgres
   requireSsl: true
 

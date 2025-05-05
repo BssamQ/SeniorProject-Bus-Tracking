@@ -30,7 +30,9 @@ Future<void> main() async {
 
   prefs = await SharedPreferences.getInstance();
 
-  const ipAddress = '10.0.2.2';
+  //const ipAddress = '10.0.2.2';
+  const ipAddress = '13.53.71.232';
+
   client = Client(
     'http://$ipAddress:8080/',
     authenticationKeyManager: FlutterAuthenticationKeyManager(),
